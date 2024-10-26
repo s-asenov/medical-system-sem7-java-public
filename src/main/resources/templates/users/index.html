@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Users List</title>
 </head>
@@ -22,8 +22,19 @@
             <td th:text="${user.firstName + ' ' + user.lastName}">Name</td>
             <td th:text="${user.username}">Username</td>
             <td>
-                <a th:href="@{/users/edit/{id}(id=${user.id})}" class="btn btn-sm btn-info">Редакция</a>
-                <a th:href="@{/users/delete/{id}(id=${user.id})}" class="btn btn-sm btn-danger">Изтриване</a>
+                <a sec:authorize="hasRole('ROLE_ADMIN')"
+                   th:href="@{/users/edit/{id}(id=${user.id})}"
+                   class="btn btn-sm btn-info">
+                    Редакция
+                </a>
+
+                <!-- Show Edit if Current User -->
+                <a th:if="${#authentication.name == user.username}"
+                   th:href="@{/users/edit/{id}(id=${user.id})}"
+                   class="btn btn-sm btn-info">
+                    Редакция
+                </a>
+                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/users/delete/{id}(id=${user.id})}" class="btn btn-sm btn-danger">Изтриване</a>
             </td>
         </tr>
         </tbody>

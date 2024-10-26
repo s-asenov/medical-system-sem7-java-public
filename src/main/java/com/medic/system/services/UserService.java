@@ -23,6 +23,12 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.userRepository.findByUsername(username);
+        return userRepository.findByUsername(username);
+    }
+
+    public boolean isCurrentUser(Long userId, String authenticatedUsername) {
+        return userRepository.findById(userId)
+            .map(user -> user.getUsername().equals(authenticatedUsername))
+            .orElse(false);
     }
 }

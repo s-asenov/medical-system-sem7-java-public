@@ -14,8 +14,6 @@ public class Patient extends User {
     @Column(unique = true, nullable = false)
     private String egn;
 
-    private boolean isHealthInsurancePaid;
-
     @ManyToOne
     @JoinColumn(name = "general_practitioner_id")
     private Doctor generalPractitioner;

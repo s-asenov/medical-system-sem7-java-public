@@ -27,7 +27,7 @@ public class DatabaseLoader {
             user.setLastName("admin");
             user.setUsername("admin");
             user.setPassword(passwordEncoder.encode("password"));
-            user.setRole(Role.ADMIN);
+            user.setRole(Role.ROLE_ADMIN);
             userRepository.save(user);
         }
 
@@ -38,7 +38,7 @@ public class DatabaseLoader {
             doctor.setLastName("doctor");
             doctor.setUsername("doctor");
             doctor.setPassword(passwordEncoder.encode("password"));
-            doctor.setRole(Role.DOCTOR);
+            doctor.setRole(Role.ROLE_DOCTOR);
             doctor.setGeneralPractitioner(true);
             userRepository.save(doctor);
         }
