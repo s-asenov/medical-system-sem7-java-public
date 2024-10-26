@@ -1,0 +1,28 @@
+<!-- src/main/resources/templates/users.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Users List</title>
+</head>
+
+<div layout:fragment="content">
+    <h1>Users</h1>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}">Id</td>
+            <td th:text="${user.firstName}">Name</td>
+            <td th:text="${user.email}">Email</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</html>

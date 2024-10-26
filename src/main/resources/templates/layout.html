@@ -1,0 +1,24 @@
+<!-- src/main/resources/templates/layout.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Application</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+
+<body>
+<!-- Header fragment -->
+<th:block th:insert="~{fragments/header :: header}"></th:block>
+
+<!-- Content section for pages that extend layout.html -->
+<div layout:fragment="content">
+</div>
+
+<!-- Footer fragment -->
+<th:block th:insert="~{fragments/footer :: footer}"></th:block>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
