@@ -1,5 +1,6 @@
 package com.medic.system.config;
 
+import com.medic.system.entities.Doctor;
 import com.medic.system.entities.User;
 import com.medic.system.enums.Role;
 import com.medic.system.repositories.UserRepository;
@@ -20,17 +21,28 @@ public class DatabaseLoader {
     }
 
     private void loadUsers() {
-        if (userRepository.findByUsername("admin") != null) {
-            return;
+        if (userRepository.findByUsername("admin") == null) {
+            User user = new User();
+            user.setFirstName("admin");
+            user.setLastName("admin");
+            user.setUsername("admin");
+            user.setPassword(passwordEncoder.encode("password"));
+            user.setRole(Role.ADMIN);
+            userRepository.save(user);
         }
 
-        User user = new User();
-        user.setFirstName("admin");
-        user.setLastName("admin");
-        user.setUsername("admin");
-        user.setPassword(passwordEncoder.encode("password"));
-        user.setRole(Role.SUPER_ADMIN);
-        userRepository.save(user);
+
+        if (userRepository.findByUsername("doctor") == null) {
+            Doctor doctor = new Doctor();
+            doctor.setFirstName("doctor");
+            doctor.setLastName("doctor");
+            doctor.setUsername("doctor");
+            doctor.setPassword(passwordEncoder.encode("password"));
+            doctor.setRole(Role.DOCTOR);
+            doctor.setGeneralPractitioner(true);
+            userRepository.save(doctor);
+        }
+
     }
 }
 

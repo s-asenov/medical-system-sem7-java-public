@@ -1,10 +1,7 @@
 package com.medic.system.entities;
 
 import com.medic.system.enums.Role;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,11 +14,11 @@ import java.util.Set;
 @Table(name = "users")
 @Getter
 @Setter
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User extends BaseEntity implements UserDetails {
     private String username;
     private String firstName;
     private String lastName;
-    private String email;
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
