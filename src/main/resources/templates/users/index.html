@@ -22,14 +22,14 @@
             <td th:text="${user.firstName + ' ' + user.lastName}">Name</td>
             <td th:text="${user.username}">Username</td>
             <td>
-                <a sec:authorize="hasRole('ROLE_ADMIN')"
-                   th:href="@{/users/edit/{id}(id=${user.id})}"
-                   class="btn btn-sm btn-info">
-                    Редакция
-                </a>
+<!--                <a sec:authorize="hasRole('ROLE_ADMIN')"-->
+<!--                   th:href="@{/users/edit/{id}(id=${user.id})}"-->
+<!--                   class="btn btn-sm btn-info">-->
+<!--                    Редакция-->
+<!--                </a>-->
 
                 <!-- Show Edit if Current User -->
-                <a th:if="${#authentication.name == user.username}"
+                <a th:if="${#authentication.name == user.username or #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
                    th:href="@{/users/edit/{id}(id=${user.id})}"
                    class="btn btn-sm btn-info">
                     Редакция

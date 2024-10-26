@@ -8,9 +8,9 @@ import java.util.List;
 
 @Getter
 @Setter
-public class DoctorRequestDto extends BaseUserRequestDto{
-    public boolean isGeneralPractitioner;
+public class DoctorRequestDto extends BaseUserRequestDto {
+    private Boolean isGeneralPractitioner;
 
-    @NotNull(message = "Specialties are mandatory")
+//    @NotNull(message = "Specialties are mandatory")
     private List<String> specialties;
 }

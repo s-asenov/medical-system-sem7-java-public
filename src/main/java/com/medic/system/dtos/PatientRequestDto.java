@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PatientRequestDto {
+public class PatientRequestDto extends BaseUserRequestDto {
     @NotBlank(message = "EGN is mandatory")
     private String egn;
 

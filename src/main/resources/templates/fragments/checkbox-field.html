@@ -1,0 +1,11 @@
+<!-- fragments/checkbox-field.html -->
+<div th:fragment="checkboxField(fieldName, labelText, checked)" th:with="fname=fieldName">
+    <div class="mb-3">
+        <label th:for="${fieldName}" th:text="${labelText}" class="form-label"></label>
+        <input type="checkbox"
+               th:class="'form-check-input' + ${#fields.hasErrors(fieldName) ? ' is-invalid' : ''}"
+               th:id="${fieldName}" th:name="${fieldName}"
+               th:checked="${checked}" />
+        <span th:if="${#fields.hasErrors(fieldName)}" th:errors="*{__${fieldName}__}" class="invalid-feedback"></span>
+    </div>
+</div>

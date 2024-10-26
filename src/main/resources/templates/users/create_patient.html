@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>Users List</title>
+</head>
+
+<div layout:fragment="content">
+  <form action="/users/create" method="post" th:object="${patient}">
+    <h1>Create Patient</h1>
+
+    <div>
+      <label>Role:</label>
+      <input type="text" value="ROLE_PATIENT" readonly disabled/>
+      <input type="hidden" th:field="*{role}"/>
+    </div>
+
+    <div>
+      <label>First Name:</label>
+      <input type="text" th:field="*{firstName}" required/>
+    </div>
+    <div>
+      <label>Last Name:</label>
+      <input type="text" th:field="*{lastName}" required/>
+    </div>
+    <div>
+      <label>Username:</label>
+      <input type="text" th:field="*{username}" required/>
+    </div>
+    <div>
+      <label>Password:</label>
+      <input type="password" th:field="*{password}" required/>
+    </div>
+    <div>
+      <label>EGN:</label>
+      <input type="text" th:field="*{egn}" required/>
+    </div>
+    <div>
+      <label>General Practitioner:</label>
+      <select th:field="*{generalPractitionerId}">
+        <option value="">Select General Practitioner</option>
+        <option th:each="gp : ${generalPractitioners}" th:value="${gp.id}" th:text="${gp.firstName + ' ' + gp.lastName}"></option>
+      </select>
+    </div>
+    <div>
+      <button type="submit">Create Patient</button>
+    </div>
+  </form>
+</div>
+</html>

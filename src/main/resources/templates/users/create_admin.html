@@ -6,30 +6,34 @@
 </head>
 
 <div layout:fragment="content">
-  <form action="/users/create" method="post" th:object="${admin}">
+  <form action="/users/create/admin" method="post" th:object="${admin}">
     <h1>Create Admin</h1>
+    <input type="hidden"
+           th:name="${_csrf.parameterName}"
+           th:value="${_csrf.token}" />
 
-    <div>
-      <label>Role:</label>
-      <input type="text" value="ROLE_ADMIN" readonly disabled/>
-      <input type="hidden" th:field="*{role}"/>
-    </div>
+
+<!--    <div>-->
+<!--      <label>Role:</label>-->
+<!--      <input type="text" value="ROLE_ADMIN" readonly disabled/>-->
+<!--      <input type="hidden" th:field="*{role}"/>-->
+<!--    </div>-->
 
     <div>
       <label>First Name:</label>
-      <input type="text" th:field="*{firstName}" required/>
+      <input type="text" th:field="${admin.firstName}" />
     </div>
     <div>
       <label>Last Name:</label>
-      <input type="text" th:field="*{lastName}" required/>
+      <input type="text" th:field="*{lastName}" />
     </div>
     <div>
       <label>Username:</label>
-      <input type="text" th:field="*{username}" required/>
+      <input type="text" th:field="*{username}" />
     </div>
     <div>
       <label>Password:</label>
-      <input type="password" th:field="*{password}" required/>
+      <input type="password" th:field="*{password}" />
     </div>
     <div>
       <button type="submit">Create Admin</button>
