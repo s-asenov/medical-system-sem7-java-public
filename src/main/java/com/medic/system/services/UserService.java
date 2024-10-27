@@ -5,6 +5,8 @@ import com.medic.system.entities.User;
 import com.medic.system.repositories.DoctorRepository;
 import com.medic.system.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,10 @@ public class UserService implements UserServiceInterface {
 
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     public User findById(Long id) {

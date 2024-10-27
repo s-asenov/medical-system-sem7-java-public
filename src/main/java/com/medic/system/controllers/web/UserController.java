@@ -8,6 +8,7 @@ import com.medic.system.enums.Role;
 import com.medic.system.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -26,8 +27,8 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public String index(Model model) {
-        model.addAttribute("users", userService.findAll());
+    public String index(Model model, Pageable pageable) {
+        model.addAttribute("users", userService.findAll(pageable));
         return "users/index";
     }
 

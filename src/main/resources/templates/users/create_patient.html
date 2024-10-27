@@ -7,22 +7,52 @@
 
 <div layout:fragment="content">
   <form action="/users/create/patient" method="post" th:object="${patient}">
-    <h1>Create Patient</h1>
+    <h1>Създай пациент</h1>
 
     <input type="hidden"
            th:name="${_csrf.parameterName}"
            th:value="${_csrf.token}" />
     <input type="hidden" th:field="*{role}"/>
 
-    <div th:replace="fragments/input-field :: inputField('firstName', 'First Name', 'text', 'Enter First Name', ${patient.firstName})"></div>
+    <div class="mb-3">
+      <label class="form-label">Име</label>
+      <input type="text" th:field="*{firstName}"
+             th:class="'form-control' + (${#fields.hasErrors('firstName') ? ' is-invalid' : ''})"
+             placeholder="Въведи име" />
+      <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="invalid-feedback"></span>
+    </div>
 
-    <div th:include="fragments/input-field :: inputField('lastName', 'Last Name', 'text', 'Enter Last Name', ${patient.lastName})"></div>
+    <div class="mb-3">
+      <label class="form-label">Фамилия</label>
+      <input type="text" th:field="*{lastName}"
+             th:class="'form-control' + (${#fields.hasErrors('lastName') ? ' is-invalid' : ''})"
+             placeholder="Въведи фамилия" />
+      <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="invalid-feedback"></span>
+    </div>
 
-    <div th:include="fragments/input-field :: inputField('username', 'Username', 'text', 'Enter Username', ${patient.username})"></div>
+    <div class="mb-3">
+      <label class="form-label">Потребителско име</label>
+      <input type="text" th:field="*{username}"
+             th:class="'form-control' + (${#fields.hasErrors('username') ? ' is-invalid' : ''})"
+             placeholder="Въведи потребителско име" />
+      <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="invalid-feedback"></span>
+    </div>
 
-    <div th:include="fragments/input-field :: inputField('password', 'Password', 'password', 'Enter Password', ${patient.password})"></div>
+    <div class="mb-3">
+      <label class="form-label">Парола</label>
+      <input type="password" th:field="*{password}"
+             th:class="'form-control' + (${#fields.hasErrors('password') ? ' is-invalid' : ''})"
+             placeholder="Enter Password" />
+      <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback"></span>
+    </div>
 
-    <div th:include="fragments/input-field :: inputField('egn', 'Egn', 'text', 'Enter Password', ${patient.egn})"></div>
+    <div class="mb-3">
+      <label class="form-label">Потвърди парола</label>
+      <input type="password" th:field="*{confirmPassword}"
+             th:class="'form-control' + (${#fields.hasErrors('confirmPassword') ? ' is-invalid' : ''})"
+             placeholder="Confirm Password" />
+      <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="invalid-feedback"></span>
+    </div>
 
     <div class="mb-3">
       <label for="generalPractitionerId" class="form-label">GP</label>
@@ -34,7 +64,7 @@
     </div>
 
     <div>
-      <button type="submit" class="btn btn-primary">Create Patient</button>
+      <button type="submit" class="btn btn-primary">Създай пациент</button>
     </div>
   </form>
 </div>
