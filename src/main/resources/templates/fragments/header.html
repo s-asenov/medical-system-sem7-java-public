@@ -13,11 +13,11 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" th:href="@{/users}">Всички</a></li>
-                            <li><a class="dropdown-item" href="#">Пациенти</a></li>
-                            <li><a class="dropdown-item" href="#">Доктори</a></li>
+                            <li><a class="dropdown-item" th:href="@{/patients}">Пациенти</a></li>
+                            <li><a class="dropdown-item" th:href="@{/doctors}">Доктори</a></li>
                         </ul>
                     </li>
-                    <li th:if="${!#authentication.isAuthenticated()}" class="nav-item">
+                    <li th:unless="${#authentication.isAuthenticated()}" class="nav-item">
                         <a class="nav-link" href="/login">Login</a>
                     </li>
                     <li th:if="${#authentication.isAuthenticated()}" class="nav-item">

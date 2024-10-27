@@ -2,10 +2,13 @@ package com.medic.system.controllers.web;
 
 import com.medic.system.dtos.BaseUserRequestDto;
 import com.medic.system.dtos.DoctorRequestDto;
+import com.medic.system.dtos.EditBaseUserRequestDto;
 import com.medic.system.dtos.PatientRequestDto;
 import com.medic.system.entities.Doctor;
+import com.medic.system.entities.User;
 import com.medic.system.enums.Role;
-import com.medic.system.services.UserService;
+import com.medic.system.services.DoctorService;
+import com.medic.system.services.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -24,11 +27,12 @@ import java.util.List;
 @Controller
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
+    private final DoctorService doctorService;
 
     @GetMapping
     public String index(Model model, Pageable pageable) {
-        model.addAttribute("users", userService.findAll(pageable));
+        model.addAttribute("users", userServiceImpl.findAll(pageable));
         return "users/index";
     }
 
@@ -44,7 +48,7 @@ public class UserController {
     @GetMapping("/create/patient")
     @PreAuthorize("hasRole('ADMIN')")
     public String createPatient(Model model) {
-        List<Doctor> gps = userService.findAllGeneralPractitioners();
+        List<Doctor> gps = doctorService.findAllGeneralPractitioners();
         model.addAttribute("generalPractitioners", gps);
         model.addAttribute("patient", new PatientRequestDto());
         return "users/create_patient";
@@ -81,7 +85,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public String storePatient(@Valid @ModelAttribute("patient") PatientRequestDto patient, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            List<Doctor> gps = userService.findAllGeneralPractitioners();
+            List<Doctor> gps = doctorService.findAllGeneralPractitioners();
             model.addAttribute("generalPractitioners", gps);
 
             return "users/create_patient";
@@ -91,26 +95,27 @@ public class UserController {
     }
 
     @GetMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @userService.isCurrentUser(#id, authentication.name)")
+    @PreAuthorize("hasRole('ADMIN') or @userServiceImpl.isCurrentUser(#id, authentication.name)")
     public String edit(@PathVariable Long id, Model model) {
-        return "users/edit";
-    }
+        User user;
 
-//    @PostMapping("/{id}")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public String update(@PathVariable Long id) {
-//        return "redirect:/users";
-//    }
-
-    @GetMapping("/{id}")
-    public String show(@PathVariable Long id, Model model) {
         try {
-            model.addAttribute("user", userService.findById(id));
+            user = userServiceImpl.findById(id);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Потребителят не съществува");
         }
 
-        return "users/show";
+        if (user.getRole() == Role.ROLE_DOCTOR) {
+            return "redirect:/doctors/edit/" + id;
+        }
+
+        if (user.getRole() == Role.ROLE_PATIENT) {
+            return "redirect:/patients/edit/" + id;
+        }
+
+        model.addAttribute("user", new EditBaseUserRequestDto(user));
+
+        return "users/edit";
     }
 
     @GetMapping("/delete/{id}")
@@ -118,7 +123,7 @@ public class UserController {
     public String delete(@PathVariable Long id) {
         try
         {
-            userService.deleteById(id);
+            userServiceImpl.deleteById(id);
         }
         catch (Exception e)
         {

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Всички пациенти</title>
+</head>
+
+<div layout:fragment="content">
+    <h1>Всички пациенти</h1>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'id', '№')}"></div>
+            <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'firstName', 'Име')}"></div>
+            <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'username', 'Потребителско име')}"></div>
+            <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'generalPractitioner', 'Общопрактикуващ (личен)')}"></div>
+            <th>ЕГН</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="patient : ${patients.content}">
+            <td th:text="${patient.id}"></td>
+            <td th:text="${patient.firstName + ' ' + patient.lastName}"></td>
+            <td th:text="${patient.username}"></td>
+            <td>
+                <a th:if="${patient.generalPractitioner != null}" th:href="@{/doctors/{id}(id=${patient.generalPractitioner.id})}"
+                   th:text="${patient.generalPractitioner.firstName + ' ' + patient.generalPractitioner.lastName}" class="text-decoration-none fw-bold text-black"></a>
+            </td>
+            <td th:text="${patient.egn}"></td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:include="~{fragments/pagination :: pagination(${patients}, '/patients')}"></div>
+</div>
+</html>

@@ -1,9 +1,6 @@
 package com.medic.system.config;
 
-import com.medic.system.services.UserService;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.medic.system.services.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -15,17 +12,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import java.io.IOException;
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
-    public SecurityConfiguration(UserService userService) {
-        this.userService = userService;
+    public SecurityConfiguration(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
     }
 
 //    @Bean
@@ -49,7 +44,7 @@ public class SecurityConfiguration {
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userService);
+        authProvider.setUserDetailsService(userServiceImpl);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }

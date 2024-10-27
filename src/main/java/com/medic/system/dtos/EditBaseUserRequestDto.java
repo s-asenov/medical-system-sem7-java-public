@@ -10,25 +10,29 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BaseUserRequestDto {
+public class EditBaseUserRequestDto {
 
     @NotBlank(message = "Username is mandatory")
     @Matches(fieldToMatch = "^[a-zA-Z0-9]*$", message = "Username must contain only letters and numbers")
     public String username;
 
-    @NotBlank(message = "Password is mandatory")
     public String password;
 
-    @NotBlank(message = "Confirm password is mandatory")
     @Matches(fieldToMatch = "password", message = "Passwords do not match")
-    public String confirmPassword;
-
-    @NotNull(message = "Role is mandatory")
-    public Role role;
+    public String confirmPassword;;
 
     @NotBlank(message = "First name is mandatory")
     public String firstName;
 
     @NotBlank(message = "Last name is mandatory")
     public String lastName;
+
+    public EditBaseUserRequestDto() {}
+
+    public EditBaseUserRequestDto(User user)
+    {
+        this.username = user.getUsername();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+    }
 }

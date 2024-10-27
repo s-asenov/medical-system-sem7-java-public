@@ -1,6 +1,7 @@
 package com.medic.system.config;
 
 import com.medic.system.entities.Doctor;
+import com.medic.system.entities.Patient;
 import com.medic.system.entities.User;
 import com.medic.system.enums.Role;
 import com.medic.system.repositories.UserRepository;
@@ -43,6 +44,16 @@ public class DatabaseLoader {
             userRepository.save(doctor);
         }
 
+        if (userRepository.findByUsername("patient") == null) {
+            Patient user = new Patient();
+            user.setFirstName("patient");
+            user.setLastName("patient");
+            user.setUsername("patient");
+            user.setEgn("1234567890");
+            user.setPassword(passwordEncoder.encode("password"));
+            user.setRole(Role.ROLE_PATIENT);
+            userRepository.save(user);
+        }
     }
 }
 

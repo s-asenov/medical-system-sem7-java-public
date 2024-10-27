@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Всички лекари</title>
+</head>
+
+<div layout:fragment="content">
+    <h1>Всички лекари</h1>
+    <!-- todo decide if doctor can create patient -->
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'id', '№')}"></div>
+            <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'firstName', 'Име')}"></div>
+            <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'username', 'Потребителско име')}"></div>
+            <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'isGeneralPractitioner', 'Общопрактикуващ (личен)')}"></div>
+            <th>Специалности</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="doctor : ${doctors.content}">
+            <td th:text="${doctor.id}"></td>
+            <td th:text="${doctor.firstName + ' ' + doctor.lastName}"></td>
+            <td th:text="${doctor.username}"></td>
+            <td>
+                <span th:if="${doctor.isGeneralPractitioner}" class="badge bg-success">Да</span>
+                <span th:unless="${doctor.isGeneralPractitioner}" class="badge bg-warning">Не</span>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:include="~{fragments/pagination :: pagination(${doctors}, '/doctors')}"></div>
+</div>
+</html>
