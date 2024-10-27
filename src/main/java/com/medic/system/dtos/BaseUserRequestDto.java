@@ -1,5 +1,6 @@
 package com.medic.system.dtos;
 
+import com.medic.system.annotations.Matches;
 import com.medic.system.enums.Role;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,6 +16,10 @@ public class BaseUserRequestDto {
 
     @NotBlank(message = "Password is mandatory")
     public String password;
+
+    @NotBlank(message = "Confirm password is mandatory")
+    @Matches(fieldToMatch = "password", message = "Passwords do not match")
+    public String confirmPassword;
 
     @NotNull(message = "Role is mandatory")
     public Role role;

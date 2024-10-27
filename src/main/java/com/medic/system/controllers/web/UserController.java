@@ -8,11 +8,13 @@ import com.medic.system.enums.Role;
 import com.medic.system.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -93,20 +95,35 @@ public class UserController {
         return "users/edit";
     }
 
-    @PostMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String update(@PathVariable Long id) {
-        return "redirect:/users";
-    }
+//    @PostMapping("/{id}")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public String update(@PathVariable Long id) {
+//        return "redirect:/users";
+//    }
 
     @GetMapping("/{id}")
     public String show(@PathVariable Long id, Model model) {
+        try {
+            model.addAttribute("user", userService.findById(id));
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Потребителят не съществува");
+        }
+
         return "users/show";
     }
 
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public String delete(@PathVariable Long id) {
+        try
+        {
+            userService.deleteById(id);
+        }
+        catch (Exception e)
+        {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Потребителят не съществува");
+        }
+
         return "redirect:/users";
     }
 }

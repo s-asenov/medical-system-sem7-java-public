@@ -6,44 +6,35 @@
 </head>
 
 <div layout:fragment="content">
-  <form action="/users/create" method="post" th:object="${patient}">
+  <form action="/users/create/patient" method="post" th:object="${patient}">
     <h1>Create Patient</h1>
 
-    <div>
-      <label>Role:</label>
-      <input type="text" value="ROLE_PATIENT" readonly disabled/>
-      <input type="hidden" th:field="*{role}"/>
+    <input type="hidden"
+           th:name="${_csrf.parameterName}"
+           th:value="${_csrf.token}" />
+    <input type="hidden" th:field="*{role}"/>
+
+    <div th:replace="fragments/input-field :: inputField('firstName', 'First Name', 'text', 'Enter First Name', ${patient.firstName})"></div>
+
+    <div th:include="fragments/input-field :: inputField('lastName', 'Last Name', 'text', 'Enter Last Name', ${patient.lastName})"></div>
+
+    <div th:include="fragments/input-field :: inputField('username', 'Username', 'text', 'Enter Username', ${patient.username})"></div>
+
+    <div th:include="fragments/input-field :: inputField('password', 'Password', 'password', 'Enter Password', ${patient.password})"></div>
+
+    <div th:include="fragments/input-field :: inputField('egn', 'Egn', 'text', 'Enter Password', ${patient.egn})"></div>
+
+    <div class="mb-3">
+      <label for="generalPractitionerId" class="form-label">GP</label>
+      <select th:field="*{generalPractitionerId}" th:class="'form-select' + ${#fields.hasErrors('generalPractitionerId') ? ' is-invalid' : ''}" id="generalPractitionerId" name="generalPractitionerId">
+        <option value="">Select GP</option>
+        <option th:each="generalPractitionerId : ${generalPractitioners}" th:value="${generalPractitionerId.id}" th:text="${generalPractitionerId.getFirstName()}"></option>
+      </select>
+      <span th:if="${#fields.hasErrors('generalPractitionerId')}" th:errors="*{generalPractitionerId}" class="invalid-feedback"></span>
     </div>
 
     <div>
-      <label>First Name:</label>
-      <input type="text" th:field="*{firstName}" required/>
-    </div>
-    <div>
-      <label>Last Name:</label>
-      <input type="text" th:field="*{lastName}" required/>
-    </div>
-    <div>
-      <label>Username:</label>
-      <input type="text" th:field="*{username}" required/>
-    </div>
-    <div>
-      <label>Password:</label>
-      <input type="password" th:field="*{password}" required/>
-    </div>
-    <div>
-      <label>EGN:</label>
-      <input type="text" th:field="*{egn}" required/>
-    </div>
-    <div>
-      <label>General Practitioner:</label>
-      <select th:field="*{generalPractitionerId}">
-        <option value="">Select General Practitioner</option>
-        <option th:each="gp : ${generalPractitioners}" th:value="${gp.id}" th:text="${gp.firstName + ' ' + gp.lastName}"></option>
-      </select>
-    </div>
-    <div>
-      <button type="submit">Create Patient</button>
+      <button type="submit" class="btn btn-primary">Create Patient</button>
     </div>
   </form>
 </div>

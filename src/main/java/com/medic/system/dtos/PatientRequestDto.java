@@ -1,6 +1,7 @@
 package com.medic.system.dtos;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,6 @@ public class PatientRequestDto extends BaseUserRequestDto {
     @NotBlank(message = "EGN is mandatory")
     private String egn;
 
-    @NotBlank(message = "General practitioner id is mandatory")
+    @NotNull(message = "General practitioner id is mandatory")
     private Long generalPractitionerId;
 }

@@ -18,17 +18,10 @@
         </thead>
         <tbody>
         <tr th:each="user : ${users}">
-            <td th:text="${user.id}">Id</td>
-            <td th:text="${user.firstName + ' ' + user.lastName}">Name</td>
-            <td th:text="${user.username}">Username</td>
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.firstName + ' ' + user.lastName}"></td>
+            <td th:text="${user.username}"></td>
             <td>
-<!--                <a sec:authorize="hasRole('ROLE_ADMIN')"-->
-<!--                   th:href="@{/users/edit/{id}(id=${user.id})}"-->
-<!--                   class="btn btn-sm btn-info">-->
-<!--                    Редакция-->
-<!--                </a>-->
-
-                <!-- Show Edit if Current User -->
                 <a th:if="${#authentication.name == user.username or #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
                    th:href="@{/users/edit/{id}(id=${user.id})}"
                    class="btn btn-sm btn-info">

@@ -11,6 +11,5 @@ import java.util.List;
 public class DoctorRequestDto extends BaseUserRequestDto {
     private Boolean isGeneralPractitioner;
 
-//    @NotNull(message = "Specialties are mandatory")
     private List<String> specialties;
 }
