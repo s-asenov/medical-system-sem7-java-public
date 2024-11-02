@@ -1,5 +1,7 @@
-package com.medic.system.dtos;
+package com.medic.system.dtos.user;
 
+import com.medic.system.annotations.FieldMatch;
+import com.medic.system.annotations.Unique;
 import com.medic.system.entities.User;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -7,7 +9,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@Unique(entityClass = User.class, fieldName = "username", message = "Потребителското име вече съществува")
+@FieldMatch(first = "password", second = "confirmPassword", message = "Паролите не съвпадат")
 public class EditBaseUserRequestDto {
+    private Long id;
 
     @NotBlank(message = "Потребителското име е задължително")
     private String username;
@@ -22,10 +27,13 @@ public class EditBaseUserRequestDto {
     @NotBlank(message = "Фамилията е задължителна")
     private String lastName;
 
+    public EditBaseUserRequestDto() {}
+
     public EditBaseUserRequestDto(User user)
     {
-        this.username = user.getUsername();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
+        setUsername(user.getUsername());
+        setFirstName(user.getFirstName());
+        setLastName(user.getLastName());
+        setId(user.getId());
     }
 }

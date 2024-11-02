@@ -37,7 +37,7 @@ public class DoctorService {
                 gps.add((Doctor) UserServiceImpl.getCurrentUser());
             }
         } else {
-            gps = this.findAllGeneralPractitioners();
+            gps = findAllGeneralPractitioners();
         }
 
         return gps;

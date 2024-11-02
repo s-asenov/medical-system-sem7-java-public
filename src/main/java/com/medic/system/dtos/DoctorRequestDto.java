@@ -1,6 +1,6 @@
 package com.medic.system.dtos;
 
-import jakarta.validation.constraints.NotNull;
+import com.medic.system.dtos.user.BaseUserRequestDto;
 import lombok.Getter;
 import lombok.Setter;
 

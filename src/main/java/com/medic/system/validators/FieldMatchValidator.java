@@ -13,17 +13,17 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
 
     @Override
     public void initialize(FieldMatch constraintAnnotation) {
-        this.firstFieldName = constraintAnnotation.first();
-        this.secondFieldName = constraintAnnotation.second();
-        this.message = constraintAnnotation.message();
+        firstFieldName = constraintAnnotation.first();
+        secondFieldName = constraintAnnotation.second();
+        message = constraintAnnotation.message();
     }
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
         try {
             // access the fields
-            Field firstField = this.getField(value.getClass(), firstFieldName);
-            Field secondField = this.getField(value.getClass(), secondFieldName);
+            Field firstField = getField(value.getClass(), firstFieldName);
+            Field secondField = getField(value.getClass(), secondFieldName);
 
             firstField.setAccessible(true);
             secondField.setAccessible(true);

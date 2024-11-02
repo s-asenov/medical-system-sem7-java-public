@@ -1,23 +1,20 @@
 package com.medic.system.controllers.web;
 
-import com.medic.system.dtos.PatientRequestDto;
-import com.medic.system.entities.Doctor;
+import com.medic.system.dtos.patient.EditPatientRequestDto;
+import com.medic.system.dtos.patient.PatientRequestDto;
 import com.medic.system.entities.Patient;
-import com.medic.system.entities.User;
 import com.medic.system.services.DoctorService;
 import com.medic.system.services.PatientService;
-import com.medic.system.services.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.server.ResponseStatusException;
 
 @RequestMapping("/patients")
 @RequiredArgsConstructor
@@ -65,6 +62,33 @@ public class PatientController {
             "@userServiceImpl.isCurrentUser(#id, authentication.name) or " +
             "(hasRole('DOCTOR') and @userServiceImpl.getCurrentUser().isGeneralPractitioner())")
     public String edit(@PathVariable Long id, Model model) {
+        try {
+            Patient patient = patientService.findById(id);
+            model.addAttribute("patient", new EditPatientRequestDto(patient));
+            model.addAttribute("generalPractitioners", doctorService.getListOfGps());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Пациентът не съществува");
+        }
+
         return "patients/edit";
+    }
+
+    @PostMapping("/edit/{id}")
+    @PreAuthorize("hasRole('ADMIN') or " +
+            "@userServiceImpl.isCurrentUser(#id, authentication.name) or " +
+            "(hasRole('DOCTOR') and @userServiceImpl.getCurrentUser().isGeneralPractitioner())")
+    public String update(@PathVariable Long id, @Valid @ModelAttribute("patient") EditPatientRequestDto patient, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("generalPractitioners", doctorService.getListOfGps());
+            return "patients/edit";
+        }
+
+        patientService.update(id, patient, bindingResult);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("generalPractitioners", doctorService.getListOfGps());
+            return "patients/edit";
+        }
+
+        return "redirect:/patients";
     }
 }

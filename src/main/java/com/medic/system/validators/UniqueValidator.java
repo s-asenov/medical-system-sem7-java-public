@@ -20,32 +20,41 @@ public class UniqueValidator implements ConstraintValidator<Unique, Object> {
 
     @Override
     public void initialize(Unique constraintAnnotation) {
-        this.entityClass = constraintAnnotation.entityClass();
-        this.fieldName = constraintAnnotation.fieldName();
+        entityClass = constraintAnnotation.entityClass();
+        fieldName = constraintAnnotation.fieldName();
     }
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
+        Field idField;
+        Object idForm;
+        // in case of form not having id field, set it to 0
         try {
-            Field field = this.getField(value.getClass(), fieldName);
-            Field idField = this.getField(value.getClass(), "id");
+            idField = getField(value.getClass(), "id");
 
             idField.setAccessible(true);
+            idForm = idField.get(value);
+        } catch (Exception e) {
+            idForm = 0;
+        }
+
+        try {
+            Field field = getField(value.getClass(), fieldName);
             field.setAccessible(true);
 
+            // check if the entity with the same value exists for given fieldname
             String query = String.format("SELECT e FROM %s e WHERE e.%s = :value", entityClass.getSimpleName(), fieldName);
-            Object entity = entityManager.createQuery(query, this.entityClass)
+            Object entity = entityManager.createQuery(query, entityClass)
                     .setParameter("value", field.get(value))
                     .getSingleResult();
 
             if (entity != null)
             {
                 // check if the entity has same id from ifForm
-                Field entityIdField = this.getField(entity.getClass(), "id");
+                Field entityIdField = getField(entity.getClass(), "id");
                 entityIdField.setAccessible(true);
                 Object entityId = entityIdField.get(entity);
 
-                Object idForm = idField.get(value);
 
                 // if the entity id is different from the id from the form, reject the form
                 if (!entityId.equals(idForm)) {

@@ -1,4 +1,4 @@
-package com.medic.system.dtos;
+package com.medic.system.dtos.user;
 
 import com.medic.system.annotations.FieldMatch;
 import com.medic.system.annotations.Unique;
@@ -12,10 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @FieldMatch(first = "password", second = "confirmPassword", message = "Паролите не съвпадат")
-@Unique(entityClass = User.class, fieldName = "username", message = "Username already exists")
+@Unique(entityClass = User.class, fieldName = "username", message = "Потребителското име вече съществува")
 public class BaseUserRequestDto {
-    public Long id;
-
     @NotBlank(message = "Потребителското име е задължително")
     private String username;
 

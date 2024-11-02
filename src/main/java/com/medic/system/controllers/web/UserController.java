@@ -1,10 +1,7 @@
 package com.medic.system.controllers.web;
 
-import com.medic.system.dtos.BaseUserRequestDto;
-import com.medic.system.dtos.DoctorRequestDto;
-import com.medic.system.dtos.EditBaseUserRequestDto;
-import com.medic.system.dtos.PatientRequestDto;
-import com.medic.system.entities.Doctor;
+import com.medic.system.dtos.user.BaseUserRequestDto;
+import com.medic.system.dtos.user.EditBaseUserRequestDto;
 import com.medic.system.entities.User;
 import com.medic.system.enums.Role;
 import com.medic.system.services.DoctorService;
@@ -19,9 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RequestMapping("/users")
 @RequiredArgsConstructor
