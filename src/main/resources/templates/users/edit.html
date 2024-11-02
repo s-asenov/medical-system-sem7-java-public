@@ -40,14 +40,14 @@
             <label class="form-label">Парола</label>
             <input type="password" th:field="*{password}"
                    th:class="'form-control' + (${#fields.hasErrors('password') ? ' is-invalid' : ''})"
-                   placeholder="Enter Password" />
+                   placeholder="Въведи парола" />
             <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback"></span>
         </div>
         <div class="mb-3">
             <label class="form-label">Потвърди парола</label>
             <input type="password" th:field="*{confirmPassword}"
                    th:class="'form-control' + (${#fields.hasErrors('confirmPassword') ? ' is-invalid' : ''})"
-                   placeholder="Confirm Password" />
+                   placeholder="Потвърди парола" />
             <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="invalid-feedback"></span>
         </div>
         <div>

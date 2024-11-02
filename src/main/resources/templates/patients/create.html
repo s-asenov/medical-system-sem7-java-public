@@ -6,7 +6,7 @@
 </head>
 
 <div layout:fragment="content">
-  <form action="/users/create/patient" method="post" th:object="${patient}">
+  <form th:action="@{/patients/create}" method="post" th:object="${patient}">
     <h1>Създай пациент</h1>
 
     <input type="hidden"
@@ -42,7 +42,7 @@
       <label class="form-label">Парола</label>
       <input type="password" th:field="*{password}"
              th:class="'form-control' + (${#fields.hasErrors('password') ? ' is-invalid' : ''})"
-             placeholder="Enter Password" />
+             placeholder="Въведи парола" />
       <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback"></span>
     </div>
 
@@ -50,14 +50,14 @@
       <label class="form-label">Потвърди парола</label>
       <input type="password" th:field="*{confirmPassword}"
              th:class="'form-control' + (${#fields.hasErrors('confirmPassword') ? ' is-invalid' : ''})"
-             placeholder="Confirm Password" />
+             placeholder="Потвърди парола" />
       <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="invalid-feedback"></span>
     </div>
 
     <div class="mb-3">
       <label for="generalPractitionerId" class="form-label">GP</label>
       <select th:field="*{generalPractitionerId}" th:class="'form-select' + ${#fields.hasErrors('generalPractitionerId') ? ' is-invalid' : ''}" id="generalPractitionerId" name="generalPractitionerId">
-        <option value="">Select GP</option>
+        <option value="">Избери GP</option>
         <option th:each="generalPractitionerId : ${generalPractitioners}" th:value="${generalPractitionerId.id}" th:text="${generalPractitionerId.getFirstName()}"></option>
       </select>
       <span th:if="${#fields.hasErrors('generalPractitionerId')}" th:errors="*{generalPractitionerId}" class="invalid-feedback"></span>

@@ -1,8 +1,10 @@
 package com.medic.system.dtos;
 
-import com.medic.system.annotations.Matches;
+import com.medic.system.annotations.FieldMatch;
+import com.medic.system.annotations.Unique;
 import com.medic.system.entities.User;
 import com.medic.system.enums.Role;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -10,25 +12,33 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@FieldMatch(first = "password", second = "confirmPassword", message = "Паролите не съвпадат")
 public class BaseUserRequestDto {
 
-    @NotBlank(message = "Username is mandatory")
-    @Matches(fieldToMatch = "^[a-zA-Z0-9]*$", message = "Username must contain only letters and numbers")
+    @NotBlank(message = "Потребителското име е задължително")
+    @Unique(entityClass = User.class, fieldName = "username", message = "Username already exists")
     public String username;
 
-    @NotBlank(message = "Password is mandatory")
+    @NotBlank(message = "Паролата е задължителна")
     public String password;
 
-    @NotBlank(message = "Confirm password is mandatory")
-    @Matches(fieldToMatch = "password", message = "Passwords do not match")
+    @NotBlank(message = "Потвърждението на паролата е задължително")
     public String confirmPassword;
 
-    @NotNull(message = "Role is mandatory")
+    @NotNull(message = "Ролята е задължителна")
     public Role role;
 
-    @NotBlank(message = "First name is mandatory")
+    @NotBlank(message = "Името е задължително")
     public String firstName;
 
-    @NotBlank(message = "Last name is mandatory")
+    @NotBlank(message = "Фамилията е задължителна")
     public String lastName;
+
+    @AssertTrue(message = "Паролите не съвпадат")
+    public boolean isPasswordMatching() {
+        if (password == null || confirmPassword == null) {
+            return false;
+        }
+        return password.equals(confirmPassword);
+    }
 }

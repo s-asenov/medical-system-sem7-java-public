@@ -10,6 +10,5 @@ import java.util.List;
 @Setter
 public class DoctorRequestDto extends BaseUserRequestDto {
     private Boolean isGeneralPractitioner;
-
     private List<String> specialties;
 }

@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequestMapping("/users")
@@ -36,24 +37,6 @@ public class UserController {
         return "users/index";
     }
 
-    @GetMapping("/create/doctor")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String createDoctor(Model model) {
-        DoctorRequestDto doctor = new DoctorRequestDto();
-        doctor.setRole(Role.ROLE_DOCTOR);
-        model.addAttribute("doctor", doctor);
-        return "users/create_doctor";
-    }
-
-    @GetMapping("/create/patient")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String createPatient(Model model) {
-        List<Doctor> gps = doctorService.findAllGeneralPractitioners();
-        model.addAttribute("generalPractitioners", gps);
-        model.addAttribute("patient", new PatientRequestDto());
-        return "users/create_patient";
-    }
-
     @GetMapping("/create/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public String createAdmin(Model model) {
@@ -68,29 +51,6 @@ public class UserController {
             return "users/create_admin";
         }
         // Save admin user logic here
-        return "redirect:/users";
-    }
-
-    @PostMapping("/create/doctor")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String storeDoctor(@Valid @ModelAttribute("doctor") DoctorRequestDto doctor, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            return "users/create_doctor";
-        }
-
-        return "redirect:/users";
-    }
-
-    @PostMapping("/create/patient")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String storePatient(@Valid @ModelAttribute("patient") PatientRequestDto patient, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            List<Doctor> gps = doctorService.findAllGeneralPractitioners();
-            model.addAttribute("generalPractitioners", gps);
-
-            return "users/create_patient";
-        }
-        // Save patient user logic here
         return "redirect:/users";
     }
 

@@ -8,9 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PatientRequestDto extends BaseUserRequestDto {
-    @NotBlank(message = "EGN is mandatory")
+    @NotBlank(message = "ЕГН-то е задължително")
     private String egn;
 
-    @NotNull(message = "General practitioner id is mandatory")
+    @NotNull(message = "Личният лекар е задължителен")
     private Long generalPractitionerId;
 }

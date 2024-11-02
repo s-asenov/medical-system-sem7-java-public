@@ -33,26 +33,45 @@ public class DoctorController {
         return "doctors/index";
     }
 
-    @GetMapping("/create/patient")
+//    @GetMapping("/create/patient")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public String createPatient(Model model) {
+//        List<Doctor> gps = doctorService.findAllGeneralPractitioners();
+//        model.addAttribute("generalPractitioners", gps);
+//        model.addAttribute("patient", new PatientRequestDto());
+//        return "users/create_patient";
+//    }
+//
+//    @PostMapping("/create/patient")
+//    @PreAuthorize("@doctorService.isCurrentUserGp(authentication.principal.id)")
+//    public String storePatient(@Valid @ModelAttribute("patient") PatientRequestDto patient, BindingResult bindingResult, Model model) {
+//        if (bindingResult.hasErrors()) {
+//            List<Doctor> gps = doctorService.findAllGeneralPractitioners();
+//            model.addAttribute("generalPractitioners", gps);
+//
+//            return "users/create_patient";
+//        }
+//        // Save patient user logic here
+//        return "redirect:/users";
+//    }
+
+    @GetMapping("/create/doctor")
     @PreAuthorize("hasRole('ADMIN')")
-    public String createPatient(Model model) {
-        List<Doctor> gps = doctorService.findAllGeneralPractitioners();
-        model.addAttribute("generalPractitioners", gps);
-        model.addAttribute("patient", new PatientRequestDto());
-        return "users/create_patient";
+    public String createDoctor(Model model) {
+        DoctorRequestDto doctor = new DoctorRequestDto();
+        doctor.setRole(Role.ROLE_DOCTOR);
+        model.addAttribute("doctor", doctor);
+        return "users/create_doctor";
     }
 
-    @PostMapping("/create/patient")
-    @PreAuthorize("@doctorService.isCurrentUserGp(authentication.principal.id)")
-    public String storePatient(@Valid @ModelAttribute("patient") PatientRequestDto patient, BindingResult bindingResult, Model model) {
+    @PostMapping("/create/doctor")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String storeDoctor(@Valid @ModelAttribute("doctor") DoctorRequestDto doctor, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            List<Doctor> gps = doctorService.findAllGeneralPractitioners();
-            model.addAttribute("generalPractitioners", gps);
-
-            return "users/create_patient";
+            return "users/create_doctor";
         }
-        // Save patient user logic here
-        return "redirect:/users";
+
+        return "redirect:/doctors";
     }
 
     @GetMapping("/{id}")

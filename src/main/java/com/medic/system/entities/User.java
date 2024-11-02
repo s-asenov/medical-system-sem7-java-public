@@ -16,6 +16,7 @@ import java.util.Set;
 @Setter
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User extends BaseEntity implements UserDetails {
+    @Column(unique = true)
     private String username;
     private String firstName;
     private String lastName;
@@ -46,5 +47,17 @@ public class User extends BaseEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
+    }
+
+    public boolean isDoctor() {
+        return role == Role.ROLE_DOCTOR;
+    }
+
+    public boolean isPatient() {
+        return role == Role.ROLE_PATIENT;
+    }
+
+    public boolean isAdmin() {
+        return role == Role.ROLE_ADMIN;
     }
 }

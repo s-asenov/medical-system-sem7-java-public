@@ -1,16 +1,14 @@
 package com.medic.system.services;
 
 import com.medic.system.entities.User;
-import com.medic.system.repositories.DoctorRepository;
 import com.medic.system.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -39,5 +37,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(userId)
             .map(user -> user.getUsername().equals(authenticatedUsername))
             .orElse(false);
+    }
+
+    public static User getCurrentUser() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }
