@@ -10,9 +10,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@Unique(entityClass = Patient.class, fieldName = "egn", message = "ЕГН-то вече съществува")
 public class PatientRequestDto extends BaseUserRequestDto {
     @NotBlank(message = "ЕГН-то е задължително")
-    @Unique(entityClass = Patient.class, fieldName = "egn", message = "ЕГН-то вече съществува")
     private String egn;
 
     @NotNull(message = "Личният лекар е задължителен")
@@ -20,6 +20,6 @@ public class PatientRequestDto extends BaseUserRequestDto {
 
     public PatientRequestDto() {
         super();
-        this.role = Role.ROLE_PATIENT;
+        this.setRole(Role.ROLE_PATIENT);
     }
 }

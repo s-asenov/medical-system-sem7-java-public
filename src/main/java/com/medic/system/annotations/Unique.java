@@ -7,9 +7,9 @@ import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = UniqueValidator.class)
-@Target({ ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER })
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = UniqueValidator.class)
 public @interface Unique {
     String message() default "Field value must be unique";
     Class<?>[] groups() default {};

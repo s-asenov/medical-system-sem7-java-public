@@ -10,19 +10,17 @@ import lombok.Setter;
 public class EditBaseUserRequestDto {
 
     @NotBlank(message = "Потребителското име е задължително")
-    public String username;
+    private String username;
 
-    public String password;
+    private String password;
 
-    public String confirmPassword;
+    private String confirmPassword;
 
     @NotBlank(message = "Името е задължително")
-    public String firstName;
+    private String firstName;
 
     @NotBlank(message = "Фамилията е задължителна")
-    public String lastName;
-
-    public EditBaseUserRequestDto() {}
+    private String lastName;
 
     public EditBaseUserRequestDto(User user)
     {

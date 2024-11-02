@@ -7,6 +7,8 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
 
+import java.lang.reflect.Field;
+
 @RequiredArgsConstructor
 public class UniqueValidator implements ConstraintValidator<Unique, Object> {
 
@@ -24,15 +26,56 @@ public class UniqueValidator implements ConstraintValidator<Unique, Object> {
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        if (value == null) {
+        try {
+            Field field = this.getField(value.getClass(), fieldName);
+            Field idField = this.getField(value.getClass(), "id");
+
+            idField.setAccessible(true);
+            field.setAccessible(true);
+
+            String query = String.format("SELECT e FROM %s e WHERE e.%s = :value", entityClass.getSimpleName(), fieldName);
+            Object entity = entityManager.createQuery(query, this.entityClass)
+                    .setParameter("value", field.get(value))
+                    .getSingleResult();
+
+            if (entity != null)
+            {
+                // check if the entity has same id from ifForm
+                Field entityIdField = this.getField(entity.getClass(), "id");
+                entityIdField.setAccessible(true);
+                Object entityId = entityIdField.get(entity);
+
+                Object idForm = idField.get(value);
+
+                // if the entity id is different from the id from the form, reject the form
+                if (!entityId.equals(idForm)) {
+                    context.disableDefaultConstraintViolation();
+                    context.buildConstraintViolationWithTemplate("Запис със същата стойност вече съществува")
+                            .addPropertyNode(fieldName)
+                            .addConstraintViolation();
+                    return false;
+                }
+            }
+
             return true;
+        } catch (Exception e){
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate("Грешка при валидацията")
+                    .addPropertyNode(fieldName)
+                    .addConstraintViolation();
+            return false;
+        }
+    }
+
+    public Field getField(Class<?> clazz, String fieldName) {
+        while (clazz != null) {
+            try {
+                return clazz.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                clazz = clazz.getSuperclass();
+            }
         }
 
-        String query = String.format("SELECT COUNT(e) FROM %s e WHERE e.%s = :value", entityClass.getSimpleName(), fieldName);
-        Long count = entityManager.createQuery(query, Long.class)
-                .setParameter("value", value)
-                .getSingleResult();
-
-        return count == 0;
+        return null;
     }
 }
