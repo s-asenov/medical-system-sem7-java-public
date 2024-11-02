@@ -26,12 +26,9 @@ public class Patient extends User {
     }
 
     public Patient(PatientRequestDto patientRequestDto, Doctor doctor) {
-        this();
+        super(patientRequestDto);
+        setRole(Role.ROLE_PATIENT);
         setEgn(patientRequestDto.getEgn());
-        setFirstName(patientRequestDto.getFirstName());
-        setLastName(patientRequestDto.getLastName());
-        setUsername(patientRequestDto.getUsername());
-        setPassword(patientRequestDto.getPassword());
         setGeneralPractitioner(doctor);
     }
 }

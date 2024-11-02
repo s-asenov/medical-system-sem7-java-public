@@ -1,9 +1,10 @@
 package com.medic.system.controllers.web;
 
-import com.medic.system.dtos.DoctorRequestDto;
-import com.medic.system.enums.Role;
+import com.medic.system.dtos.doctor.DoctorRequestDto;
+import com.medic.system.dtos.doctor.EditDoctorRequestDto;
+import com.medic.system.dtos.patient.EditPatientRequestDto;
+import com.medic.system.entities.Doctor;
 import com.medic.system.services.DoctorService;
-import com.medic.system.services.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,6 @@ import org.springframework.web.server.ResponseStatusException;
 @Controller
 public class DoctorController {
 
-    private final UserServiceImpl userServiceImpl;
     private final DoctorService doctorService;
 
     @GetMapping
@@ -29,55 +29,61 @@ public class DoctorController {
         return "doctors/index";
     }
 
-//    @GetMapping("/create/patient")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public String createPatient(Model model) {
-//        List<Doctor> gps = doctorService.findAllGeneralPractitioners();
-//        model.addAttribute("generalPractitioners", gps);
-//        model.addAttribute("patient", new PatientRequestDto());
-//        return "users/create_patient";
-//    }
-//
-//    @PostMapping("/create/patient")
-//    @PreAuthorize("@doctorService.isCurrentUserGp(authentication.principal.id)")
-//    public String storePatient(@Valid @ModelAttribute("patient") PatientRequestDto patient, BindingResult bindingResult, Model model) {
-//        if (bindingResult.hasErrors()) {
-//            List<Doctor> gps = doctorService.findAllGeneralPractitioners();
-//            model.addAttribute("generalPractitioners", gps);
-//
-//            return "users/create_patient";
-//        }
-//        // Save patient user logic here
-//        return "redirect:/users";
-//    }
-
-    @GetMapping("/create/doctor")
+    @GetMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     public String createDoctor(Model model) {
         DoctorRequestDto doctor = new DoctorRequestDto();
-        doctor.setRole(Role.ROLE_DOCTOR);
         model.addAttribute("doctor", doctor);
-        return "users/create_doctor";
+
+        return "doctors/create";
     }
 
-    @PostMapping("/create/doctor")
+    @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     public String storeDoctor(@Valid @ModelAttribute("doctor") DoctorRequestDto doctor, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            return "users/create_doctor";
+            return "doctors/create";
+        }
+
+        doctorService.create(doctor, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "doctors/create";
         }
 
         return "redirect:/doctors";
     }
 
-    @GetMapping("/{id}")
-    public String show(@PathVariable Long id, Model model) {
+    @GetMapping("/edit/{id}")
+    @PreAuthorize("hasRole('ADMIN') or " +
+            "@userServiceImpl.isCurrentUser(#id, authentication.name) or " +
+            "(hasRole('DOCTOR') and @userServiceImpl.getCurrentUser().isGeneralPractitioner())")
+    public String edit(@PathVariable Long id, Model model) {
         try {
-            model.addAttribute("user", userServiceImpl.findById(id));
+            Doctor doctor = doctorService.findById(id);
+            model.addAttribute("doctor", new EditDoctorRequestDto(doctor));
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Потребителят не съществува");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Докторът не съществува");
         }
 
-        return "users/show";
+        return "doctors/edit";
+    }
+
+    @PostMapping("/edit/{id}")
+    @PreAuthorize("hasRole('ADMIN') or " +
+            "@userServiceImpl.isCurrentUser(#id, authentication.name) or " +
+            "(hasRole('DOCTOR') and @userServiceImpl.getCurrentUser().isGeneralPractitioner())")
+    public String update(@PathVariable Long id, @Valid @ModelAttribute("doctor") EditDoctorRequestDto doctor, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "doctors/edit";
+        }
+
+        doctorService.update(id, doctor, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "doctors/edit";
+        }
+
+        return "redirect:/doctors";
     }
 }

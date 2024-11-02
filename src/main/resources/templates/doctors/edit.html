@@ -6,12 +6,12 @@
 </head>
 
 <div layout:fragment="content">
-  <form action="/users/create/doctor" method="post" th:object="${doctor}">
+  <form th:action="@{|/doctors/edit/${doctor.id}|}" method="post" th:object="${doctor}">
     <h1>Създай доктор</h1>
     <input type="hidden"
            th:name="${_csrf.parameterName}"
            th:value="${_csrf.token}" />
-    <input type="hidden" th:field="*{role}"/>
+    <input type="hidden" th:field="*{id}"/>
 
     <div class="mb-3">
       <label class="form-label">Име</label>

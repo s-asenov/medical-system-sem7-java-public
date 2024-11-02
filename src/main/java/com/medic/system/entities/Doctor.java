@@ -1,10 +1,9 @@
 package com.medic.system.entities;
 
+import com.medic.system.dtos.doctor.DoctorRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Entity
 @Table(name = "doctors")
@@ -14,8 +13,16 @@ import java.util.List;
 public class Doctor extends User {
     private boolean isGeneralPractitioner;
 
-    @CollectionTable(name = "doctor_specialties", joinColumns = @JoinColumn(name = "doctor_id"))
-    @Column(name = "specialty")
-    @ElementCollection
-    private List<String> specialties;
+    public Doctor() {
+    }
+
+    public Doctor(DoctorRequestDto doctorRequestDto) {
+        super(doctorRequestDto);
+        isGeneralPractitioner = doctorRequestDto.getIsGeneralPractitioner();
+    }
+
+//    @CollectionTable(name = "doctor_specialties", joinColumns = @JoinColumn(name = "doctor_id"))
+//    @Column(name = "specialty")
+//    @ElementCollection
+//    private List<String> specialties;
 }

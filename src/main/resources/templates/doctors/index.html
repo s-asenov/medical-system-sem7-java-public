@@ -7,7 +7,7 @@
 
 <div layout:fragment="content">
     <h1>Всички лекари</h1>
-    <!-- todo decide if doctor can create patient -->
+    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/doctors/create}" class="btn btn-primary">Създай доктор</a>
     <table class="table table-bordered table-striped">
         <thead>
         <tr>

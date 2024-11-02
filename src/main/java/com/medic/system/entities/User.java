@@ -1,5 +1,7 @@
 package com.medic.system.entities;
 
+import com.medic.system.dtos.patient.PatientRequestDto;
+import com.medic.system.dtos.user.BaseUserRequestDto;
 import com.medic.system.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,6 +25,18 @@ public class User extends BaseEntity implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public User() {
+        super();
+    }
+
+    public User(BaseUserRequestDto baseUserRequestDto) {
+        super();
+        setFirstName(baseUserRequestDto.getFirstName());
+        setLastName(baseUserRequestDto.getLastName());
+        setUsername(baseUserRequestDto.getUsername());
+        setPassword(baseUserRequestDto.getPassword());
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

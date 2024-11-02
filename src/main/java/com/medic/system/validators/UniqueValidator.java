@@ -2,6 +2,7 @@ package com.medic.system.validators;
 
 import com.medic.system.annotations.Unique;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -44,9 +45,16 @@ public class UniqueValidator implements ConstraintValidator<Unique, Object> {
 
             // check if the entity with the same value exists for given fieldname
             String query = String.format("SELECT e FROM %s e WHERE e.%s = :value", entityClass.getSimpleName(), fieldName);
-            Object entity = entityManager.createQuery(query, entityClass)
-                    .setParameter("value", field.get(value))
-                    .getSingleResult();
+            Object entity;
+
+            try {
+                entity = entityManager.createQuery(query, entityClass)
+                        .setParameter("value", field.get(value))
+                        .getSingleResult();
+            } catch (NoResultException e) {
+                // no result means the value is unique
+                return true;
+            }
 
             if (entity != null)
             {

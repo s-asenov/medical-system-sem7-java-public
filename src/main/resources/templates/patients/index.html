@@ -7,6 +7,7 @@
 
 <div layout:fragment="content">
     <h1>Всички пациенти</h1>
+    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/patients/create}" class="btn btn-primary">Създай пациент</a>
     <table class="table table-bordered table-striped">
         <thead>
         <tr>

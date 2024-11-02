@@ -7,9 +7,9 @@
 
 <div layout:fragment="content">
     <h1>Всички потребители</h1>
-    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/users/create/admin}" class="btn btn-primary">Създай администратор</a>
-    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/users/create/patient}" class="btn btn-primary">Създай пациент</a>
-    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/users/create/doctor}" class="btn btn-primary">Създай доктор</a>
+    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admins/create}" class="btn btn-primary">Създай администратор</a>
+    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/patients/create}" class="btn btn-primary">Създай пациент</a>
+    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/doctors/create}" class="btn btn-primary">Създай доктор</a>
 <!--    <p th:text="${}"></p>-->
     <table class="table table-bordered table-striped">
         <thead>

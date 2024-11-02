@@ -1,12 +1,18 @@
 package com.medic.system.services;
 
+import com.medic.system.dtos.doctor.DoctorRequestDto;
+import com.medic.system.dtos.doctor.EditDoctorRequestDto;
+import com.medic.system.dtos.patient.EditPatientRequestDto;
 import com.medic.system.entities.Doctor;
 import com.medic.system.entities.User;
 import com.medic.system.repositories.DoctorRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DoctorService {
     private final DoctorRepository doctorRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public List<Doctor> findAllGeneralPractitioners() {
         return doctorRepository.findAllByIsGeneralPractitioner(true);
@@ -53,5 +60,57 @@ public class DoctorService {
         }
 
         return doctor;
+    }
+
+    public Doctor create(DoctorRequestDto doctorRequestDto, BindingResult bindingResult)
+    {
+        if (doctorRequestDto == null) {
+            bindingResult.rejectValue("username", "error.doctor", "DoctorRequestDto cannot be null");
+            return null;
+        }
+
+        doctorRequestDto.setPassword(passwordEncoder.encode(doctorRequestDto.getPassword()));
+
+        Doctor doctor = new Doctor(doctorRequestDto);
+
+        try {
+            return doctorRepository.save(doctor);
+        } catch (DataIntegrityViolationException e) {
+            // set to generalPractitionerId because it is last one
+            bindingResult.rejectValue("isGeneralPractitioner", "error.doctor",  "Database error: " + e.getMostSpecificCause().getMessage());
+            return null;
+        }
+    }
+
+    public Doctor update(Long id, EditDoctorRequestDto editDoctorRequestDto, BindingResult bindingResult) {
+        Doctor doctor;
+
+        try {
+            doctor = findById(id);
+        } catch (Exception e) {
+            bindingResult.rejectValue("username", "error.doctor", "Докторът не е намерен");
+            return null;
+        }
+
+        doctor.setGeneralPractitioner(editDoctorRequestDto.getIsGeneralPractitioner());
+        doctor.setFirstName(editDoctorRequestDto.getFirstName());
+        doctor.setLastName(editDoctorRequestDto.getLastName());
+        doctor.setUsername(editDoctorRequestDto.getUsername());
+
+        if (editDoctorRequestDto.getPassword() != null && !editDoctorRequestDto.getPassword().isEmpty()) {
+            doctor.setPassword(passwordEncoder.encode(editDoctorRequestDto.getPassword()));
+        }
+
+        try {
+            return doctorRepository.save(doctor);
+        } catch (DataIntegrityViolationException e) {
+            // set to generalPractitionerId because it is last one
+            bindingResult.rejectValue("isGeneralPractitioner", "error.doctor",  "Database error: " + e.getMostSpecificCause().getMessage());
+            return null;
+        }
+    }
+
+    public Doctor findById(Long id) {
+        return doctorRepository.findById(id).orElseThrow();
     }
 }

@@ -23,7 +23,6 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserController {
 
     private final UserServiceImpl userServiceImpl;
-    private final DoctorService doctorService;
 
     @GetMapping
     public String index(Model model, Pageable pageable) {

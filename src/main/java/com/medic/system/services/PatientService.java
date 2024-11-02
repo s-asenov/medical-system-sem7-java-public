@@ -81,7 +81,6 @@ public class PatientService {
             return null;
         }
 
-
         patient.setFirstName(editPatientRequestDto.getFirstName());
         patient.setLastName(editPatientRequestDto.getLastName());
         patient.setEgn(editPatientRequestDto.getEgn());
