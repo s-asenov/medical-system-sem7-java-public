@@ -26,7 +26,7 @@ public class PatientService {
 
     public Patient save(PatientRequestDto patientRequestDto, BindingResult bindingResult) {
         if (patientRequestDto == null) {
-            bindingResult.reject("patientRequestDto", "PatientRequestDto cannot be null");
+            bindingResult.rejectValue("patientRequestDto", "error.patient", "PatientRequestDto cannot be null");
             return null;
         }
 
@@ -35,7 +35,7 @@ public class PatientService {
         try {
             doctor = doctorService.isDoctorAndGp(patientRequestDto.getGeneralPractitionerId());
         } catch (IllegalArgumentException e) {
-            bindingResult.reject("generalPractitionerId", e.getMessage());
+            bindingResult.rejectValue("generalPractitionerId", "error.patient", e.getMessage());
             return null;
         }
 
@@ -47,7 +47,7 @@ public class PatientService {
             return patientRepository.save(patient);
         } catch (DataIntegrityViolationException e) {
             // set to generalPractitionerId because it is last one
-            bindingResult.reject("generalPractitionerId", "Database error: " + e.getMostSpecificCause().getMessage());
+            bindingResult.rejectValue("generalPractitionerId", "error.patient",  "Database error: " + e.getMostSpecificCause().getMessage());
             return null;
         }
     }

@@ -12,7 +12,6 @@ import java.util.List;
 @Getter
 @Setter
 public class Doctor extends User {
-
     private boolean isGeneralPractitioner;
 
     @CollectionTable(name = "doctor_specialties", joinColumns = @JoinColumn(name = "doctor_id"))

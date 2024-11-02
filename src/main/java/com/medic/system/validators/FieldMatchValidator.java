@@ -22,8 +22,8 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
     public boolean isValid(Object value, ConstraintValidatorContext context) {
         try {
             // access the fields
-            Field firstField = value.getClass().getDeclaredField(firstFieldName);
-            Field secondField = value.getClass().getDeclaredField(secondFieldName);
+            Field firstField = value.getClass().getField(firstFieldName);
+            Field secondField = value.getClass().getField(secondFieldName);
 
             // get values
             Object firstObj = firstField.get(value);

@@ -39,6 +39,14 @@
     </div>
 
     <div class="mb-3">
+      <label class="form-label">ЕГН</label>
+      <input type="text" th:field="*{egn}"
+             th:class="'form-control' + (${#fields.hasErrors('egn') ? ' is-invalid' : ''})"
+             placeholder="Въведи ЕГН" />
+      <span th:if="${#fields.hasErrors('egn')}" th:errors="*{egn}" class="invalid-feedback"></span>
+    </div>
+
+    <div class="mb-3">
       <label class="form-label">Парола</label>
       <input type="password" th:field="*{password}"
              th:class="'form-control' + (${#fields.hasErrors('password') ? ' is-invalid' : ''})"
@@ -58,7 +66,7 @@
       <label for="generalPractitionerId" class="form-label">GP</label>
       <select th:field="*{generalPractitionerId}" th:class="'form-select' + ${#fields.hasErrors('generalPractitionerId') ? ' is-invalid' : ''}" id="generalPractitionerId" name="generalPractitionerId">
         <option value="">Избери GP</option>
-        <option th:each="generalPractitionerId : ${generalPractitioners}" th:value="${generalPractitionerId.id}" th:text="${generalPractitionerId.getFirstName()}"></option>
+        <option th:each="generalPractitioner : ${generalPractitioners}" th:value="${generalPractitioner.id}" th:text="${generalPractitioner.getFirstName()}"></option>
       </select>
       <span th:if="${#fields.hasErrors('generalPractitionerId')}" th:errors="*{generalPractitionerId}" class="invalid-feedback"></span>
     </div>
