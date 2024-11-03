@@ -8,7 +8,7 @@
 <div layout:fragment="content">
     <h1>Всички потребители</h1>
     <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admins/create}" class="btn btn-primary">Създай администратор</a>
-    <a sec:authorize="hasRole('ROLE_ADMIN') or (hasRole('ROLE_DOCTOR') and isGeneralPractitioner)"
+    <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (#authorization.expression('hasRole(''ROLE_DOCTOR'')') and isGeneralPractitioner)}"
        th:href="@{/patients/create}" class="btn btn-primary">Създай пациент</a>
     <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/doctors/create}" class="btn btn-primary">Създай доктор</a>
     <table class="table table-bordered table-striped">

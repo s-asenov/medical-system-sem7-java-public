@@ -1,7 +1,7 @@
 package com.medic.system.repositories;
 
-import com.medic.system.entities.Doctor;
 import com.medic.system.entities.User;
+import com.medic.system.enums.Role;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +16,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.id = :id AND u.role = 'ROLE_ADMIN'")
     User findAdminById(Long id);
+
+    Page<User> findAllByRoleIsIn(Pageable pageable, Role... roles);
 }

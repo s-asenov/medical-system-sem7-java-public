@@ -12,7 +12,7 @@
                             Потребители
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li sec:authorize="hasRole('ROLE_ADMIN')"><a class="dropdown-item" th:href="@{/users}">Всички</a></li>
+                            <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_DOCTOR')"><a class="dropdown-item" th:href="@{/users}">Всички</a></li>
                             <li sec:authorize="hasRole('ROLE_ADMIN')"><a class="dropdown-item" th:href="@{/admins}">Администратори</a></li>
                             <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_DOCTOR')"><a class="dropdown-item" th:href="@{/patients}">Пациенти</a></li>
                             <li sec:authorize="hasRole('ROLE_ADMIN')"><a class="dropdown-item" th:href="@{/doctors}">Доктори</a></li>

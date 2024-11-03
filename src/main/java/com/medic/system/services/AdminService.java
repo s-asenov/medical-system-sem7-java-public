@@ -12,9 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class AdminService {
@@ -64,7 +61,14 @@ public class AdminService {
         }
 
         try {
-            return userRepository.save(user);
+            User admin = userRepository.save(user);
+
+            // if admin is current user update principal with new data
+            if (admin.getId().equals(UserServiceImpl.getCurrentUser().getId())) {
+                UserServiceImpl.setCurrentUser(admin);
+            }
+
+            return admin;
         } catch (DataIntegrityViolationException e) {
             // set to generalPractitionerId because it is last one
             bindingResult.rejectValue("username", "error.user",  "Грешка при редактиране на администратор");

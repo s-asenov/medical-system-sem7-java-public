@@ -102,7 +102,14 @@ public class DoctorService {
         }
 
         try {
-            return doctorRepository.save(doctor);
+            Doctor doc = doctorRepository.save(doctor);
+
+            // if doc is current user update principal with new data
+            if (doc.getId().equals(UserServiceImpl.getCurrentUser().getId())) {
+                UserServiceImpl.setCurrentUser(doc);
+            }
+
+            return doc;
         } catch (DataIntegrityViolationException e) {
             // set to generalPractitionerId because it is last one
             bindingResult.rejectValue("isGeneralPractitioner", "error.doctor",  "Грешка при редактиране на доктор");

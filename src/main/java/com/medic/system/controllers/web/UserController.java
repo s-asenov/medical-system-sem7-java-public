@@ -29,7 +29,7 @@ public class UserController {
             isGeneralPractitioner = ((Doctor) user).isGeneralPractitioner();
         }
 
-        model.addAttribute("users", userServiceImpl.findAll(pageable));
+        model.addAttribute("users", userServiceImpl.findAllBasedOnRole(pageable));
         model.addAttribute("isGeneralPractitioner", isGeneralPractitioner);
 
         return "users/index";

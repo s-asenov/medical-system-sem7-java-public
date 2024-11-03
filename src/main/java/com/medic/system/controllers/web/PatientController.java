@@ -28,6 +28,7 @@ public class PatientController {
     private final DoctorService doctorService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DOCTOR')")
     public String index(Model model, Pageable pageable) {
         User user = UserServiceImpl.getCurrentUser();
 
