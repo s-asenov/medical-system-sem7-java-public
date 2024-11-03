@@ -6,8 +6,8 @@
 </head>
 
 <div layout:fragment="content">
-  <form th:action="@{|/doctors/edit/${doctor.id}|}" method="post" th:object="${doctor}">
-    <h1>Създай доктор</h1>
+  <form th:action="@{/doctors/edit/{id}(id=${doctor.id})}" method="post" th:object="${doctor}">
+    <h1>Редактирай доктор</h1>
     <input type="hidden"
            th:name="${_csrf.parameterName}"
            th:value="${_csrf.token}" />
@@ -58,7 +58,7 @@
         <input type="checkbox" th:field="*{isGeneralPractitioner}" />
     </div>
     <div>
-      <button type="submit" class="btn btn-primary">Създай доктор</button>
+      <button type="submit" class="btn btn-primary">Редактирай доктор</button>
     </div>
   </form>
 </div>

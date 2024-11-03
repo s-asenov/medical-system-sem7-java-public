@@ -1,19 +1,15 @@
 package com.medic.system.controllers.web;
 
-import com.medic.system.dtos.user.BaseUserRequestDto;
 import com.medic.system.dtos.user.EditBaseUserRequestDto;
+import com.medic.system.entities.Doctor;
 import com.medic.system.entities.User;
-import com.medic.system.enums.Role;
-import com.medic.system.services.DoctorService;
 import com.medic.system.services.UserServiceImpl;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -26,30 +22,22 @@ public class UserController {
 
     @GetMapping
     public String index(Model model, Pageable pageable) {
-        model.addAttribute("users", userServiceImpl.findAll(pageable));
-        return "users/index";
-    }
+        User user = UserServiceImpl.getCurrentUser();
 
-    @GetMapping("/create/admin")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String createAdmin(Model model) {
-        model.addAttribute("admin", new BaseUserRequestDto());
-        return "users/create_admin";
-    }
-
-    @PostMapping("/create/admin")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String storeAdmin(@Valid @ModelAttribute("admin") BaseUserRequestDto admin, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            return "users/create_admin";
+        boolean isGeneralPractitioner = false;
+        if (user.isDoctor()) {
+            isGeneralPractitioner = ((Doctor) user).isGeneralPractitioner();
         }
-        // Save admin user logic here
-        return "redirect:/users";
+
+        model.addAttribute("users", userServiceImpl.findAll(pageable));
+        model.addAttribute("isGeneralPractitioner", isGeneralPractitioner);
+
+        return "users/index";
     }
 
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasRole('ADMIN') or @userServiceImpl.isCurrentUser(#id, authentication.name)")
-    public String edit(@PathVariable Long id, Model model) {
+    public String edit(@PathVariable Long id) {
         User user;
 
         try {
@@ -58,17 +46,19 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Потребителят не съществува");
         }
 
-        if (user.getRole() == Role.ROLE_DOCTOR) {
+        if (user.isDoctor()) {
             return "redirect:/doctors/edit/" + id;
         }
 
-        if (user.getRole() == Role.ROLE_PATIENT) {
+        if (user.isPatient()) {
             return "redirect:/patients/edit/" + id;
         }
 
-        model.addAttribute("user", new EditBaseUserRequestDto(user));
+        if (user.isAdmin()) {
+            return "redirect:/admins/edit/" + id;
+        }
 
-        return "users/edit";
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Потребителят не съществува");
     }
 
     @GetMapping("/delete/{id}")

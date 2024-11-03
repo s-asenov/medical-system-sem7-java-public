@@ -31,7 +31,7 @@ public class PatientService {
 
     public Patient save(PatientRequestDto patientRequestDto, BindingResult bindingResult) {
         if (patientRequestDto == null) {
-            bindingResult.rejectValue("patientRequestDto", "error.patient", "PatientRequestDto cannot be null");
+            bindingResult.rejectValue("generalPractitionerId", "error.patient", "Грешка при създаване на пациент");
             return null;
         }
 
@@ -40,7 +40,7 @@ public class PatientService {
         try {
             doctor = doctorService.isDoctorAndGp(patientRequestDto.getGeneralPractitionerId());
         } catch (IllegalArgumentException e) {
-            bindingResult.rejectValue("generalPractitionerId", "error.patient", e.getMessage());
+            bindingResult.rejectValue("generalPractitionerId", "error.patient", "Грешка при създаване на пациент");
             return null;
         }
 
@@ -52,16 +52,16 @@ public class PatientService {
             return patientRepository.save(patient);
         } catch (DataIntegrityViolationException e) {
             // set to generalPractitionerId because it is last one
-            bindingResult.rejectValue("generalPractitionerId", "error.patient",  "Database error: " + e.getMostSpecificCause().getMessage());
+            bindingResult.rejectValue("generalPractitionerId", "error.patient",  "Грешка при създаване на пациент");
             return null;
         }
     }
 
     public Patient update(Long id, EditPatientRequestDto editPatientRequestDto, BindingResult bindingResult) {
-//        if (editPatientRequestDto == null) {
-//            bindingResult.rejectValue("editPatientRequestDto", "error.patient", "EditPatientRequestDto cannot be null");
-//            return null;
-//        }
+        if (editPatientRequestDto == null) {
+            bindingResult.rejectValue("generalPractitionerId", "error.patient", "Грешка при редактиране на пациент");
+            return null;
+        }
 
         Patient patient;
         try {
@@ -95,7 +95,7 @@ public class PatientService {
             return patientRepository.save(patient);
         } catch (DataIntegrityViolationException e) {
             // set to generalPractitionerId because it is last one
-            bindingResult.rejectValue("generalPractitionerId", "error.patient",  "Database error: " + e.getMostSpecificCause().getMessage());
+            bindingResult.rejectValue("generalPractitionerId", "error.patient",  "Грешка при редактиране на пациент");
             return null;
         }
     }

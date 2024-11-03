@@ -28,6 +28,8 @@ public class EditPatientRequestDto extends EditBaseUserRequestDto {
     public EditPatientRequestDto(Patient patient) {
         super(patient);
         setEgn(patient.getEgn());
-        setGeneralPractitionerId(patient.getGeneralPractitioner().getId());
+        if (patient.getGeneralPractitioner() != null) {
+            setGeneralPractitionerId(patient.getGeneralPractitioner().getId());
+        }
     }
 }

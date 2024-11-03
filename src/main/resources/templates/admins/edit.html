@@ -6,7 +6,7 @@
 </head>
 
 <div layout:fragment="content">
-    <form action="/users/create/admin" method="post" th:object="${user}">
+    <form th:action="@{|/admins/edit/${admin.id}|}" action="/users/create/admin" method="post" th:object="${admin}">
         <h1>Редактирай потребител</h1>
         <input type="hidden"
                th:name="${_csrf.parameterName}"

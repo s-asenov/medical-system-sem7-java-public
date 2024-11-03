@@ -36,6 +36,7 @@ public class User extends BaseEntity implements UserDetails {
         setLastName(baseUserRequestDto.getLastName());
         setUsername(baseUserRequestDto.getUsername());
         setPassword(baseUserRequestDto.getPassword());
+        setRole(baseUserRequestDto.getRole());
     }
 
     @Override

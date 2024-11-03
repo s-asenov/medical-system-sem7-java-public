@@ -29,7 +29,15 @@
                    th:text="${patient.generalPractitioner.firstName + ' ' + patient.generalPractitioner.lastName}" class="text-decoration-none fw-bold text-black"></a>
             </td>
             <td th:text="${patient.egn}"></td>
-            <td></td>
+            <td>
+                <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')
+                or (#authorization.expression('hasRole(''ROLE_DOCTOR'')') and isGeneralPractitioner)}"
+                   th:href="@{/users/edit/{id}(id=${patient.id})}"
+                   class="btn btn-sm btn-info">
+                    Редакция
+                </a>
+                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/users/delete/{id}(id=${patient.id})}" class="btn btn-sm btn-danger">Изтриване</a>
+            </td>
         </tr>
         </tbody>
     </table>

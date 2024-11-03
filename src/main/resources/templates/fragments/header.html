@@ -1,4 +1,4 @@
-<header>
+<header xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -12,9 +12,10 @@
                             Потребители
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" th:href="@{/users}">Всички</a></li>
-                            <li><a class="dropdown-item" th:href="@{/patients}">Пациенти</a></li>
-                            <li><a class="dropdown-item" th:href="@{/doctors}">Доктори</a></li>
+                            <li sec:authorize="hasRole('ROLE_ADMIN')"><a class="dropdown-item" th:href="@{/users}">Всички</a></li>
+                            <li sec:authorize="hasRole('ROLE_ADMIN')"><a class="dropdown-item" th:href="@{/admins}">Администратори</a></li>
+                            <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_DOCTOR')"><a class="dropdown-item" th:href="@{/patients}">Пациенти</a></li>
+                            <li sec:authorize="hasRole('ROLE_ADMIN')"><a class="dropdown-item" th:href="@{/doctors}">Доктори</a></li>
                         </ul>
                     </li>
                     <li th:unless="${#authentication.isAuthenticated()}" class="nav-item">

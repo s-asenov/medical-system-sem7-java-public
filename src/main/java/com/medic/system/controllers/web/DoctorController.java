@@ -31,7 +31,7 @@ public class DoctorController {
 
     @GetMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public String createDoctor(Model model) {
+    public String create(Model model) {
         DoctorRequestDto doctor = new DoctorRequestDto();
         model.addAttribute("doctor", doctor);
 
@@ -40,7 +40,7 @@ public class DoctorController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public String storeDoctor(@Valid @ModelAttribute("doctor") DoctorRequestDto doctor, BindingResult bindingResult, Model model) {
+    public String store(@Valid @ModelAttribute("doctor") DoctorRequestDto doctor, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "doctors/create";
         }
@@ -55,9 +55,7 @@ public class DoctorController {
     }
 
     @GetMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ADMIN') or " +
-            "@userServiceImpl.isCurrentUser(#id, authentication.name) or " +
-            "(hasRole('DOCTOR') and @userServiceImpl.getCurrentUser().isGeneralPractitioner())")
+    @PreAuthorize("hasRole('ADMIN') or @userServiceImpl.isCurrentUser(#id, authentication.name)")
     public String edit(@PathVariable Long id, Model model) {
         try {
             Doctor doctor = doctorService.findById(id);
@@ -70,9 +68,7 @@ public class DoctorController {
     }
 
     @PostMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ADMIN') or " +
-            "@userServiceImpl.isCurrentUser(#id, authentication.name) or " +
-            "(hasRole('DOCTOR') and @userServiceImpl.getCurrentUser().isGeneralPractitioner())")
+    @PreAuthorize("hasRole('ADMIN') or @userServiceImpl.isCurrentUser(#id, authentication.name)")
     public String update(@PathVariable Long id, @Valid @ModelAttribute("doctor") EditDoctorRequestDto doctor, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "doctors/edit";

@@ -23,19 +23,6 @@ public class SecurityConfiguration {
         this.userServiceImpl = userServiceImpl;
     }
 
-//    @Bean
-//    public InMemoryUserDetailsManager userDetailsInMemory() {
-//        UserDetails user1 = User
-//                .withUsername("user1")
-//                .password("$2a$12$VcsUDlmbLDczCbM2Cm5sAetkRVDSyHHzisAig1B.ypT/GW8XrcTq.")
-//                .build();
-//        UserDetails user2 = User.withUsername("user2")
-//                .password("$2a$12$BUppzBU81H1M.doHy7GMBegE1SoVSbmM5BH1F/sd5MiVti1EXL6IG")
-//                .build();
-//        return new InMemoryUserDetailsManager(user1, user2);
-//    }
-
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -53,11 +40,11 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/public/**").permitAll()  // Allow access to /public/**
-                        .anyRequest().authenticated()               // Require authentication for other requests
+                        .requestMatchers("/public/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .successHandler(customAuthenticationSuccessHandler()) // Use custom success handler
+                        .successHandler(customAuthenticationSuccessHandler())
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -70,7 +57,7 @@ public class SecurityConfiguration {
     @Bean
     public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
         return (request, response, authentication) -> {
-            response.sendRedirect("/users"); // Redirect to /users after successful login
+            response.sendRedirect("/users");
         };
     }
 

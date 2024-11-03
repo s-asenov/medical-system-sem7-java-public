@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Всички потребители</title>
+</head>
+
+<div layout:fragment="content">
+    <h1>Всички потребители</h1>
+    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admins/create}" class="btn btn-primary">Създай администратор</a>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${admins}, '/admins', 'id', '№')}"></div>
+            <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${admins}, '/admins', 'firstName', 'Име')}"></div>
+            <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${admins}, '/admins', 'username', 'Потребителско име')}"></div>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="admin : ${admins.content}">
+            <td th:text="${admin.id}"></td>
+            <td th:text="${admin.firstName + ' ' + admin.lastName}"></td>
+            <td th:text="${admin.username}"></td>
+            <td>
+                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admins/edit/{id}(id=${admin.id})}"
+                   class="btn btn-sm btn-info">
+                    Редакция
+                </a>
+                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/users/delete/{id}(id=${admin.id})}" class="btn btn-sm btn-danger">Изтриване</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:include="~{fragments/pagination :: pagination(${admins}, '/admins')}"></div>
+</div>
+</html>

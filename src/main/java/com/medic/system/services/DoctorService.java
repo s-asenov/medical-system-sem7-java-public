@@ -65,7 +65,7 @@ public class DoctorService {
     public Doctor create(DoctorRequestDto doctorRequestDto, BindingResult bindingResult)
     {
         if (doctorRequestDto == null) {
-            bindingResult.rejectValue("username", "error.doctor", "DoctorRequestDto cannot be null");
+            bindingResult.rejectValue("username", "error.doctor", "Грешка при създаване на доктор");
             return null;
         }
 
@@ -77,7 +77,7 @@ public class DoctorService {
             return doctorRepository.save(doctor);
         } catch (DataIntegrityViolationException e) {
             // set to generalPractitionerId because it is last one
-            bindingResult.rejectValue("isGeneralPractitioner", "error.doctor",  "Database error: " + e.getMostSpecificCause().getMessage());
+            bindingResult.rejectValue("isGeneralPractitioner", "error.doctor",  "Грешка при създаване на доктор");
             return null;
         }
     }
@@ -105,7 +105,7 @@ public class DoctorService {
             return doctorRepository.save(doctor);
         } catch (DataIntegrityViolationException e) {
             // set to generalPractitionerId because it is last one
-            bindingResult.rejectValue("isGeneralPractitioner", "error.doctor",  "Database error: " + e.getMostSpecificCause().getMessage());
+            bindingResult.rejectValue("isGeneralPractitioner", "error.doctor",  "Грешка при редактиране на доктор");
             return null;
         }
     }

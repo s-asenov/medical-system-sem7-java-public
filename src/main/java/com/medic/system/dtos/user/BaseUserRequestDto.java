@@ -31,4 +31,11 @@ public class BaseUserRequestDto {
 
     @NotBlank(message = "Фамилията е задължителна")
     private String lastName;
+
+    public BaseUserRequestDto() {
+    }
+
+    public BaseUserRequestDto(Role role) {
+        setRole(role);
+    }
 }
