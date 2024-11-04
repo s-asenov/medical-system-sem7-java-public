@@ -25,8 +25,8 @@
             <td th:text="${patient.firstName + ' ' + patient.lastName}"></td>
             <td th:text="${patient.username}"></td>
             <td>
-                <a th:if="${patient.generalPractitioner != null}" th:href="@{/doctors/{id}(id=${patient.generalPractitioner.id})}"
-                   th:text="${patient.generalPractitioner.firstName + ' ' + patient.generalPractitioner.lastName}" class="text-decoration-none fw-bold text-black"></a>
+                <p th:if="${patient.generalPractitioner != null}"
+                   th:text="${patient.generalPractitioner.firstName + ' ' + patient.generalPractitioner.lastName}" class="mb-0 fw-bold text-black"></p>
             </td>
             <td th:text="${patient.egn}"></td>
             <td>

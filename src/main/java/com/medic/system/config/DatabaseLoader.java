@@ -39,9 +39,9 @@ public class DatabaseLoader {
             userRepository.save(user);
         }
 
-
-        if (userRepository.findByUsername("doctor") == null) {
-            Doctor doctor = new Doctor();
+        Doctor doctor = (Doctor) userRepository.findByUsername("doctor");
+        if (doctor == null) {
+            doctor = new Doctor();
             doctor.setFirstName("doctor");
             doctor.setLastName("doctor");
             doctor.setUsername("doctor");
@@ -59,6 +59,7 @@ public class DatabaseLoader {
             user.setEgn("1234567890");
             user.setPassword(passwordEncoder.encode("password"));
             user.setRole(Role.ROLE_PATIENT);
+            user.setGeneralPractitioner(doctor);
             userRepository.save(user);
         }
     }
