@@ -18,11 +18,14 @@
                             <li sec:authorize="hasRole('ROLE_ADMIN')"><a class="dropdown-item" th:href="@{/doctors}">Доктори</a></li>
                         </ul>
                     </li>
+                    <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
+                        <a class="nav-link" th:href="@{/specialities}">Специалности</a>
+                    </li>
                     <li th:unless="${#authentication.isAuthenticated()}" class="nav-item">
-                        <a class="nav-link" href="/login">Login</a>
+                        <a class="nav-link" th:href="@{/login}">Login</a>
                     </li>
                     <li th:if="${#authentication.isAuthenticated()}" class="nav-item">
-                        <a class="nav-link" href="/logout">Logout</a>
+                        <a class="nav-link" th:href="@{/logout}">Logout</a>
                     </li>
                 </ul>
             </div>

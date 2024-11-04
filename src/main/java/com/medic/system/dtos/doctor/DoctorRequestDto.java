@@ -12,6 +12,8 @@ import java.util.List;
 public class DoctorRequestDto extends BaseUserRequestDto {
     private Boolean isGeneralPractitioner;
 
+    private List<Long> specialities;
+
     public DoctorRequestDto() {
         super();
         setRole(Role.ROLE_DOCTOR);

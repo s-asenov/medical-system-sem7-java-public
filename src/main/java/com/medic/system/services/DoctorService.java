@@ -2,8 +2,8 @@ package com.medic.system.services;
 
 import com.medic.system.dtos.doctor.DoctorRequestDto;
 import com.medic.system.dtos.doctor.EditDoctorRequestDto;
-import com.medic.system.dtos.patient.EditPatientRequestDto;
 import com.medic.system.entities.Doctor;
+import com.medic.system.entities.Speciality;
 import com.medic.system.entities.User;
 import com.medic.system.repositories.DoctorRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +22,7 @@ import java.util.List;
 public class DoctorService {
     private final DoctorRepository doctorRepository;
     private final PasswordEncoder passwordEncoder;
+    private final SpecialityService specialityService;
 
     public List<Doctor> findAllGeneralPractitioners() {
         return doctorRepository.findAllByIsGeneralPractitioner(true);
@@ -73,11 +74,22 @@ public class DoctorService {
 
         Doctor doctor = new Doctor(doctorRequestDto);
 
+        // add specialities, if error return null and put error in bindingResult
+        try {
+            for (Long specialityId : doctorRequestDto.getSpecialities()) {
+                Speciality speciality = specialityService.findById(specialityId);
+                doctor.addSpeciality(speciality);
+            }
+        } catch (Exception e) {
+            bindingResult.rejectValue("specialities", "error.doctor", "Грешка при добавяне на специалности");
+            return null;
+        }
+
         try {
             return doctorRepository.save(doctor);
         } catch (DataIntegrityViolationException e) {
-            // set to generalPractitionerId because it is last one
-            bindingResult.rejectValue("isGeneralPractitioner", "error.doctor",  "Грешка при създаване на доктор");
+            // set to specialities because it is last one
+            bindingResult.rejectValue("specialities", "error.doctor",  "Грешка при създаване на доктор");
             return null;
         }
     }
@@ -96,6 +108,18 @@ public class DoctorService {
         doctor.setFirstName(editDoctorRequestDto.getFirstName());
         doctor.setLastName(editDoctorRequestDto.getLastName());
         doctor.setUsername(editDoctorRequestDto.getUsername());
+
+        // add specialities, if error return null and put error in bindingResult
+        try {
+            doctor.clearSpecialities();
+            for (Long specialityId : editDoctorRequestDto.getSpecialities()) {
+                Speciality speciality = specialityService.findById(specialityId);
+                doctor.addSpeciality(speciality);
+            }
+        } catch (Exception e) {
+            bindingResult.rejectValue("specialities", "error.doctor", "Грешка при добавяне на специалности");
+            return null;
+        }
 
         if (editDoctorRequestDto.getPassword() != null && !editDoctorRequestDto.getPassword().isEmpty()) {
             doctor.setPassword(passwordEncoder.encode(editDoctorRequestDto.getPassword()));

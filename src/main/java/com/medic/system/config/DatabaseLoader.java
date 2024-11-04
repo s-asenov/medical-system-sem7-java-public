@@ -2,23 +2,30 @@ package com.medic.system.config;
 
 import com.medic.system.entities.Doctor;
 import com.medic.system.entities.Patient;
+import com.medic.system.entities.Speciality;
 import com.medic.system.entities.User;
 import com.medic.system.enums.Role;
+import com.medic.system.repositories.SpecialityRepository;
 import com.medic.system.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
+
 @Component
 public class DatabaseLoader {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final SpecialityRepository specialityRepository;
 
     @Autowired
-    public DatabaseLoader(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public DatabaseLoader(UserRepository userRepository, PasswordEncoder passwordEncoder, SpecialityRepository specialityRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.specialityRepository = specialityRepository;
         loadUsers();
+        loadSpecialities();
     }
 
     private void loadUsers() {
@@ -54,6 +61,39 @@ public class DatabaseLoader {
             user.setRole(Role.ROLE_PATIENT);
             userRepository.save(user);
         }
+    }
+
+    private void loadSpecialities()
+    {
+        Set<String> specialityNames = Set.of(
+                "Кардиолог",
+                "Дерматолог",
+                "Ортопед",
+                "Оториноларинголог",
+                "Педиатър",
+                "Психиатър",
+                "Хирург",
+                "Офталмолог",
+                "Уролог",
+                "Гинеколог",
+                "Невролог",
+                "Ендокринолог",
+                "Гастроентеролог",
+                "Пулмолог",
+                "Ревматолог",
+                "Имунолог",
+                "Алерголог",
+                "Онколог",
+                "Радиолог"
+        );
+
+        specialityNames.forEach(specialityName -> {
+            if (specialityRepository.findByName(specialityName) == null) {
+                Speciality speciality = new Speciality();
+                speciality.setName(specialityName);
+                specialityRepository.save(speciality);
+            }
+        });
     }
 }
 

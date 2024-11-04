@@ -1,18 +1,17 @@
 package com.medic.system.dtos.doctor;
 
-import com.medic.system.annotations.Unique;
 import com.medic.system.dtos.user.EditBaseUserRequestDto;
 import com.medic.system.entities.Doctor;
-import com.medic.system.entities.Patient;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
 public class EditDoctorRequestDto extends EditBaseUserRequestDto {
     private Boolean isGeneralPractitioner;
+    private List<Long> specialities;
 
     public EditDoctorRequestDto() {
         super();
@@ -20,6 +19,10 @@ public class EditDoctorRequestDto extends EditBaseUserRequestDto {
 
     public EditDoctorRequestDto(Doctor doctor) {
         super(doctor);
+        specialities = doctor.getSpecialities()
+                .stream()
+                .map(speciality -> speciality.getId())
+                .toList();
         setIsGeneralPractitioner(doctor.isGeneralPractitioner());
     }
 }

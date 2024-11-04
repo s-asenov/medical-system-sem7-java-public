@@ -7,11 +7,7 @@
 
 <div layout:fragment="content">
   <form th:action="@{/admins/create}" method="post" th:object="${admin}">
-    <h1>Редактирай администратор</h1>
-    <input type="hidden"
-           th:name="${_csrf.parameterName}"
-           th:value="${_csrf.token}" />
-
+    <h1>Създай администратор</h1>
     <input type="hidden" th:field="*{role}"/>
 
     <div class="mb-3">
@@ -54,7 +50,7 @@
         <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="invalid-feedback"></span>
     </div>
     <div>
-      <button type="submit" class="btn btn-primary">Редактирай администратор</button>
+      <button type="submit" class="btn btn-primary">Създай администратор</button>
     </div>
   </form>
 </div>

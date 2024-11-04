@@ -2,9 +2,9 @@ package com.medic.system.controllers.web;
 
 import com.medic.system.dtos.doctor.DoctorRequestDto;
 import com.medic.system.dtos.doctor.EditDoctorRequestDto;
-import com.medic.system.dtos.patient.EditPatientRequestDto;
 import com.medic.system.entities.Doctor;
 import com.medic.system.services.DoctorService;
+import com.medic.system.services.SpecialityService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class DoctorController {
 
     private final DoctorService doctorService;
+    private final SpecialityService specialityService;
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DOCTOR')")
@@ -35,6 +36,7 @@ public class DoctorController {
     public String create(Model model) {
         DoctorRequestDto doctor = new DoctorRequestDto();
         model.addAttribute("doctor", doctor);
+        model.addAttribute("specialities", specialityService.findAll());
 
         return "doctors/create";
     }
@@ -43,12 +45,14 @@ public class DoctorController {
     @PreAuthorize("hasRole('ADMIN')")
     public String store(@Valid @ModelAttribute("doctor") DoctorRequestDto doctor, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("specialities", specialityService.findAll());
             return "doctors/create";
         }
 
         doctorService.create(doctor, bindingResult);
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("specialities", specialityService.findAll());
             return "doctors/create";
         }
 
@@ -61,6 +65,7 @@ public class DoctorController {
         try {
             Doctor doctor = doctorService.findById(id);
             model.addAttribute("doctor", new EditDoctorRequestDto(doctor));
+            model.addAttribute("specialities", specialityService.findAll());
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Докторът не съществува");
         }
@@ -70,14 +75,16 @@ public class DoctorController {
 
     @PostMapping("/edit/{id}")
     @PreAuthorize("hasRole('ADMIN') or @userServiceImpl.isCurrentUser(#id, authentication.name)")
-    public String update(@PathVariable Long id, @Valid @ModelAttribute("doctor") EditDoctorRequestDto doctor, BindingResult bindingResult) {
+    public String update(@PathVariable Long id, @Valid @ModelAttribute("doctor") EditDoctorRequestDto doctor, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("specialities", specialityService.findAll());
             return "doctors/edit";
         }
 
         doctorService.update(id, doctor, bindingResult);
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("specialities", specialityService.findAll());
             return "doctors/edit";
         }
 

@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "doctors")
 @PrimaryKeyJoinColumn(name = "user_id")
@@ -12,6 +15,15 @@ import lombok.Setter;
 @Setter
 public class Doctor extends User {
     private boolean isGeneralPractitioner;
+
+    @ManyToMany
+    @JoinTable(
+            name = "doctor_specialities",
+            joinColumns = @JoinColumn(name = "doctor_id"),
+            inverseJoinColumns = @JoinColumn(name = "speciality_id")
+    )
+    @OrderBy("name ASC")
+    private List<Speciality> specialities = new ArrayList<>();
 
     public Doctor() {
     }
@@ -21,8 +33,11 @@ public class Doctor extends User {
         isGeneralPractitioner = doctorRequestDto.getIsGeneralPractitioner();
     }
 
-//    @CollectionTable(name = "doctor_specialties", joinColumns = @JoinColumn(name = "doctor_id"))
-//    @Column(name = "specialty")
-//    @ElementCollection
-//    private List<String> specialties;
+    public void addSpeciality(Speciality speciality) {
+        specialities.add(speciality);
+    }
+
+    public void clearSpecialities() {
+        specialities.clear();
+    }
 }
