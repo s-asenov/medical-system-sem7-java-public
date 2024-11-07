@@ -15,7 +15,7 @@
             <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'firstName', 'Име')}"></div>
             <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'username', 'Потребителско име')}"></div>
             <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'generalPractitioner', 'Общопрактикуващ (личен)')}"></div>
-            <th>ЕГН</th>
+            <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'egn', 'ЕГН')}"></div>
             <th>Действия</th>
         </tr>
         </thead>
@@ -30,10 +30,7 @@
             </td>
             <td th:text="${patient.egn}"></td>
             <td>
-                <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')
-                or (#authorization.expression('hasRole(''ROLE_DOCTOR'')') and isGeneralPractitioner)}"
-                   th:href="@{/users/edit/{id}(id=${patient.id})}"
-                   class="btn btn-sm btn-info">
+                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/users/edit/{id}(id=${patient.id})}" class="btn btn-sm btn-info">
                     Редакция
                 </a>
                 <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/users/delete/{id}(id=${patient.id})}" class="btn btn-sm btn-danger">Изтриване</a>

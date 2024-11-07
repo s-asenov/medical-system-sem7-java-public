@@ -4,7 +4,6 @@ import com.medic.system.dtos.doctor.DoctorRequestDto;
 import com.medic.system.dtos.doctor.EditDoctorRequestDto;
 import com.medic.system.entities.Doctor;
 import com.medic.system.entities.Speciality;
-import com.medic.system.entities.User;
 import com.medic.system.repositories.DoctorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,25 +28,6 @@ public class DoctorService {
 
     public Page<Doctor> findAll(Pageable pageable) {
         return doctorRepository.findAll(pageable);
-    }
-
-    public boolean isCurrentUserGp() {
-        return UserServiceImpl.getCurrentUser().isDoctor() && ((Doctor) UserServiceImpl.getCurrentUser()).getIsGeneralPractitioner();
-    }
-
-    public List<Doctor> getListOfGps() {
-        List<Doctor> gps = new ArrayList<>();
-        User currentUser = UserServiceImpl.getCurrentUser();
-
-        if (currentUser.isDoctor()) {
-            if (((Doctor) currentUser).getIsGeneralPractitioner()) {
-                gps.add((Doctor) UserServiceImpl.getCurrentUser());
-            }
-        } else {
-            gps = findAllGeneralPractitioners();
-        }
-
-        return gps;
     }
 
     public Doctor isDoctorAndGp(Long id)

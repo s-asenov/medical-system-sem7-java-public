@@ -1,7 +1,5 @@
 package com.medic.system.controllers.web;
 
-import com.medic.system.dtos.user.EditBaseUserRequestDto;
-import com.medic.system.entities.Doctor;
 import com.medic.system.entities.User;
 import com.medic.system.services.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -22,15 +20,7 @@ public class UserController {
 
     @GetMapping
     public String index(Model model, Pageable pageable) {
-        User user = UserServiceImpl.getCurrentUser();
-
-        boolean isGeneralPractitioner = false;
-        if (user.isDoctor()) {
-            isGeneralPractitioner = ((Doctor) user).getIsGeneralPractitioner();
-        }
-
         model.addAttribute("users", userServiceImpl.findAllBasedOnRole(pageable));
-        model.addAttribute("isGeneralPractitioner", isGeneralPractitioner);
 
         return "users/index";
     }

@@ -26,7 +26,6 @@ public class PatientController {
 
     private final PatientService patientService;
     private final DoctorService doctorService;
-    private final UserServiceImpl userServiceImpl;
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DOCTOR')")
@@ -45,25 +44,25 @@ public class PatientController {
     }
 
     @GetMapping("/create")
-    @PreAuthorize("hasRole('ADMIN') or (hasRole('DOCTOR') and @doctorService.isCurrentUserGp())")
+    @PreAuthorize("hasRole('ADMIN')")
     public String create(Model model) {
-        model.addAttribute("generalPractitioners", doctorService.getListOfGps());
+        model.addAttribute("generalPractitioners", doctorService.findAllGeneralPractitioners());
         model.addAttribute("patient", new PatientRequestDto());
 
         return "patients/create";
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN') or (hasRole('DOCTOR') and @userServiceImpl.getCurrentUser().getIsGeneralPractitioner())")
+    @PreAuthorize("hasRole('ADMIN')")
     public String store(@Valid @ModelAttribute("patient") PatientRequestDto patient, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("generalPractitioners", doctorService.getListOfGps());
+            model.addAttribute("generalPractitioners", doctorService.findAllGeneralPractitioners());
             return "patients/create";
         }
 
         patientService.save(patient, bindingResult);
         if (bindingResult.hasErrors()) {
-            model.addAttribute("generalPractitioners", doctorService.getListOfGps());
+            model.addAttribute("generalPractitioners", doctorService.findAllGeneralPractitioners());
             return "patients/create";
         }
 
@@ -71,12 +70,12 @@ public class PatientController {
     }
 
     @GetMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ADMIN') or (hasRole('DOCTOR') and @userServiceImpl.getCurrentUser().getIsGeneralPractitioner())")
+    @PreAuthorize("hasRole('ADMIN')")
     public String edit(@PathVariable Long id, Model model) {
         try {
             Patient patient = patientService.findById(id);
             model.addAttribute("patient", new EditPatientRequestDto(patient));
-            model.addAttribute("generalPractitioners", doctorService.getListOfGps());
+            model.addAttribute("generalPractitioners", doctorService.findAllGeneralPractitioners());
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Пациентът не съществува");
         }
@@ -85,16 +84,16 @@ public class PatientController {
     }
 
     @PostMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ADMIN') or (hasRole('DOCTOR') and @userServiceImpl.getCurrentUser().getIsGeneralPractitioner())")
+    @PreAuthorize("hasRole('ADMIN')")
     public String update(@PathVariable Long id, @Valid @ModelAttribute("patient") EditPatientRequestDto patient, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("generalPractitioners", doctorService.getListOfGps());
+            model.addAttribute("generalPractitioners", doctorService.findAllGeneralPractitioners());
             return "patients/edit";
         }
 
         patientService.update(id, patient, bindingResult);
         if (bindingResult.hasErrors()) {
-            model.addAttribute("generalPractitioners", doctorService.getListOfGps());
+            model.addAttribute("generalPractitioners", doctorService.findAllGeneralPractitioners());
             return "patients/edit";
         }
 

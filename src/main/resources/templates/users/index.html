@@ -8,8 +8,7 @@
 <div layout:fragment="content">
     <h1>Всички потребители</h1>
     <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admins/create}" class="btn btn-primary">Създай администратор</a>
-    <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (#authorization.expression('hasRole(''ROLE_DOCTOR'')') and isGeneralPractitioner)}"
-       th:href="@{/patients/create}" class="btn btn-primary">Създай пациент</a>
+    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/patients/create}" class="btn btn-primary">Създай пациент</a>
     <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/doctors/create}" class="btn btn-primary">Създай доктор</a>
     <table class="table table-bordered table-striped">
         <thead>
@@ -26,10 +25,8 @@
             <td th:text="${user.firstName + ' ' + user.lastName}"></td>
             <td th:text="${user.username}"></td>
             <td>
-                <!-- if not patient and current user OR current user is admin OR current user is GP and user is patient => can edit-->
-                <a th:if="${(user.role != 'ROLE_PATIENT' and #authentication.name == user.username)
-                or #authorization.expression('hasRole(''ROLE_ADMIN'')')
-                or (user.isPatient() and #authorization.expression('hasRole(''ROLE_DOCTOR'')') and isGeneralPractitioner)}"
+                <!-- if not patient and current user OR current user is admin => can edit-->
+                <a th:if="${(user.role != 'ROLE_PATIENT' and #authentication.name == user.username) or #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
                    th:href="@{/users/edit/{id}(id=${user.id})}"
                    class="btn btn-sm btn-info">
                     Редакция
