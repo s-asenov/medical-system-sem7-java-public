@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html lang="bg"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Всички специалности</title>
@@ -11,8 +11,8 @@
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${specialities}, '/specialities', 'id', '№')}"></div>
-            <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${specialities}, '/specialities', 'name', 'Име')}"></div>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${specialities}, '/specialities', 'id', '№')}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${specialities}, '/specialities', 'name', 'Име')}"></th>
             <th>Действия</th>
         </tr>
         </thead>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html lang="bg"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Всички лекари</title>
@@ -11,10 +11,10 @@
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'id', '№')}"></div>
-            <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'firstName', 'Име')}"></div>
-            <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'username', 'Потребителско име')}"></div>
-            <div th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'isGeneralPractitioner', 'Общопрактикуващ (личен)')}"></div>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'id', '№')}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'firstName', 'Име')}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'username', 'Потребителско име')}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'isGeneralPractitioner', 'Общопрактикуващ (личен)')}"></th>
             <th>Специалности</th>
             <th>Действия</th>
         </tr>
