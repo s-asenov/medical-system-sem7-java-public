@@ -29,7 +29,7 @@
                 <!-- if not patient and current user OR current user is admin OR current user is GP and user is patient => can edit-->
                 <a th:if="${(user.role != 'ROLE_PATIENT' and #authentication.name == user.username)
                 or #authorization.expression('hasRole(''ROLE_ADMIN'')')
-                or (user.role == 'ROLE_PATIENT' and #authorization.expression('hasRole(''ROLE_DOCTOR'')') and isGeneralPractitioner)}"
+                or (user.isPatient() and #authorization.expression('hasRole(''ROLE_DOCTOR'')') and isGeneralPractitioner)}"
                    th:href="@{/users/edit/{id}(id=${user.id})}"
                    class="btn btn-sm btn-info">
                     Редакция

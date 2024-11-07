@@ -26,6 +26,7 @@ public class PatientController {
 
     private final PatientService patientService;
     private final DoctorService doctorService;
+    private final UserServiceImpl userServiceImpl;
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DOCTOR')")
@@ -34,7 +35,7 @@ public class PatientController {
 
         boolean isGeneralPractitioner = false;
         if (user.isDoctor()) {
-            isGeneralPractitioner = ((Doctor) user).isGeneralPractitioner();
+            isGeneralPractitioner = ((Doctor) user).getIsGeneralPractitioner();
         }
 
         model.addAttribute("isGeneralPractitioner", isGeneralPractitioner);
@@ -53,7 +54,7 @@ public class PatientController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN') or (hasRole('DOCTOR') and @userServiceImpl.getCurrentUser().isGeneralPractitioner())")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('DOCTOR') and @userServiceImpl.getCurrentUser().getIsGeneralPractitioner())")
     public String store(@Valid @ModelAttribute("patient") PatientRequestDto patient, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("generalPractitioners", doctorService.getListOfGps());
@@ -70,7 +71,7 @@ public class PatientController {
     }
 
     @GetMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ADMIN') or (hasRole('DOCTOR') and @userServiceImpl.getCurrentUser().isGeneralPractitioner())")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('DOCTOR') and @userServiceImpl.getCurrentUser().getIsGeneralPractitioner())")
     public String edit(@PathVariable Long id, Model model) {
         try {
             Patient patient = patientService.findById(id);
@@ -84,7 +85,7 @@ public class PatientController {
     }
 
     @PostMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ADMIN') or (hasRole('DOCTOR') and @userServiceImpl.getCurrentUser().isGeneralPractitioner())")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('DOCTOR') and @userServiceImpl.getCurrentUser().getIsGeneralPractitioner())")
     public String update(@PathVariable Long id, @Valid @ModelAttribute("patient") EditPatientRequestDto patient, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("generalPractitioners", doctorService.getListOfGps());

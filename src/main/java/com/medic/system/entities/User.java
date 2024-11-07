@@ -4,6 +4,8 @@ import com.medic.system.dtos.patient.PatientRequestDto;
 import com.medic.system.dtos.user.BaseUserRequestDto;
 import com.medic.system.enums.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,12 +20,25 @@ import java.util.Set;
 @Setter
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User extends BaseEntity implements UserDetails {
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
+    @NotBlank(message = "Потребителското име е задължително")
     private String username;
+
+    @Column(nullable = false)
+    @NotBlank(message = "Името е задължително")
     private String firstName;
+
+    @Column(nullable = false)
+    @NotBlank(message = "Фамилията е задължителна")
     private String lastName;
+
+    @Column(nullable = false)
+    @NotBlank(message = "Паролата е задължителна")
     private String password;
+
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @NotNull(message = "Ролята е задължителна")
     private Role role;
 
     public User() {

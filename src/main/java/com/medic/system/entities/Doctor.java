@@ -14,7 +14,8 @@ import java.util.List;
 @Getter
 @Setter
 public class Doctor extends User {
-    private boolean isGeneralPractitioner;
+    @Column(nullable = false)
+    private Boolean isGeneralPractitioner = false;
 
     @ManyToMany
     @JoinTable(

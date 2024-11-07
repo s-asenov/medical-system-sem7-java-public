@@ -23,6 +23,6 @@ public class EditDoctorRequestDto extends EditBaseUserRequestDto {
                 .stream()
                 .map(speciality -> speciality.getId())
                 .toList();
-        setIsGeneralPractitioner(doctor.isGeneralPractitioner());
+        setIsGeneralPractitioner(doctor.getIsGeneralPractitioner());
     }
 }

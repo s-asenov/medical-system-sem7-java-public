@@ -47,7 +47,7 @@ public class DatabaseLoader {
             doctor.setUsername("doctor");
             doctor.setPassword(passwordEncoder.encode("password"));
             doctor.setRole(Role.ROLE_DOCTOR);
-            doctor.setGeneralPractitioner(true);
+            doctor.setIsGeneralPractitioner(true);
             userRepository.save(doctor);
         }
 

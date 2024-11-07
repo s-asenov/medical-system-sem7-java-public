@@ -4,6 +4,7 @@ import com.medic.system.dtos.patient.EditPatientRequestDto;
 import com.medic.system.dtos.patient.PatientRequestDto;
 import com.medic.system.entities.Doctor;
 import com.medic.system.entities.Patient;
+import com.medic.system.entities.User;
 import com.medic.system.repositories.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -44,6 +45,11 @@ public class PatientService {
             return null;
         }
 
+        User currentUser = UserServiceImpl.getCurrentUser();
+        if (currentUser.isDoctor() && !doctor.getId().equals(currentUser.getId())) {
+            bindingResult.rejectValue("generalPractitionerId", "error.patient", "Нямате права да създавате пациенти за други лекари");
+            return null;
+        }
 
         patientRequestDto.setPassword(passwordEncoder.encode(patientRequestDto.getPassword()));
         Patient patient = new Patient(patientRequestDto, doctor);

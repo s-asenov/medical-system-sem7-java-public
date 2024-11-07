@@ -26,7 +26,7 @@ public class UserController {
 
         boolean isGeneralPractitioner = false;
         if (user.isDoctor()) {
-            isGeneralPractitioner = ((Doctor) user).isGeneralPractitioner();
+            isGeneralPractitioner = ((Doctor) user).getIsGeneralPractitioner();
         }
 
         model.addAttribute("users", userServiceImpl.findAllBasedOnRole(pageable));

@@ -33,7 +33,7 @@ public class DoctorService {
     }
 
     public boolean isCurrentUserGp() {
-        return UserServiceImpl.getCurrentUser().isDoctor() && ((Doctor) UserServiceImpl.getCurrentUser()).isGeneralPractitioner();
+        return UserServiceImpl.getCurrentUser().isDoctor() && ((Doctor) UserServiceImpl.getCurrentUser()).getIsGeneralPractitioner();
     }
 
     public List<Doctor> getListOfGps() {
@@ -41,7 +41,7 @@ public class DoctorService {
         User currentUser = UserServiceImpl.getCurrentUser();
 
         if (currentUser.isDoctor()) {
-            if (((Doctor) currentUser).isGeneralPractitioner()) {
+            if (((Doctor) currentUser).getIsGeneralPractitioner()) {
                 gps.add((Doctor) UserServiceImpl.getCurrentUser());
             }
         } else {
@@ -56,7 +56,7 @@ public class DoctorService {
         Doctor doctor = doctorRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Няма такъв доктор"));
 
-        if (!doctor.isGeneralPractitioner()) {
+        if (!doctor.getIsGeneralPractitioner()) {
             throw new IllegalArgumentException("Докторът не е общопрактикуващ");
         }
 
@@ -104,7 +104,7 @@ public class DoctorService {
             return null;
         }
 
-        doctor.setGeneralPractitioner(editDoctorRequestDto.getIsGeneralPractitioner());
+        doctor.setIsGeneralPractitioner(editDoctorRequestDto.getIsGeneralPractitioner());
         doctor.setFirstName(editDoctorRequestDto.getFirstName());
         doctor.setLastName(editDoctorRequestDto.getLastName());
         doctor.setUsername(editDoctorRequestDto.getUsername());

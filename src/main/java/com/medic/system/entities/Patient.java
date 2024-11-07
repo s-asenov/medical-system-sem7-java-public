@@ -3,6 +3,7 @@ package com.medic.system.entities;
 import com.medic.system.dtos.patient.PatientRequestDto;
 import com.medic.system.enums.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ import lombok.Setter;
 public class Patient extends User {
 
     @Column(unique = true, nullable = false)
+    @NotBlank(message = "ЕГН-то е задължително")
     private String egn;
 
     @ManyToOne
