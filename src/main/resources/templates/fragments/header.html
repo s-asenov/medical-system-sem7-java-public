@@ -21,6 +21,9 @@
                     <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
                         <a class="nav-link" th:href="@{/specialities}">Специалности</a>
                     </li>
+                    <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
+                        <a class="nav-link" th:href="@{/diagnoses}">Диагнози</a>
+                    </li>
                     <li th:unless="${#authentication.isAuthenticated()}" class="nav-item">
                         <a class="nav-link" th:href="@{/login}">Login</a>
                     </li>

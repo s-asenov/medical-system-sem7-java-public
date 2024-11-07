@@ -1,9 +1,9 @@
 package com.medic.system.controllers.web;
 
-import com.medic.system.dtos.speciality.SpecialityRequestDto;
-import com.medic.system.dtos.speciality.EditSpecialityRequestDto;
-import com.medic.system.entities.Speciality;
-import com.medic.system.services.SpecialityService;
+import com.medic.system.dtos.diagnose.DiagnoseRequestDto;
+import com.medic.system.dtos.diagnose.EditDiagnoseRequestDto;
+import com.medic.system.entities.Diagnose;
+import com.medic.system.services.DiagnoseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -15,82 +15,82 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-@RequestMapping("/specialities")
+@RequestMapping("/diagnoses")
 @Controller
 @RequiredArgsConstructor
-public class SpecialityController {
-    private final SpecialityService specialityService;
+public class DiagnoseController {
+    private final DiagnoseService diagnoseService;
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public String index(Model model, Pageable pageable) {
-        model.addAttribute("specialities", specialityService.findAll(pageable));
-        return "specialities/index";
+        model.addAttribute("diagnoses", diagnoseService.findAll(pageable));
+        return "diagnoses/index";
     }
 
     @GetMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
     public String create(Model model) {
-        SpecialityRequestDto speciality = new SpecialityRequestDto();
-        model.addAttribute("speciality", speciality);
+        DiagnoseRequestDto diagnose = new DiagnoseRequestDto();
+        model.addAttribute("diagnose", diagnose);
 
-        return "specialities/create";
+        return "diagnoses/create";
     }
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public String store(@Valid @ModelAttribute("speciality") SpecialityRequestDto speciality, BindingResult bindingResult) {
+    public String store(@Valid @ModelAttribute("diagnose") DiagnoseRequestDto diagnose, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "specialities/create";
+            return "diagnoses/create";
         }
 
-        specialityService.create(speciality, bindingResult);
+        diagnoseService.create(diagnose, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "specialities/create";
+            return "diagnoses/create";
         }
 
-        return "redirect:/specialities";
+        return "redirect:/diagnoses";
     }
 
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public String edit(@PathVariable Long id, Model model) {
         try {
-            Speciality speciality = specialityService.findById(id);
-            model.addAttribute("speciality", new EditSpecialityRequestDto(speciality));
+            Diagnose diagnose = diagnoseService.findById(id);
+            model.addAttribute("diagnose", new EditDiagnoseRequestDto(diagnose));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Специалността не съществува");
         }
 
-        return "specialities/edit";
+        return "diagnoses/edit";
     }
 
     @PostMapping("/edit/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public String update(@PathVariable Long id, @Valid @ModelAttribute("speciality") EditSpecialityRequestDto speciality, BindingResult bindingResult) {
+    public String update(@PathVariable Long id, @Valid @ModelAttribute("diagnose") EditDiagnoseRequestDto diagnose, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "specialities/edit";
+            return "diagnoses/edit";
         }
 
-        specialityService.update(id, speciality, bindingResult);
+        diagnoseService.update(id, diagnose, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "specialities/edit";
+            return "diagnoses/edit";
         }
 
-        return "redirect:/specialities";
+        return "redirect:/diagnoses";
     }
 
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public String delete(@PathVariable Long id) {
         try {
-            specialityService.deleteById(id);
+            diagnoseService.deleteById(id);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Специалността не съществува");
         }
 
-        return "redirect:/specialities";
+        return "redirect:/diagnoses";
     }
 }
