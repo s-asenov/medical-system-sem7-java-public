@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="bg"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Всички прегледи</title>
+</head>
+
+<div layout:fragment="content">
+    <h1>Всички прегледи</h1>
+    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/medical_appointments/create}" class="btn btn-primary">Създай преглед</a>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'id', '№')}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'date', 'Дата')}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'doctor', 'Доктор')}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'patient', 'Пациент')}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'diagnose', 'Диагноза')}"></th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="appointment : ${appointments.content}">
+            <td th:text="${appointment.id}"></td>
+            <td th:text="${appointment.date}"></td>
+            <td th:text="${appointment.doctor.fullName}"></td>
+            <td th:text="${appointment.patient.fullName}"></td>
+            <td th:text="${appointment.diagnose.name}"></td>
+            <td>
+                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/medical_appointments/edit/{id}(id=${appointment.id})}"
+                   class="btn btn-sm btn-info">
+                    Редакция
+                </a>
+                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/medical_appointments/delete/{id}(id=${appointment.id})}" class="btn btn-sm btn-danger">Изтриване</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:include="~{fragments/pagination :: pagination(${appointments}, '/medical_appointments')}"></div>
+</div>
+</html>

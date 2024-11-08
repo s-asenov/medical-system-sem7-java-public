@@ -26,6 +26,10 @@ public class DoctorService {
         return doctorRepository.findAllByIsGeneralPractitioner(true);
     }
 
+    public List<Doctor> findAll() {
+        return doctorRepository.findAll();
+    }
+
     public Page<Doctor> findAll(Pageable pageable) {
         return doctorRepository.findAll(pageable);
     }

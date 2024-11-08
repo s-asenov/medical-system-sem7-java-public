@@ -90,4 +90,8 @@ public class User extends BaseEntity implements UserDetails {
     public boolean isAdmin() {
         return role == Role.ROLE_ADMIN;
     }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

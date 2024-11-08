@@ -22,7 +22,7 @@
         <tbody>
         <tr th:each="doctor : ${doctors.content}">
             <td th:text="${doctor.id}"></td>
-            <td th:text="${doctor.firstName + ' ' + doctor.lastName}"></td>
+            <td th:text="${doctor.fullName}"></td>
             <td th:text="${doctor.username}"></td>
             <td>
                 <span th:if="${doctor.isGeneralPractitioner}" class="badge bg-success">Да</span>

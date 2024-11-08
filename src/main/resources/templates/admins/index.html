@@ -20,7 +20,7 @@
         <tbody>
         <tr th:each="admin : ${admins.content}">
             <td th:text="${admin.id}"></td>
-            <td th:text="${admin.firstName + ' ' + admin.lastName}"></td>
+            <td th:text="${admin.fullName}"></td>
             <td th:text="${admin.username}"></td>
             <td>
                 <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admins/edit/{id}(id=${admin.id})}"

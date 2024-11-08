@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "patients")
 @PrimaryKeyJoinColumn(name = "user_id")
@@ -21,6 +24,9 @@ public class Patient extends User {
     @ManyToOne
     @JoinColumn(name = "general_practitioner_id")
     private Doctor generalPractitioner;
+
+    @OneToMany(mappedBy = "patient")
+    private List<MedicalAppointment> medicalAppointments = new ArrayList<>();
 
     public Patient() {
         super();

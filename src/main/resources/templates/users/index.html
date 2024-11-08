@@ -22,7 +22,7 @@
         <tbody>
         <tr th:each="user : ${users.content}">
             <td th:text="${user.id}"></td>
-            <td th:text="${user.firstName + ' ' + user.lastName}"></td>
+            <td th:text="${user.fullName}"></td>
             <td th:text="${user.username}"></td>
             <td>
                 <!-- if not patient and current user OR current user is admin => can edit-->

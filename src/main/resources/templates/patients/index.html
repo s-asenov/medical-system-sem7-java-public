@@ -22,7 +22,7 @@
         <tbody>
         <tr th:each="patient : ${patients.content}">
             <td th:text="${patient.id}"></td>
-            <td th:text="${patient.firstName + ' ' + patient.lastName}"></td>
+            <td th:text="${patient.fullName}"></td>
             <td th:text="${patient.username}"></td>
             <td>
                 <p th:if="${patient.generalPractitioner != null}"

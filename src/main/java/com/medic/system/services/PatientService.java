@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +22,10 @@ public class PatientService {
     private final PatientRepository patientRepository;
     private final DoctorService doctorService;
     private final PasswordEncoder passwordEncoder;
+
+    public List<Patient> findAll() {
+        return patientRepository.findAll();
+    }
 
     public Page<Patient> findAll(Pageable pageable) {
         return patientRepository.findAll(pageable);

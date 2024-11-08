@@ -26,6 +26,9 @@ public class Doctor extends User {
     @OrderBy("name ASC")
     private List<Speciality> specialities = new ArrayList<>();
 
+    @OneToMany(mappedBy = "doctor")
+    private List<MedicalAppointment> medicalAppointments = new ArrayList<>();
+
     public Doctor() {
     }
 
