@@ -35,8 +35,8 @@
                     <th:block th:text="(!${spStatus.last} ? ${speciality.name} + ', ' : ${speciality.name})"></th:block>
                 </th:block>
             </td>
-            <td th:text="${doctor.patients.size()}"></td>
-            <td th:text="${doctor.medicalAppointments.size()}"></td>
+            <td th:text="${doctor.patientsCount}"></td>
+            <td th:text="${doctor.medicalAppointmentsCount}"></td>
             <td>
                 <a th:if="${#authentication.name == doctor.username or #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
                    th:href="@{/doctors/edit/{id}(id=${doctor.id})}"
@@ -48,6 +48,6 @@
         </tr>
         </tbody>
     </table>
-    <div th:include="~{fragments/pagination :: pagination(${doctors}, '/doctors')}"></div>
+    <div th:include="~{fragments/pagination :: pagination(${doctors}, '/doctors', null)}"></div>
 </div>
 </html>

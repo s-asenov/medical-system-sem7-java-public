@@ -44,6 +44,6 @@
         </tr>
         </tbody>
     </table>
-    <div th:include="~{fragments/pagination :: pagination(${patients}, '/patients')}"></div>
+    <div th:include="~{fragments/pagination :: pagination(${patients}, '/patients', ${utils.toQueryString(searchForm)})}"></div>
 </div>
 </html>

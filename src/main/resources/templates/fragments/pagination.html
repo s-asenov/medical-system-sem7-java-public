@@ -1,17 +1,17 @@
-<div th:fragment="pagination(pageable, route)">
+<div th:fragment="pagination(pageable, route, extraParams)">
     <nav th:if="${pageable.totalPages > 1}" aria-label="Page navigation">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${pageable.hasPrevious()} ? '' : 'disabled'">
-                <a class="page-link" th:href="@{${route}(page=${pageable.number - 1})}" aria-label="Previous">
+                <a class="page-link" th:href="${utils.generatePaginationUrl(route, pageable.pageable, pageable.number - 1, extraParams)}" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
             <li class="page-item" th:each="page : ${#numbers.sequence(0, pageable.totalPages - 1)}"
                 th:classappend="${page == pageable.number} ? 'active'">
-                <a class="page-link" th:href="@{${route}(page=${page})}" th:text="${page + 1}">1</a>
+                <a class="page-link" th:href="${utils.generatePaginationUrl(route, pageable.pageable, page, extraParams)}" th:text="${page + 1}">1</a>
             </li>
             <li class="page-item" th:classappend="${pageable.hasNext()} ? '' : 'disabled'">
-                <a class="page-link" th:href="@{${route}(page=${pageable.number + 1})}" aria-label="Next">
+                <a class="page-link" th:href="${utils.generatePaginationUrl(route, pageable.pageable, pageable.number + 1, extraParams)}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
