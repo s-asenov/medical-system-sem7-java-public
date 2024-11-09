@@ -12,7 +12,7 @@
         <thead>
         <tr>
             <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'id', '№', null)}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'firstName', 'Име', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'fullName', 'Име', null)}"></th>
             <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'username', 'Потребителско име', null)}"></th>
             <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'isGeneralPractitioner', 'Общопрактикуващ (личен)', null)}"></th>
             <th>Специалности</th>

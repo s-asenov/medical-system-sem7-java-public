@@ -18,7 +18,7 @@
         <thead>
         <tr>
             <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'id', '№', ${utils.toQueryString(searchForm)})}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'firstName', 'Име', ${utils.toQueryString(searchForm)})}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'fullName', 'Име', ${utils.toQueryString(searchForm)})}"></th>
             <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'username', 'Потребителско име', ${utils.toQueryString(searchForm)})}"></th>
             <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'generalPractitioner.fullName', 'Общопрактикуващ (личен)', ${utils.toQueryString(searchForm)})}"></th>
             <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'egn', 'ЕГН', ${utils.toQueryString(searchForm)})}"></th>
@@ -32,7 +32,7 @@
             <td th:text="${patient.username}"></td>
             <td>
                 <p th:if="${patient.generalPractitioner != null}"
-                   th:text="${patient.generalPractitioner.firstName + ' ' + patient.generalPractitioner.lastName}" class="mb-0 fw-bold text-black"></p>
+                   th:text="${patient.generalPractitioner.fullName}" class="mb-0 fw-bold text-black"></p>
             </td>
             <td th:text="${patient.egn}"></td>
             <td>
