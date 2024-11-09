@@ -4,6 +4,9 @@ import com.medic.system.dtos.doctor.DoctorRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,7 +31,20 @@ public class Doctor extends User implements Serializable {
     private List<Speciality> specialities = new ArrayList<>();
 
     @OneToMany(mappedBy = "doctor")
+    @LazyCollection(LazyCollectionOption.EXTRA)
     private List<MedicalAppointment> medicalAppointments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "generalPractitioner")
+    @LazyCollection(LazyCollectionOption.EXTRA)
+    private List<Patient> patients = new ArrayList<>();
+
+    // Formula for counting patients associated with this doctor
+    @Formula("(SELECT COUNT(*) FROM patients p WHERE p.general_practitioner_id = user_id)")
+    private Long patientsCount;
+
+    // Formula for counting medical appointments associated with this doctor
+    @Formula("(SELECT COUNT(*) FROM medical_appointments m WHERE m.doctor_id = user_id)")
+    private Long medicalAppointmentsCount;
 
     public Doctor() {
     }
