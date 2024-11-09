@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    UserDetails findByUsername(String username);
+    User findByUsername(String username);
 
     @Query("SELECT u FROM User u WHERE u.role = 'ROLE_ADMIN'")
     Page<User> findAllAdminUsers(Pageable pageable);

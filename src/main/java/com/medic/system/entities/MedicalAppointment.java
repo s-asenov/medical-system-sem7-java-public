@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "medical_appointments")
@@ -17,7 +17,7 @@ public class MedicalAppointment extends BaseEntity {
     @FutureOrPresent(message = "Дата не може да бъде в миналото")
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "doctor_id")

@@ -2,10 +2,7 @@ package com.medic.system.services;
 
 import com.medic.system.dtos.medical_appointment.EditMedicalAppointmentRequestDto;
 import com.medic.system.dtos.medical_appointment.MedicalAppointmentRequestDto;
-import com.medic.system.entities.Diagnose;
-import com.medic.system.entities.Doctor;
-import com.medic.system.entities.MedicalAppointment;
-import com.medic.system.entities.Patient;
+import com.medic.system.entities.*;
 import com.medic.system.repositories.MedicalAppointmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -133,5 +130,23 @@ public class MedicalAppointmentService {
 
     public void deleteById(Long id) {
         medicalAppointmentRepository.deleteById(id);
+    }
+
+    public boolean isDoctorAppointment(Long appointmentId, Long doctorId) {
+        return medicalAppointmentRepository.findByIdAndDoctorId(appointmentId, doctorId).orElse(null) != null;
+    }
+
+    public Page<MedicalAppointment> findAllBasedOnRole(Pageable pageable) {
+        User user = UserServiceImpl.getCurrentUser();
+
+        if (user.isAdmin()) {
+            return findAll(pageable);
+        }
+
+        if (user.isDoctor()) {
+            return medicalAppointmentRepository.findAllByDoctorId(user.getId(), pageable);
+        }
+
+        return medicalAppointmentRepository.findAllByPatientId(user.getId(), pageable);
     }
 }

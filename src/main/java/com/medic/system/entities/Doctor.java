@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @PrimaryKeyJoinColumn(name = "user_id")
 @Getter
 @Setter
-public class Doctor extends User {
+public class Doctor extends User implements Serializable {
     @Column(nullable = false)
     private Boolean isGeneralPractitioner = false;
 

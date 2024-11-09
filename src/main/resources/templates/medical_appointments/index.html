@@ -7,7 +7,7 @@
 
 <div layout:fragment="content">
     <h1>Всички прегледи</h1>
-    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/medical_appointments/create}" class="btn btn-primary">Създай преглед</a>
+    <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_DOCTOR')" th:href="@{/medical_appointments/create}" class="btn btn-primary">Създай преглед</a>
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
@@ -27,7 +27,8 @@
             <td th:text="${appointment.patient.fullName}"></td>
             <td th:text="${appointment.diagnose.name}"></td>
             <td>
-                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/medical_appointments/edit/{id}(id=${appointment.id})}"
+                <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (#authentication.principal.id == appointment.doctor.id and #authorization.expression('hasRole(''ROLE_DOCTOR'')'))}"
+                   th:href="@{/medical_appointments/edit/{id}(id=${appointment.id})}"
                    class="btn btn-sm btn-info">
                     Редакция
                 </a>

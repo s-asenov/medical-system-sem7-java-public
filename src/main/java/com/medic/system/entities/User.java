@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 
@@ -19,7 +20,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User extends BaseEntity implements UserDetails {
+public class User extends BaseEntity implements UserDetails, Serializable {
     @Column(nullable = false, unique = true)
     @NotBlank(message = "Потребителското име е задължително")
     private String username;

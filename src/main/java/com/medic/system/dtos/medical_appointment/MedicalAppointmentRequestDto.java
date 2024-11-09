@@ -8,7 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
+
 
 @Getter
 @Setter
@@ -27,5 +28,5 @@ public class MedicalAppointmentRequestDto {
     @FutureOrPresent(message = "Дата не може да бъде в миналото")
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    private LocalDate date;
 }

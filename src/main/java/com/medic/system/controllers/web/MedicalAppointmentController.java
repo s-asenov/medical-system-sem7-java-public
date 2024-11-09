@@ -29,14 +29,13 @@ public class MedicalAppointmentController {
     private final DiagnoseService diagnoseService;
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public String index(Model model, Pageable pageable) {
-        model.addAttribute("appointments", medicalAppointmentService.findAll(pageable));
+        model.addAttribute("appointments", medicalAppointmentService.findAllBasedOnRole(pageable));
         return "medical_appointments/index";
     }
 
     @GetMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     public String create(Model model) {
         MedicalAppointmentRequestDto appointment = new MedicalAppointmentRequestDto();
 
@@ -49,7 +48,7 @@ public class MedicalAppointmentController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     public String store(@Valid @ModelAttribute("appointment") MedicalAppointmentRequestDto appointment, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("doctors", doctorService.findAll());
@@ -73,7 +72,7 @@ public class MedicalAppointmentController {
     }
 
     @GetMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('DOCTOR') and @medicalAppointmentService.isDoctorAppointment(#id, principal.id))")
     public String edit(@PathVariable Long id, Model model) {
         try {
             MedicalAppointment appointment = medicalAppointmentService.findById(id);
@@ -90,7 +89,7 @@ public class MedicalAppointmentController {
     }
 
     @PostMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('DOCTOR') and @medicalAppointmentService.isDoctorAppointment(#id, principal.id))")
     public String update(@PathVariable Long id, @Valid @ModelAttribute("appointment") EditMedicalAppointmentRequestDto appointment, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("doctors", doctorService.findAll());
@@ -114,7 +113,7 @@ public class MedicalAppointmentController {
     }
 
     @GetMapping("/delete/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public String delete(@PathVariable Long id) {
         try {
             medicalAppointmentService.deleteById(id);

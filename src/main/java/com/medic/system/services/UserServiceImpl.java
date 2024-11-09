@@ -7,6 +7,7 @@ import com.medic.system.entities.Doctor;
 import com.medic.system.entities.User;
 import com.medic.system.enums.Role;
 import com.medic.system.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,14 +47,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    @Transactional
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username);
-    }
-
-    public boolean isCurrentUser(Long userId, String authenticatedUsername) {
-        return userRepository.findById(userId)
-            .map(user -> user.getUsername().equals(authenticatedUsername))
-            .orElse(false);
     }
 
     public static User getCurrentUser() {

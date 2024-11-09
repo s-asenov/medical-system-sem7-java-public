@@ -60,7 +60,7 @@ public class DoctorController {
     }
 
     @GetMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @userServiceImpl.isCurrentUser(#id, authentication.name)")
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
     public String edit(@PathVariable Long id, Model model) {
         try {
             Doctor doctor = doctorService.findById(id);
@@ -74,7 +74,7 @@ public class DoctorController {
     }
 
     @PostMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @userServiceImpl.isCurrentUser(#id, authentication.name)")
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
     public String update(@PathVariable Long id, @Valid @ModelAttribute("doctor") EditDoctorRequestDto doctor, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("specialities", specialityService.findAll());

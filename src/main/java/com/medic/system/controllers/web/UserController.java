@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @GetMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @userServiceImpl.isCurrentUser(#id, authentication.name)")
+    @PreAuthorize("!hasRole('PATIENT') and (hasRole('ADMIN') or #id == authentication.principal.id)")
     public String edit(@PathVariable Long id) {
         User user;
 
