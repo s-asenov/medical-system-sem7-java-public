@@ -11,13 +11,13 @@
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'id', '№')}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'firstName', 'Име')}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'username', 'Потребителско име')}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'isGeneralPractitioner', 'Общопрактикуващ (личен)')}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'id', '№', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'firstName', 'Име', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'username', 'Потребителско име', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'isGeneralPractitioner', 'Общопрактикуващ (личен)', null)}"></th>
             <th>Специалности</th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'patientsCount', 'Брой пациенти')}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'medicalAppointmentsCount', 'Брой прегледи')}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'patientsCount', 'Брой пациенти', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${doctors}, '/doctors', 'medicalAppointmentsCount', 'Брой прегледи', null)}"></th>
             <th>Действия</th>
         </tr>
         </thead>

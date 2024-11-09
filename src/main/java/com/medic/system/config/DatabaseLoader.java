@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -41,28 +43,36 @@ public class DatabaseLoader {
             userRepository.save(user);
         }
 
-        Doctor doctor = (Doctor) userRepository.findByUsername("doctor");
-        if (doctor == null) {
-            doctor = new Doctor();
-            doctor.setFirstName("doctor");
-            doctor.setLastName("doctor");
-            doctor.setUsername("doctor");
-            doctor.setPassword(passwordEncoder.encode("password"));
-            doctor.setRole(Role.ROLE_DOCTOR);
-            doctor.setIsGeneralPractitioner(true);
-            userRepository.save(doctor);
+        // create 2 dummy gp
+        List<Doctor> doctors = new ArrayList<>();
+        for (int i = 1; i <= 2; i++) {
+            Doctor doctor = (Doctor) userRepository.findByUsername("doctor" + i);
+            if (doctor == null) {
+                doctor = new Doctor();
+                doctor.setFirstName("doctor" + i);
+                doctor.setLastName("doctor" + i);
+                doctor.setUsername("doctor" + i);
+                doctor.setPassword(passwordEncoder.encode("password"));
+                doctor.setRole(Role.ROLE_DOCTOR);
+                doctor.setIsGeneralPractitioner(true);
+                userRepository.save(doctor);
+            }
+            doctors.add(doctor);
         }
 
-        if (userRepository.findByUsername("patient") == null) {
-            Patient user = new Patient();
-            user.setFirstName("patient");
-            user.setLastName("patient");
-            user.setUsername("patient");
-            user.setEgn("1234567890");
-            user.setPassword(passwordEncoder.encode("password"));
-            user.setRole(Role.ROLE_PATIENT);
-            user.setGeneralPractitioner(doctor);
-            userRepository.save(user);
+        for (int i = 1; i <= 5; i++) {
+            Patient patient = (Patient) userRepository.findByUsername("patient" + i);
+            if (patient == null) {
+                patient = new Patient();
+                patient.setFirstName("patient" + i);
+                patient.setLastName("patient" + i);
+                patient.setUsername("patient" + i);
+                patient.setPassword(passwordEncoder.encode("password"));
+                patient.setRole(Role.ROLE_PATIENT);
+                patient.setGeneralPractitioner(doctors.get(i % 2));
+                patient.setEgn("1234567890" + i);
+                userRepository.save(patient);
+            }
         }
     }
 

@@ -11,11 +11,11 @@
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'id', '№')}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'date', 'Дата')}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'doctor', 'Доктор')}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'patient', 'Пациент')}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'diagnose', 'Диагноза')}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'id', '№', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'date', 'Дата', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'doctor', 'Доктор', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'patient', 'Пациент', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'diagnose', 'Диагноза', null)}"></th>
             <th>Действия</th>
         </tr>
         </thead>

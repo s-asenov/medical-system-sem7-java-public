@@ -7,15 +7,21 @@
 
 <div layout:fragment="content">
     <h1>Всички пациенти</h1>
+    <form th:action="@{/patients}" method="get" th:object="${searchForm}">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Търсене по име" th:field="*{name}">
+            <button class="btn btn-outline-secondary" type="submit">Търси</button>
+        </div>
+    </form>
     <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/patients/create}" class="btn btn-primary">Създай пациент</a>
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'id', '№')}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'firstName', 'Име')}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'username', 'Потребителско име')}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'generalPractitioner', 'Общопрактикуващ (личен)')}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'egn', 'ЕГН')}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'id', '№', ${utils.toQueryString(searchForm)})}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'firstName', 'Име', ${utils.toQueryString(searchForm)})}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'username', 'Потребителско име', ${utils.toQueryString(searchForm)})}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'generalPractitioner.fullName', 'Общопрактикуващ (личен)', ${utils.toQueryString(searchForm)})}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'egn', 'ЕГН', ${utils.toQueryString(searchForm)})}"></th>
             <th>Действия</th>
         </tr>
         </thead>

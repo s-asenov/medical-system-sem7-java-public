@@ -11,9 +11,9 @@
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${diagnoses}, '/diagnoses', 'id', '№')}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${diagnoses}, '/diagnoses', 'name', 'Име')}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${diagnoses}, '/diagnoses', 'description', 'Описание')}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${diagnoses}, '/diagnoses', 'id', '№', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${diagnoses}, '/diagnoses', 'name', 'Име', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${diagnoses}, '/diagnoses', 'description', 'Описание', null)}"></th>
             <th>Действия</th>
         </tr>
         </thead>

@@ -1,6 +1,5 @@
-<th th:fragment="sortableHeader(pageable, route, fieldName, text)">
+<th th:fragment="sortableHeader(pageableList, route, fieldName, text, extraParams)">
     <a class="text-decoration-none" th:text="${text}"
-       th:href="@{${route}(page=${pageable.number}, size=${pageable.size},
-       sort=${fieldName + ',' + (pageable.sort.getOrderFor(fieldName) == null or pageable.sort.getOrderFor(fieldName).isAscending() ? 'DESC' : 'ASC') })}">
+       th:href="${utils.generateSortUrl(pageableList.pageable, route, fieldName, extraParams)}">
     </a>
 </th>

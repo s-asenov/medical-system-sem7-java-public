@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -41,6 +42,9 @@ public class User extends BaseEntity implements UserDetails, Serializable {
     @Column(nullable = false)
     @NotNull(message = "Ролята е задължителна")
     private Role role;
+
+    @Formula("CONCAT(first_name, ' ', last_name)")
+    private String fullName;
 
     public User() {
         super();
@@ -90,9 +94,5 @@ public class User extends BaseEntity implements UserDetails, Serializable {
 
     public boolean isAdmin() {
         return role == Role.ROLE_ADMIN;
-    }
-
-    public String getFullName() {
-        return firstName + " " + lastName;
     }
 }
