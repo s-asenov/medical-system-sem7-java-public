@@ -4,7 +4,10 @@ import com.medic.system.dtos.patient.EditPatientRequestDto;
 import com.medic.system.dtos.patient.PatientRequestDto;
 import com.medic.system.dtos.user.BaseUserSearchDto;
 import com.medic.system.entities.Doctor;
+import com.medic.system.entities.Insurance;
 import com.medic.system.entities.Patient;
+import com.medic.system.repositories.DoctorRepository;
+import com.medic.system.repositories.InsuranceRepository;
 import com.medic.system.repositories.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,29 +17,42 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 @Service
 @RequiredArgsConstructor
 public class PatientService {
     private final PatientRepository patientRepository;
-    private final DoctorService doctorService;
+    private final DoctorRepository doctorRepository;
     private final PasswordEncoder passwordEncoder;
+    private final InsuranceRepository insuranceRepository;
 
     public List<Patient> findAll() {
         return patientRepository.findAll();
     }
 
     public Page<Patient> findAll(Pageable pageable, BaseUserSearchDto searchForm) {
+        Page<Patient> patientsPage;
         if (searchForm.getName() != null && !searchForm.getName().isEmpty()) {
-            return patientRepository.searchByNameAcrossFields(searchForm.getName(), pageable);
+            patientsPage = patientRepository.searchByNameAcrossFields(searchForm.getName(), pageable);
+        } else {
+            patientsPage = patientRepository.findAll(pageable);
         }
-        return patientRepository.findAll(pageable);
+
+        return patientsPage.map(patient -> {
+            patient.setHasPaidInsuranceLast6Months(hasPaidInsuranceLast6Months(patient.getId()));
+            return patient;
+        });
     }
 
     public Patient findById(Long id) {
-        return patientRepository.findById(id).orElseThrow();
+        return patientRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Пациентът не е намерен"));
     }
 
     public Patient save(PatientRequestDto patientRequestDto, BindingResult bindingResult) {
@@ -48,9 +64,9 @@ public class PatientService {
         Doctor doctor;
 
         try {
-            doctor = doctorService.isDoctorAndGp(patientRequestDto.getGeneralPractitionerId());
-        } catch (IllegalArgumentException e) {
-            bindingResult.rejectValue("generalPractitionerId", "error.patient", "Грешка при създаване на пациент");
+            doctor = findGeneralPractitioner(patientRequestDto.getGeneralPractitionerId());
+        } catch (NoSuchElementException e) {
+            bindingResult.rejectValue("generalPractitionerId", "error.patient", e.getMessage());
             return null;
         }
 
@@ -75,17 +91,16 @@ public class PatientService {
         Patient patient;
         try {
             patient = findById(id);
-        } catch (Exception e) {
-            bindingResult.rejectValue("username", "error.patient", "Пациентът не е намерен");
+        } catch (NoSuchElementException e) {
+            bindingResult.rejectValue("username", "error.patient", e.getMessage());
             return null;
         }
 
         Doctor doctor;
 
         try {
-            doctor = doctorService.isDoctorAndGp(editPatientRequestDto.getGeneralPractitionerId());
-            patient.setGeneralPractitioner(doctor);
-        } catch (IllegalArgumentException e) {
+            doctor = findGeneralPractitioner(editPatientRequestDto.getGeneralPractitionerId());
+        } catch (NoSuchElementException e) {
             bindingResult.rejectValue("generalPractitionerId", "error.patient", e.getMessage());
             return null;
         }
@@ -107,5 +122,33 @@ public class PatientService {
             bindingResult.rejectValue("generalPractitionerId", "error.patient",  "Грешка при редактиране на пациент");
             return null;
         }
+    }
+
+    public boolean hasPaidInsuranceLast6Months(Long patientId) {
+        LocalDate now = LocalDate.now();
+        LocalDate sixMonthsAgo = now.minus(6, ChronoUnit.MONTHS).withDayOfMonth(1);
+
+        List<Insurance> insurances = insuranceRepository.findAllByPatientIdAndInsuranceDateBetween(patientId, sixMonthsAgo, now);
+
+        List<LocalDate> requiredMonths = IntStream.rangeClosed(1, 6)
+                .mapToObj(i -> sixMonthsAgo.plusMonths(i))
+                .collect(Collectors.toList());
+
+        List<LocalDate> paidMonths = insurances.stream()
+                .map(Insurance::getInsuranceDate)
+                .collect(Collectors.toList());
+
+        return requiredMonths.stream().allMatch(paidMonths::contains);
+    }
+
+    private Doctor findGeneralPractitioner(Long generalPractitionerId) {
+        Doctor doctor = doctorRepository.findById(generalPractitionerId)
+                .orElseThrow(() -> new NoSuchElementException("Докторът не е намерен"));
+
+        if (doctor.getIsGeneralPractitioner() != true) {
+            throw new NoSuchElementException("Докторът не е общопрактикуващ лекар");
+        }
+
+        return doctor;
     }
 }

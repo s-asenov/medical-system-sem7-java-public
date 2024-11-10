@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="bg"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Всички осигуровки</title>
+</head>
+
+<div layout:fragment="content">
+    <h1>Всички осигуровки</h1>
+    <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PATIENT')" th:href="@{/insurances/create}" class="btn btn-primary">Създай осигуровка</a>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${insurances}, '/insurances', 'id', '№', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${insurances}, '/insurances', 'patient.fullName', 'Пациент', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${insurances}, '/insurances', 'insuranceMonth', 'Месец', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${insurances}, '/insurances', 'insuranceYear', 'Година', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${insurances}, '/insurances', 'sum', 'Сума', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${insurances}, '/insurances', 'dateOfPayment', 'Дата', null)}"></th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="insurance : ${insurances.content}">
+            <td th:text="${insurance.id}"></td>
+            <td th:text="${insurance.patient.fullName}"></td>
+            <td th:text="${insurance.insuranceMonth}"></td>
+            <td th:text="${insurance.insuranceYear}"></td>
+            <td th:text="${insurance.sum}"></td>
+            <td th:text="${insurance.dateOfPayment}"></td>
+            <td>
+                <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (#authentication.principal.id == insurance.patient.id and #authorization.expression('hasRole(''ROLE_PATIENT'')'))}"
+                   th:href="@{/insurances/edit/{id}(id=${insurance.id})}"
+                   class="btn btn-sm btn-info">
+                    Редакция
+                </a>
+                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/insurances/delete/{id}(id=${insurance.id})}" class="btn btn-sm btn-danger">Изтриване</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:include="~{fragments/pagination :: pagination(${insurances}, '/insurances', null)}"></div>
+</div>
+</html>

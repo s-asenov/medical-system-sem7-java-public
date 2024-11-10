@@ -3,7 +3,7 @@ package com.medic.system.services;
 import com.medic.system.dtos.sick_leave.EditSickLeaveRequestDto;
 import com.medic.system.dtos.sick_leave.SickLeaveRequestDto;
 import com.medic.system.entities.*;
-import com.medic.system.repositories.SickLeaveRepository;
+import com.medic.system.repositories.MedicalAppointmentRepository;
 import com.medic.system.repositories.SickLeaveRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,11 +12,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
 public class SickLeaveService {
-    private final MedicalAppointmentService medicalAppointmentService;
+    private final MedicalAppointmentRepository medicalAppointmentRepository;
     private final SickLeaveRepository sickLeaveRepository;
 
     public Page<SickLeave> findAllBasedOnRole(Pageable pageable) {
@@ -27,10 +28,10 @@ public class SickLeaveService {
         }
 
         if (user.isDoctor()) {
-            return sickLeaveRepository.findAllByMedicalAppointment_Doctor_Id(user.getId(), pageable);
+            return sickLeaveRepository.findAllByMedicalAppointment_DoctorId(user.getId(), pageable);
         }
 
-        return sickLeaveRepository.findAllByMedicalAppointment_Patient_Id(user.getId(), pageable);
+        return sickLeaveRepository.findAllByMedicalAppointment_PatientId(user.getId(), pageable);
     }
 
     public SickLeave create(SickLeaveRequestDto sickLeaveDto, BindingResult bindingResult)
@@ -42,8 +43,8 @@ public class SickLeaveService {
 
         MedicalAppointment appointment;
         try {
-            appointment = medicalAppointmentService.findById(sickLeaveDto.getMedicalAppointmentId());
-        } catch (Exception e) {
+            appointment = medicalAppointmentRepository.findById(sickLeaveDto.getMedicalAppointmentId()).orElseThrow();
+        } catch (NoSuchElementException e) {
             bindingResult.rejectValue("medicalAppointmentId", "error.sick_leave", "Прегледът не съществува");
             return null;
         }
@@ -80,15 +81,15 @@ public class SickLeaveService {
         SickLeave sickLeave;
         try {
             sickLeave = findById(id);
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             bindingResult.rejectValue("days", "error.sick_leave", "Болничният лист не съществува");
             return null;
         }
 
         MedicalAppointment appointment;
         try {
-            appointment = medicalAppointmentService.findById(editSickLeaveDto.getMedicalAppointmentId());
-        } catch (Exception e) {
+            appointment = medicalAppointmentRepository.findById(editSickLeaveDto.getMedicalAppointmentId()).orElseThrow();
+        } catch (NoSuchElementException e) {
             bindingResult.rejectValue("medicalAppointmentId", "error.sick_leave", "Прегледът не съществува");
             return null;
         }
@@ -122,7 +123,7 @@ public class SickLeaveService {
         SickLeave sickLeave;
         try {
             sickLeave = findById(sickLeaveId);
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             return false;
         }
 

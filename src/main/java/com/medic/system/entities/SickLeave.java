@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Setter
 public class SickLeave extends BaseEntity {
     @OneToOne
-    @JoinColumn(name = "medical_appointment_id")
+    @JoinColumn(name = "medical_appointment_id", nullable = false)
     @NotNull
     private MedicalAppointment medicalAppointment;
 

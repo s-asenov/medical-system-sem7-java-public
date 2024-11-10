@@ -101,7 +101,7 @@ public class DatabaseLoader {
         );
 
         specialityNames.forEach(specialityName -> {
-            if (specialityRepository.findByName(specialityName) == null) {
+            if (specialityRepository.existsByName(specialityName)) {
                 Speciality speciality = new Speciality();
                 speciality.setName(specialityName);
                 specialityRepository.save(speciality);
@@ -125,7 +125,7 @@ public class DatabaseLoader {
         );
 
         diagnoses.forEach(diagnose -> {
-            if (diagnoseRepository.findByName(diagnose.get(0)) == null) {
+            if (diagnoseRepository.existsByName(diagnose.get(0))) {
                 Diagnose newDiagnose = new Diagnose();
                 newDiagnose.setName(diagnose.get(0));
                 newDiagnose.setDescription(diagnose.get(1));

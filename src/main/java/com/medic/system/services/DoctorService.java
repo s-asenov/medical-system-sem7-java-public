@@ -5,6 +5,7 @@ import com.medic.system.dtos.doctor.EditDoctorRequestDto;
 import com.medic.system.entities.Doctor;
 import com.medic.system.entities.Speciality;
 import com.medic.system.repositories.DoctorRepository;
+import com.medic.system.repositories.SpecialityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -14,13 +15,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
 public class DoctorService {
     private final DoctorRepository doctorRepository;
     private final PasswordEncoder passwordEncoder;
-    private final SpecialityService specialityService;
+    private final SpecialityRepository specialityRepository;
 
     public List<Doctor> findAllGeneralPractitioners() {
         return doctorRepository.findAllByIsGeneralPractitioner(true);
@@ -32,18 +34,6 @@ public class DoctorService {
 
     public Page<Doctor> findAll(Pageable pageable) {
         return doctorRepository.findAll(pageable);
-    }
-
-    public Doctor isDoctorAndGp(Long id)
-    {
-        Doctor doctor = doctorRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Няма такъв доктор"));
-
-        if (!doctor.getIsGeneralPractitioner()) {
-            throw new IllegalArgumentException("Докторът не е общопрактикуващ");
-        }
-
-        return doctor;
     }
 
     public Doctor create(DoctorRequestDto doctorRequestDto, BindingResult bindingResult)
@@ -60,10 +50,11 @@ public class DoctorService {
         // add specialities, if error return null and put error in bindingResult
         try {
             for (Long specialityId : doctorRequestDto.getSpecialities()) {
-                Speciality speciality = specialityService.findById(specialityId);
+                Speciality speciality = specialityRepository.findById(specialityId)
+                        .orElseThrow(() -> new NoSuchElementException("Специалността не е намерена"));
                 doctor.addSpeciality(speciality);
             }
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             bindingResult.rejectValue("specialities", "error.doctor", "Грешка при добавяне на специалности");
             return null;
         }
@@ -96,7 +87,8 @@ public class DoctorService {
         try {
             doctor.clearSpecialities();
             for (Long specialityId : editDoctorRequestDto.getSpecialities()) {
-                Speciality speciality = specialityService.findById(specialityId);
+                Speciality speciality = specialityRepository.findById(specialityId)
+                        .orElseThrow(() -> new NoSuchElementException("Специалността не е намерена"));;
                 doctor.addSpeciality(speciality);
             }
         } catch (Exception e) {

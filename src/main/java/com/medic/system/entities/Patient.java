@@ -22,11 +22,14 @@ public class Patient extends User {
     private String egn;
 
     @ManyToOne
-    @JoinColumn(name = "general_practitioner_id")
+    @JoinColumn(name = "general_practitioner_id", nullable = false)
     private Doctor generalPractitioner;
 
     @OneToMany(mappedBy = "patient")
     private List<MedicalAppointment> medicalAppointments = new ArrayList<>();
+
+    @Transient
+    private boolean hasPaidInsuranceLast6Months;
 
     public Patient() {
         super();

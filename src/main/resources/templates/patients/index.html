@@ -22,6 +22,7 @@
             <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'username', 'Потребителско име', ${utils.toQueryString(searchForm)})}"></th>
             <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'generalPractitioner.fullName', 'Общопрактикуващ (личен)', ${utils.toQueryString(searchForm)})}"></th>
             <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${patients}, '/patients', 'egn', 'ЕГН', ${utils.toQueryString(searchForm)})}"></th>
+            <th>Платени осигуровки за последните 6 месеца?</th>
             <th>Действия</th>
         </tr>
         </thead>
@@ -35,6 +36,10 @@
                    th:text="${patient.generalPractitioner.fullName}" class="mb-0 fw-bold text-black"></p>
             </td>
             <td th:text="${patient.egn}"></td>
+            <td>
+                <span th:if="${patient.hasPaidInsuranceLast6Months}" class="badge bg-success">Да</span>
+                <span th:unless="${patient.hasPaidInsuranceLast6Months}" class="badge bg-warning">Не</span>
+            </td>
             <td>
                 <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/users/edit/{id}(id=${patient.id})}" class="btn btn-sm btn-info">
                     Редакция

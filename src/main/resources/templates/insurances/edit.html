@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="bg"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Редактирай осигуровка</title>
+</head>
+
+<div layout:fragment="content">
+    <form th:action="@{|/insurances/edit/${insurance.id}|}" method="post" th:object="${insurance}">
+        <h1>Редактирай осигуровка</h1>
+        <input type="hidden" th:field="*{id}" />
+        <div class="mb-3" th:unless="${isPatient}">
+            <label class="form-label" for="patient">Пациент</label>
+            <select class="form-control" id="patient" th:field="*{patientId}" th:class="'form-control' + (${#fields.hasErrors('patientId') ? ' is-invalid' : ''})">
+                <option value="">Избери пациент</option>
+                <option th:each="patient : ${patients}" th:value="${patient.id}" th:text="${patient.fullName}"></option>
+            </select>
+            <span th:if="${#fields.hasErrors('patientId')}" th:errors="*{patientId}" class="invalid-feedback"></span>
+        </div>
+        <input type="hidden" th:if="isPatient" th:field="*{patientId}" />
+        <div class="mb-3">
+            <label class="form-label" for="sum">Сума</label>
+            <input type="number" class="form-control" id="sum" th:field="*{sum}" th:class="'form-control' + (${#fields.hasErrors('sum') ? ' is-invalid' : ''})">
+            <span th:if="${#fields.hasErrors('sum')}" th:errors="*{sum}" class="invalid-feedback"></span>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="month">Месец</label>
+            <input type="number" class="form-control" id="month" min="1" max="12" th:field="*{insuranceMonth}" th:class="'form-control' + (${#fields.hasErrors('insuranceMonth') ? ' is-invalid' : ''})">
+            <span th:if="${#fields.hasErrors('insuranceMonth')}" th:errors="*{insuranceMonth}" class="invalid-feedback"></span>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="year">Година</label>
+            <input type="number" class="form-control" id="year" th:field="*{insuranceYear}" th:class="'form-control' + (${#fields.hasErrors('insuranceYear') ? ' is-invalid' : ''})">
+            <span th:if="${#fields.hasErrors('insuranceYear')}" th:errors="*{insuranceYear}" class="invalid-feedback"></span>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="date">Дата на плащане</label>
+            <input type="date" class="form-control" id="date" th:field="*{dateOfPayment}" th:class="'form-control' + (${#fields.hasErrors('dateOfPayment') ? ' is-invalid' : ''})">
+            <span th:if="${#fields.hasErrors('dateOfPayment')}" th:errors="*{dateOfPayment}" class="invalid-feedback"></span>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary">Редактирай осигуровка</button>
+        </div>
+    </form>
+</div>
+</html>

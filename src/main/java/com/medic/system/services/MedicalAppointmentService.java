@@ -3,7 +3,10 @@ package com.medic.system.services;
 import com.medic.system.dtos.medical_appointment.EditMedicalAppointmentRequestDto;
 import com.medic.system.dtos.medical_appointment.MedicalAppointmentRequestDto;
 import com.medic.system.entities.*;
+import com.medic.system.repositories.DiagnoseRepository;
+import com.medic.system.repositories.DoctorRepository;
 import com.medic.system.repositories.MedicalAppointmentRepository;
+import com.medic.system.repositories.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,9 +19,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MedicalAppointmentService {
     private final MedicalAppointmentRepository medicalAppointmentRepository;
-    private final DoctorService doctorService;
-    private final PatientService patientService;
-    private final DiagnoseService diagnoseService;
+    private final DoctorRepository doctorRepository;
+    private final PatientRepository patientRepository;
+    private final DiagnoseRepository diagnoseRepository;
 
     public List<MedicalAppointment> findAll() {
         return medicalAppointmentRepository.findAll();
@@ -37,7 +40,7 @@ public class MedicalAppointmentService {
 
         Doctor doctor;
         try {
-            doctor = doctorService.findById(appointmentDto.getDoctorId());
+            doctor = doctorRepository.findById(appointmentDto.getDoctorId()).orElseThrow();
         } catch (Exception e) {
             bindingResult.rejectValue("doctorId", "error.medical_appointment", "Докторът не съществува");
             return null;
@@ -45,7 +48,7 @@ public class MedicalAppointmentService {
 
         Patient patient;
         try {
-            patient = patientService.findById(appointmentDto.getPatientId());
+            patient = patientRepository.findById(appointmentDto.getPatientId()).orElseThrow();
         } catch (Exception e) {
             bindingResult.rejectValue("patientId", "error.medical_appointment", "Пациентът не съществува");
             return null;
@@ -53,7 +56,7 @@ public class MedicalAppointmentService {
 
         Diagnose diagnose;
         try {
-            diagnose = diagnoseService.findById(appointmentDto.getDiagnoseId());
+            diagnose = diagnoseRepository.findById(appointmentDto.getDiagnoseId()).orElseThrow();
         } catch (Exception e) {
             bindingResult.rejectValue("diagnoseId", "error.medical_appointment", "Диагнозата не съществува");
             return null;
@@ -89,7 +92,7 @@ public class MedicalAppointmentService {
 
         Doctor doctor;
         try {
-            doctor = doctorService.findById(editAppointmentDto.getDoctorId());
+            doctor = doctorRepository.findById(editAppointmentDto.getDoctorId()).orElseThrow();
         } catch (Exception e) {
             bindingResult.rejectValue("doctorId", "error.medical_appointment", "Докторът не съществува");
             return null;
@@ -97,7 +100,7 @@ public class MedicalAppointmentService {
 
         Patient patient;
         try {
-            patient = patientService.findById(editAppointmentDto.getPatientId());
+            patient = patientRepository.findById(editAppointmentDto.getPatientId()).orElseThrow();
         } catch (Exception e) {
             bindingResult.rejectValue("patientId", "error.medical_appointment", "Пациентът не съществува");
             return null;
@@ -105,7 +108,7 @@ public class MedicalAppointmentService {
 
         Diagnose diagnose;
         try {
-            diagnose = diagnoseService.findById(editAppointmentDto.getDiagnoseId());
+            diagnose = diagnoseRepository.findById(editAppointmentDto.getDiagnoseId()).orElseThrow();
         } catch (Exception e) {
             bindingResult.rejectValue("diagnoseId", "error.medical_appointment", "Диагнозата не съществува");
             return null;
@@ -133,7 +136,7 @@ public class MedicalAppointmentService {
     }
 
     public boolean isDoctorAppointment(Long appointmentId, Long doctorId) {
-        return medicalAppointmentRepository.findByIdAndDoctorId(appointmentId, doctorId).orElse(null) != null;
+        return medicalAppointmentRepository.existsByIdAndDoctorId(appointmentId, doctorId);
     }
 
     public Page<MedicalAppointment> findAllBasedOnRole(Pageable pageable) {
