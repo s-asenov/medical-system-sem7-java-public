@@ -36,15 +36,18 @@ public class AdminService {
         try {
             return userRepository.save(doctor);
         } catch (DataIntegrityViolationException e) {
-            // set to generalPractitionerId because it is last one
-            bindingResult.rejectValue("isGeneralPractitioner", "error.user",  "Грешка при създаване на администратор");
+            bindingResult.rejectValue("username", "error.user",  "Грешка при създаване на администратор");
             return null;
         }
     }
 
     public User update(Long id, EditBaseUserRequestDto editBaseUserRequestDto, BindingResult bindingResult) {
-        User user;
+        if (editBaseUserRequestDto == null) {
+            bindingResult.rejectValue("username", "error.user", "Грешка при редакция на потребител");
+            return null;
+        }
 
+        User user;
         try {
             user = findById(id);
         } catch (Exception e) {
@@ -52,13 +55,13 @@ public class AdminService {
             return null;
         }
 
-        user.setFirstName(editBaseUserRequestDto.getFirstName());
-        user.setLastName(editBaseUserRequestDto.getLastName());
-        user.setUsername(editBaseUserRequestDto.getUsername());
-
         if (editBaseUserRequestDto.getPassword() != null && !editBaseUserRequestDto.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(editBaseUserRequestDto.getPassword()));
         }
+
+        user.setFirstName(editBaseUserRequestDto.getFirstName());
+        user.setLastName(editBaseUserRequestDto.getLastName());
+        user.setUsername(editBaseUserRequestDto.getUsername());
 
         try {
             User admin = userRepository.save(user);

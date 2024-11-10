@@ -124,7 +124,7 @@ public class PatientService {
         }
     }
 
-    public boolean hasPaidInsuranceLast6Months(Long patientId) {
+    private boolean hasPaidInsuranceLast6Months(Long patientId) {
         LocalDate now = LocalDate.now();
         LocalDate sixMonthsAgo = now.minus(6, ChronoUnit.MONTHS).withDayOfMonth(1);
 

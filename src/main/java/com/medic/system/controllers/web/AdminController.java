@@ -4,7 +4,7 @@ import com.medic.system.dtos.user.BaseUserRequestDto;
 import com.medic.system.dtos.user.EditBaseUserRequestDto;
 import com.medic.system.entities.User;
 import com.medic.system.enums.Role;
-import com.medic.system.services.UserServiceImpl;
+import com.medic.system.services.AdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -21,12 +21,12 @@ import org.springframework.web.server.ResponseStatusException;
 @Controller
 public class AdminController {
 
-    private final UserServiceImpl userService;
+    private final AdminService adminService;
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public String index(Model model, Pageable pageable) {
-        model.addAttribute("admins", userService.findAllAdminUsers(pageable));
+        model.addAttribute("admins", adminService.findAll(pageable));
         return "admins/index";
     }
 
@@ -46,7 +46,7 @@ public class AdminController {
             return "admins/create";
         }
 
-        userService.create(admin, bindingResult);
+        adminService.create(admin, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "admins/create";
@@ -59,7 +59,7 @@ public class AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     public String edit(@PathVariable Long id, Model model) {
         try {
-            User user = userService.findAdminById(id);
+            User user = adminService.findById(id);
             model.addAttribute("admin", new EditBaseUserRequestDto(user));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Админът не съществува");
@@ -75,7 +75,7 @@ public class AdminController {
             return "admins/edit";
         }
 
-        userService.update(id, admin, bindingResult);
+        adminService.update(id, admin, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "admins/edit";
