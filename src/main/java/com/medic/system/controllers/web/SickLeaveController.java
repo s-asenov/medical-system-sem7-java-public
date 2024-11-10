@@ -32,11 +32,16 @@ public class SickLeaveController {
 
     @GetMapping("/create")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
-    public String create(Model model) {
+    public String create(Model model, @RequestParam(required = false) Long appointmentId) {
         SickLeaveRequestDto sickLeave = new SickLeaveRequestDto();
 
+        if (appointmentId != null)
+        {
+            sickLeave.setMedicalAppointmentId(appointmentId);
+        }
+
         model.addAttribute("sickLeave", sickLeave);
-        model.addAttribute("medicalAppointments", medicalAppointmentService.findAll());
+        model.addAttribute("medicalAppointments", medicalAppointmentService.findAllBasedOnRole());
 
         return "sick_leaves/create";
     }
@@ -45,14 +50,14 @@ public class SickLeaveController {
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     public String store(@Valid @ModelAttribute("sickLeave") SickLeaveRequestDto sickLeave, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("medicalAppointments", medicalAppointmentService.findAll());
+            model.addAttribute("medicalAppointments", medicalAppointmentService.findAllBasedOnRole());
             return "sick_leaves/create";
         }
 
         sickLeaveService.create(sickLeave, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("medicalAppointments", medicalAppointmentService.findAll());
+            model.addAttribute("medicalAppointments", medicalAppointmentService.findAllBasedOnRole());
             return "sick_leaves/create";
         }
 
@@ -66,7 +71,7 @@ public class SickLeaveController {
             SickLeave sickLeave = sickLeaveService.findById(id);
 
             model.addAttribute("sickLeave", new EditSickLeaveRequestDto(sickLeave));
-            model.addAttribute("medicalAppointments", medicalAppointmentService.findAll());
+            model.addAttribute("medicalAppointments", medicalAppointmentService.findAllBasedOnRole());
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Болничният лист не съществува");
         }
@@ -78,14 +83,14 @@ public class SickLeaveController {
     @PreAuthorize("hasRole('ADMIN') or (hasRole('DOCTOR') and @sickLeaveService.isSickLeaveAppointmentFromDoctor(#id, principal.id))")
     public String update(@PathVariable Long id, @Valid @ModelAttribute("sickLeave") EditSickLeaveRequestDto sickLeave, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("medicalAppointments", medicalAppointmentService.findAll());
+            model.addAttribute("medicalAppointments", medicalAppointmentService.findAllBasedOnRole());
             return "sick_leaves/edit";
         }
 
         sickLeaveService.update(id, sickLeave, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("medicalAppointments", medicalAppointmentService.findAll());
+            model.addAttribute("medicalAppointments", medicalAppointmentService.findAllBasedOnRole());
             return "sick_leaves/edit";
         }
 

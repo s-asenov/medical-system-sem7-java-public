@@ -49,6 +49,13 @@ public class SickLeaveService {
             return null;
         }
 
+        User user = UserServiceImpl.getCurrentUser();
+
+        if (user.isDoctor() && !appointment.getDoctor().getId().equals(user.getId())) {
+            bindingResult.rejectValue("medicalAppointmentId", "error.sick_leave", "Прегледът не е направен от лекаря");
+            return null;
+        }
+
         if (sickLeaveDto.getStartDate().isBefore(appointment.getDate())) {
             bindingResult.rejectValue("startDate", "error.sick_leave", "Дата на болничен лист не може да бъде преди датата на прегледа");
             return null;
@@ -91,6 +98,13 @@ public class SickLeaveService {
             appointment = medicalAppointmentRepository.findById(editSickLeaveDto.getMedicalAppointmentId()).orElseThrow();
         } catch (NoSuchElementException e) {
             bindingResult.rejectValue("medicalAppointmentId", "error.sick_leave", "Прегледът не съществува");
+            return null;
+        }
+
+        User user = UserServiceImpl.getCurrentUser();
+
+        if (user.isDoctor() && !appointment.getDoctor().getId().equals(user.getId())) {
+            bindingResult.rejectValue("medicalAppointmentId", "error.sick_leave", "Прегледът не е направен от лекаря");
             return null;
         }
 

@@ -35,6 +35,11 @@
             </td>
             <td>
                 <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (#authentication.principal.id == appointment.doctor.id and #authorization.expression('hasRole(''ROLE_DOCTOR'')'))}"
+                   th:href="@{/sick_leaves/create(appointmentId=${appointment.id})}"
+                   class="btn btn-sm btn-outline-dark">
+                    Създай болничен лист
+                </a>
+                <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (#authentication.principal.id == appointment.doctor.id and #authorization.expression('hasRole(''ROLE_DOCTOR'')'))}"
                    th:href="@{/medical_appointments/edit/{id}(id=${appointment.id})}"
                    class="btn btn-sm btn-info">
                     Редакция

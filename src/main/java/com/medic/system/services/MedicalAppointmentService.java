@@ -23,14 +23,6 @@ public class MedicalAppointmentService {
     private final PatientRepository patientRepository;
     private final DiagnoseRepository diagnoseRepository;
 
-    public List<MedicalAppointment> findAll() {
-        return medicalAppointmentRepository.findAll();
-    }
-
-    public Page<MedicalAppointment> findAll(Pageable pageable) {
-        return medicalAppointmentRepository.findAll(pageable);
-    }
-
     public MedicalAppointment create(MedicalAppointmentRequestDto appointmentDto, BindingResult bindingResult)
     {
         if (appointmentDto == null) {
@@ -143,7 +135,7 @@ public class MedicalAppointmentService {
         User user = UserServiceImpl.getCurrentUser();
 
         if (user.isAdmin()) {
-            return findAll(pageable);
+            return medicalAppointmentRepository.findAll(pageable);
         }
 
         if (user.isDoctor()) {
@@ -151,5 +143,19 @@ public class MedicalAppointmentService {
         }
 
         return medicalAppointmentRepository.findAllByPatientId(user.getId(), pageable);
+    }
+
+    public List<MedicalAppointment> findAllBasedOnRole() {
+        User user = UserServiceImpl.getCurrentUser();
+
+        if (user.isAdmin()) {
+            return medicalAppointmentRepository.findAll();
+        }
+
+        if (user.isDoctor()) {
+            return medicalAppointmentRepository.findAllByDoctorId(user.getId());
+        }
+
+        return medicalAppointmentRepository.findAllByPatientId(user.getId());
     }
 }
