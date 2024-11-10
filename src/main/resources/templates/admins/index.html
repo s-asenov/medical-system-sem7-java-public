@@ -2,11 +2,11 @@
 <html lang="bg"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Всички потребители</title>
+    <title>Всички администратори</title>
 </head>
 
 <div layout:fragment="content">
-    <h1>Всички потребители</h1>
+    <h1>Всички администратори</h1>
     <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admins/create}" class="btn btn-primary">Създай администратор</a>
     <table class="table table-bordered table-striped">
         <thead>

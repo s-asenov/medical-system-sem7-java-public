@@ -2,16 +2,14 @@ package com.medic.system.services;
 
 import com.medic.system.dtos.patient.EditPatientRequestDto;
 import com.medic.system.dtos.patient.PatientRequestDto;
-import com.medic.system.dtos.user.BaseUserSearchForm;
+import com.medic.system.dtos.user.BaseUserSearchDto;
 import com.medic.system.entities.Doctor;
 import com.medic.system.entities.Patient;
 import com.medic.system.repositories.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -30,7 +28,7 @@ public class PatientService {
         return patientRepository.findAll();
     }
 
-    public Page<Patient> findAll(Pageable pageable, BaseUserSearchForm searchForm) {
+    public Page<Patient> findAll(Pageable pageable, BaseUserSearchDto searchForm) {
         if (searchForm.getName() != null && !searchForm.getName().isEmpty()) {
             return patientRepository.searchByNameAcrossFields(searchForm.getName(), pageable);
         }

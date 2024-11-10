@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="bg"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Всички болнични</title>
+</head>
+
+<div layout:fragment="content">
+    <h1>Всички болнични</h1>
+    <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_DOCTOR')" th:href="@{/sick_leaves/create}" class="btn btn-primary">Създай болничен</a>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${sickLeaves}, '/sick_leaves', 'id', '№', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${sickLeaves}, '/sick_leaves', 'startDate', 'Дата', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${sickLeaves}, '/sick_leaves', 'days', 'Дни', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${sickLeaves}, '/sick_leaves', 'medicalAppointment.date', 'Дата на преглед', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${sickLeaves}, '/sick_leaves', 'medicalAppointment.doctor.fullName', 'Лекар', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${sickLeaves}, '/sick_leaves', 'medicalAppointment.patient.fullName', 'Пациент', null)}"></th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="sickLeave : ${sickLeaves.content}">
+            <td th:text="${sickLeave.id}"></td>
+            <td th:text="${sickLeave.startDate}"></td>
+            <td th:text="${sickLeave.days}"></td>
+            <td><span class="fw-bold" th:text="'№' + ${sickLeave.medicalAppointment.id}"></span> - <span th:text="${sickLeave.medicalAppointment.date}"></span></td>
+            <td th:text="${sickLeave.medicalAppointment.doctor.fullName}"></td>
+            <td th:text="${sickLeave.medicalAppointment.patient.fullName}"></td>
+            <td>
+                <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (#authentication.principal.id == sickLeave.medicalAppointment.doctor.id and #authorization.expression('hasRole(''ROLE_DOCTOR'')'))}"
+                   th:href="@{/sick_leaves/edit/{id}(id=${sickLeave.id})}"
+                   class="btn btn-sm btn-info">
+                    Редакция
+                </a>
+                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/sick_leaves/delete/{id}(id=${sickLeave.id})}" class="btn btn-sm btn-danger">Изтриване</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:include="~{fragments/pagination :: pagination(${sickLeaves}, '/sick_leaves', null)}"></div>
+</div>
+</html>

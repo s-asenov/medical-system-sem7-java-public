@@ -27,6 +27,9 @@
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/medical_appointments}">Прегледи</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/sick_leaves}">Болнични</a>
+                    </li>
                     <li th:unless="${#authentication.isAuthenticated()}" class="nav-item">
                         <a class="nav-link" th:href="@{/login}">Login</a>
                     </li>

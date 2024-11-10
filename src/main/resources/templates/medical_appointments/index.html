@@ -16,6 +16,7 @@
             <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'doctor', 'Доктор', null)}"></th>
             <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'patient', 'Пациент', null)}"></th>
             <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'diagnose', 'Диагноза', null)}"></th>
+            <th>Болничен лист</th>
             <th>Действия</th>
         </tr>
         </thead>
@@ -26,6 +27,12 @@
             <td th:text="${appointment.doctor.fullName}"></td>
             <td th:text="${appointment.patient.fullName}"></td>
             <td th:text="${appointment.diagnose.name}"></td>
+            <th:block th:if="${appointment.sickLeave != null}">
+                <td th:text="'Болничен лист' + ${appointment.sickLeave.startDate}"></td>
+            </th:block>
+            <th:block th:unless="${appointment.sickLeave != null}">
+                <td><span class="badge bg-info">Няма</span></td>
+            </th:block>
             <td>
                 <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (#authentication.principal.id == appointment.doctor.id and #authorization.expression('hasRole(''ROLE_DOCTOR'')'))}"
                    th:href="@{/medical_appointments/edit/{id}(id=${appointment.id})}"

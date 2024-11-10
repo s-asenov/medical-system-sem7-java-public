@@ -68,14 +68,14 @@ public class MedicalAppointmentService {
         try {
             return medicalAppointmentRepository.save(appointment);
         } catch (Exception e) {
-            bindingResult.rejectValue("name", "error.medical_appointment", "Грешка при създаване на специалност");
+            bindingResult.rejectValue("date", "error.medical_appointment", "Грешка при създаване на специалност");
             return null;
         }
     }
 
     public MedicalAppointment update(Long id, EditMedicalAppointmentRequestDto editAppointmentDto, BindingResult bindingResult) {
         if (editAppointmentDto == null) {
-            bindingResult.rejectValue("name", "error.medical_appointment", "Грешка при редактиране на специалност");
+            bindingResult.rejectValue("date", "error.medical_appointment", "Грешка при редактиране на специалност");
             return null;
         }
 
@@ -83,7 +83,7 @@ public class MedicalAppointmentService {
         try {
             appointment = findById(id);
         } catch (Exception e) {
-            bindingResult.rejectValue("name", "error.medical_appointment", "Специалността не съществува");
+            bindingResult.rejectValue("date", "error.medical_appointment", "Специалността не съществува");
             return null;
         }
 
@@ -119,7 +119,7 @@ public class MedicalAppointmentService {
         try {
             return medicalAppointmentRepository.save(appointment);
         } catch (Exception e) {
-            bindingResult.rejectValue("name", "error.medical_appointment", "Грешка при редактиране на специалност");
+            bindingResult.rejectValue("date", "error.medical_appointment", "Грешка при редактиране на специалност");
             return null;
         }
     }

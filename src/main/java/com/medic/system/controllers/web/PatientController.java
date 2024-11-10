@@ -2,11 +2,10 @@ package com.medic.system.controllers.web;
 
 import com.medic.system.dtos.patient.EditPatientRequestDto;
 import com.medic.system.dtos.patient.PatientRequestDto;
-import com.medic.system.dtos.user.BaseUserSearchForm;
+import com.medic.system.dtos.user.BaseUserSearchDto;
 import com.medic.system.entities.Doctor;
 import com.medic.system.entities.Patient;
 import com.medic.system.entities.User;
-import com.medic.system.helpers.ThymeleafHelper;
 import com.medic.system.services.DoctorService;
 import com.medic.system.services.PatientService;
 import com.medic.system.services.UserServiceImpl;
@@ -31,7 +30,7 @@ public class PatientController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DOCTOR')")
-    public String index(Model model, Pageable pageable, @ModelAttribute("searchForm") BaseUserSearchForm searchForm) {
+    public String index(Model model, Pageable pageable, @ModelAttribute("searchForm") BaseUserSearchDto searchForm) {
         User user = UserServiceImpl.getCurrentUser();
 
         boolean isGeneralPractitioner = false;

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="bg"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>Създай болничен лист</title>
+</head>
+
+<div layout:fragment="content">
+  <form th:action="@{/sick_leaves/create}" method="post" th:object="${sickLeave}">
+    <h1>Създай болничен лист</h1>
+    <div class="mb-3">
+      <label class="form-label">Начална дата</label>
+      <input type="date" th:field="*{startDate}" th:class="'form-control' + ${#fields.hasErrors('startDate') ? ' is-invalid' : ''}"/>
+      <span th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}" class="invalid-feedback"></span>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Дни</label>
+      <input type="number" th:field="*{days}" th:class="'form-control' + ${#fields.hasErrors('days') ? ' is-invalid' : ''}" />
+      <span th:if="${#fields.hasErrors('days')}" th:errors="*{days}" class="invalid-feedback"></span>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Преглед</label>
+      <select th:field="*{medicalAppointmentId}" th:class="'form-select' + ${#fields.hasErrors('medicalAppointmentId') ? ' is-invalid' : ''}">
+        <option value="">Избери преглед</option>
+        <option th:each="medicalAppointment : ${medicalAppointments}" th:value="${medicalAppointment.id}"
+                th:text="${medicalAppointment.date + ' - ' + medicalAppointment.doctor.fullName + ' - ' + medicalAppointment.patient.fullName}"></option>
+      </select>
+      <span th:if="${#fields.hasErrors('medicalAppointmentId')}" th:errors="*{medicalAppointmentId}" class="invalid-feedback"></span>
+    </div>
+    <div>
+      <button type="submit" class="btn btn-primary">Създай болничен лист</button>
+    </div>
+  </form>
+</div>
+</html>

@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BaseUserSearchForm {
+public class BaseUserSearchDto {
     private String name;
 }

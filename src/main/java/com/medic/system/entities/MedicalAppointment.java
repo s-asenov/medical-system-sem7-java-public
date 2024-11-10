@@ -33,4 +33,7 @@ public class MedicalAppointment extends BaseEntity {
     @JoinColumn(name = "diagnose_id")
     @NotNull(message = "Диагнозата е задължителна")
     private Diagnose diagnose;
+
+    @OneToOne(mappedBy = "medicalAppointment")
+    private SickLeave sickLeave;
 }
