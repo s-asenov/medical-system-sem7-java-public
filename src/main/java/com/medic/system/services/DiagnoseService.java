@@ -17,6 +17,10 @@ import java.util.List;
 public class DiagnoseService {
     private final DiagnoseRepository diagnoseRepository;
 
+    public List<Diagnose> findAllOrderedByName() {
+        return diagnoseRepository.findAllByOrderByName();
+    }
+
     public List<Diagnose> findAll() {
         return diagnoseRepository.findAll();
     }

@@ -10,6 +10,12 @@
     <form th:action="@{/patients}" method="get" th:object="${searchForm}">
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Търсене по име" th:field="*{name}">
+            <select th:field="*{generalPractitionerId}" class="form-select">
+                <option value="">Всички общопрактикуващи</option>
+                <option th:each="generalPractitioner : ${generalPractitioners}"
+                        th:value="${generalPractitioner.id}"
+                        th:text="${generalPractitioner.fullName}"></option>
+            </select>
             <button class="btn btn-outline-secondary" type="submit">Търси</button>
         </div>
     </form>

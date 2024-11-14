@@ -2,11 +2,14 @@ package com.medic.system.services;
 
 import com.medic.system.dtos.medical_appointment.EditMedicalAppointmentRequestDto;
 import com.medic.system.dtos.medical_appointment.MedicalAppointmentRequestDto;
+import com.medic.system.dtos.medical_appointment.MedicalAppointmentSearchDto;
 import com.medic.system.entities.*;
 import com.medic.system.repositories.*;
+import com.medic.system.specifications.MedicalAppointmentSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
@@ -155,31 +158,36 @@ public class MedicalAppointmentService {
         return medicalAppointmentRepository.existsByIdAndDoctorId(appointmentId, doctorId);
     }
 
-    public Page<MedicalAppointment> findAllBasedOnRole(Pageable pageable) {
+    public Page<MedicalAppointment> findAllBasedOnRole(Pageable pageable, MedicalAppointmentSearchDto searchForm) {
+        Specification<MedicalAppointment> specification = Specification.where(MedicalAppointmentSpecification.hasDiagnoseId(searchForm.getDiagnoseId()));
+
         User user = UserServiceImpl.getCurrentUser();
 
-        if (user.isAdmin()) {
-            return medicalAppointmentRepository.findAll(pageable);
-        }
-
         if (user.isDoctor()) {
-            return medicalAppointmentRepository.findAllByDoctorId(user.getId(), pageable);
+            specification = specification.and(MedicalAppointmentSpecification.hasDoctorId(user.getId()));
         }
 
-        return medicalAppointmentRepository.findAllByPatientId(user.getId(), pageable);
+        if (user.isPatient()) {
+            specification = specification.and(MedicalAppointmentSpecification.hasPatientId(user.getId()));
+        }
+
+        return medicalAppointmentRepository.findAll(specification, pageable);
     }
 
     public List<MedicalAppointment> findAllBasedOnRole() {
         User user = UserServiceImpl.getCurrentUser();
 
-        if (user.isAdmin()) {
-            return medicalAppointmentRepository.findAll();
-        }
-
+        Specification<MedicalAppointment> specification = Specification.where(MedicalAppointmentSpecification.hasDiagnoseId(null));
         if (user.isDoctor()) {
-            return medicalAppointmentRepository.findAllByDoctorId(user.getId());
+            specification = specification.and(MedicalAppointmentSpecification.hasDoctorId(user.getId()));
         }
 
-        return medicalAppointmentRepository.findAllByPatientId(user.getId());
+        if (user.isPatient()) {
+            specification = specification.and(MedicalAppointmentSpecification.hasPatientId(user.getId()));
+        }
+
+        return medicalAppointmentRepository.findAll(specification);
     }
+
+
 }

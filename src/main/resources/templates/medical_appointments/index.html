@@ -7,15 +7,24 @@
 
 <div layout:fragment="content">
     <h1>Всички прегледи</h1>
+    <form th:action="@{/medical_appointments}" method="get" th:object="${searchForm}">
+        <div class="input-group mb-3">
+            <select id="diagnose" th:field="*{diagnoseId}" class="form-select">
+                <option value="">Избери диагноза</option>
+                <option th:each="diagnose : ${diagnoses}" th:value="${diagnose.id}" th:text="${diagnose.name}"></option>
+            </select>
+            <button class="btn btn-outline-secondary" type="submit">Търси</button>
+        </div>
+    </form>
     <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_DOCTOR')" th:href="@{/medical_appointments/create}" class="btn btn-primary">Създай преглед</a>
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'id', '№', null)}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'date', 'Дата', null)}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'doctor.fullName', 'Доктор', null)}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'patient.fullName', 'Пациент', null)}"></th>
-            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'diagnose.name', 'Диагноза', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'id', '№', ${utils.toQueryString(searchForm)})}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'date', 'Дата', ${utils.toQueryString(searchForm)})}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'doctor.fullName', 'Доктор', ${utils.toQueryString(searchForm)})}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'patient.fullName', 'Пациент', ${utils.toQueryString(searchForm)})}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${appointments}, '/medical_appointments', 'diagnose.name', 'Диагноза', ${utils.toQueryString(searchForm)})}"></th>
             <th>Болничен лист</th>
             <th>Действия</th>
         </tr>
@@ -49,6 +58,6 @@
         </tr>
         </tbody>
     </table>
-    <div th:include="~{fragments/pagination :: pagination(${appointments}, '/medical_appointments', null)}"></div>
+    <div th:include="~{fragments/pagination :: pagination(${appointments}, '/medical_appointments', ${utils.toQueryString(searchForm)})}"></div>
 </div>
 </html>

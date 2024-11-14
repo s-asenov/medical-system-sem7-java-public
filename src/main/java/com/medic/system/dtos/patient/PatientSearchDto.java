@@ -7,6 +7,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PatientSearchDto extends BaseUserSearchDto {
-    private String egn;
-    private Long doctorId;
+    private Long generalPractitionerId;
 }

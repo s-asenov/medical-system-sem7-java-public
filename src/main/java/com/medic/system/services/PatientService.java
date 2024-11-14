@@ -2,17 +2,19 @@ package com.medic.system.services;
 
 import com.medic.system.dtos.patient.EditPatientRequestDto;
 import com.medic.system.dtos.patient.PatientRequestDto;
-import com.medic.system.dtos.user.BaseUserSearchDto;
+import com.medic.system.dtos.patient.PatientSearchDto;
 import com.medic.system.entities.Doctor;
 import com.medic.system.entities.Insurance;
 import com.medic.system.entities.Patient;
 import com.medic.system.repositories.DoctorRepository;
 import com.medic.system.repositories.InsuranceRepository;
 import com.medic.system.repositories.PatientRepository;
+import com.medic.system.specifications.PatientSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -37,13 +39,11 @@ public class PatientService {
         return patientRepository.findAll();
     }
 
-    public Page<Patient> findAll(Pageable pageable, BaseUserSearchDto searchForm) {
-        Page<Patient> patientsPage;
-        if (searchForm.getName() != null && !searchForm.getName().isEmpty()) {
-            patientsPage = patientRepository.searchByNameAcrossFields(searchForm.getName(), pageable);
-        } else {
-            patientsPage = patientRepository.findAll(pageable);
-        }
+    public Page<Patient> findAll(Pageable pageable, PatientSearchDto searchForm) {
+        Specification<Patient> specification = Specification.where(PatientSpecification.hasNameLike(searchForm.getName()))
+                .and(PatientSpecification.hasDoctorId(searchForm.getGeneralPractitionerId()));
+
+        Page<Patient> patientsPage = patientRepository.findAll(specification, pageable);
 
         return patientsPage.map(patient -> {
             patient.setHasPaidInsuranceLast6Months(hasPaidInsuranceLast6Months(patient.getId()));

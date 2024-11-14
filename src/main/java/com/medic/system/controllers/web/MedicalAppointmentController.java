@@ -2,6 +2,7 @@ package com.medic.system.controllers.web;
 
 import com.medic.system.dtos.medical_appointment.EditMedicalAppointmentRequestDto;
 import com.medic.system.dtos.medical_appointment.MedicalAppointmentRequestDto;
+import com.medic.system.dtos.medical_appointment.MedicalAppointmentSearchDto;
 import com.medic.system.entities.MedicalAppointment;
 import com.medic.system.services.*;
 import jakarta.validation.Valid;
@@ -27,8 +28,11 @@ public class MedicalAppointmentController {
     private final DrugService drugService;
 
     @GetMapping
-    public String index(Model model, Pageable pageable) {
-        model.addAttribute("appointments", medicalAppointmentService.findAllBasedOnRole(pageable));
+    public String index(Model model, Pageable pageable, @ModelAttribute("searchForm") MedicalAppointmentSearchDto searchForm) {
+        model.addAttribute("appointments", medicalAppointmentService.findAllBasedOnRole(pageable, searchForm));
+        model.addAttribute("searchForm", searchForm);
+        model.addAttribute("diagnoses", diagnoseService.findAllOrderedByName());
+
         return "medical_appointments/index";
     }
 

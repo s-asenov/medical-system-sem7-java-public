@@ -2,7 +2,7 @@ package com.medic.system.controllers.web;
 
 import com.medic.system.dtos.patient.EditPatientRequestDto;
 import com.medic.system.dtos.patient.PatientRequestDto;
-import com.medic.system.dtos.user.BaseUserSearchDto;
+import com.medic.system.dtos.patient.PatientSearchDto;
 import com.medic.system.entities.Doctor;
 import com.medic.system.entities.Patient;
 import com.medic.system.entities.User;
@@ -30,7 +30,7 @@ public class PatientController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_DOCTOR')")
-    public String index(Model model, Pageable pageable, @ModelAttribute("searchForm") BaseUserSearchDto searchForm) {
+    public String index(Model model, Pageable pageable, @ModelAttribute("searchForm") PatientSearchDto searchForm) {
         User user = UserServiceImpl.getCurrentUser();
 
         boolean isGeneralPractitioner = false;
@@ -41,6 +41,7 @@ public class PatientController {
         model.addAttribute("isGeneralPractitioner", isGeneralPractitioner);
         model.addAttribute("patients", patientService.findAll(pageable, searchForm));
         model.addAttribute("searchForm", searchForm);
+        model.addAttribute("generalPractitioners", doctorService.findAllGeneralPractitioners());
 
         return "patients/index";
     }
