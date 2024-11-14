@@ -2,12 +2,12 @@
 <html lang="bg"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <head>
-    <title>Редактирай диагноза</title>
+    <title>Редактирай лекарство</title>
 </head>
 
 <div layout:fragment="content">
-    <form th:action="@{|/diagnoses/edit/${diagnose.id}|}" method="post" th:object="${diagnose}">
-        <h1>Редактирай диагноза</h1>
+    <form th:action="@{|/drugs/edit/${drug.id}|}" method="post" th:object="${drug}">
+        <h1>Редактирай лекарство</h1>
         <input type="hidden" th:field="*{id}" />
         <div class="mb-3">
             <label class="form-label">Име</label>
@@ -23,8 +23,15 @@
                       placeholder="Въведи описание"></textarea>
             <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="invalid-feedback"></span>
         </div>
+        <div class="mb-3">
+            <label class="form-label">Цена</label>
+            <input type="number" th:field="*{price}"
+                   th:class="'form-control' + (${#fields.hasErrors('price') ? ' is-invalid' : ''})"
+                   placeholder="Въведи цена" />
+            <span th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="invalid-feedback"></span>
+        </div>
         <div>
-            <button type="submit" class="btn btn-primary">Редактирай диагноза</button>
+            <button type="submit" class="btn btn-primary">Редактирай лекарство</button>
         </div>
     </form>
 </div>

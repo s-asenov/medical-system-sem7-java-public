@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="bg"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Всички лекарства</title>
+</head>
+
+<div layout:fragment="content">
+    <h1>Всички лекарства</h1>
+    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/drugs/create}" class="btn btn-primary">Създай лекарство</a>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${drugs}, '/drugs', 'id', '№', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${drugs}, '/drugs', 'name', 'Име', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${drugs}, '/drugs', 'description', 'Описание', null)}"></th>
+            <th th:replace="~{fragments/table-header-sortable :: sortableHeader(${drugs}, '/drugs', 'price', 'Цена', null)}"></th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="diagnose : ${drugs.content}">
+            <td th:text="${diagnose.id}"></td>
+            <td th:text="${diagnose.name}"></td>
+            <td th:text="${diagnose.description}"></td>
+            <td th:text="${diagnose.price}"></td>
+            <td>
+                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/drugs/edit/{id}(id=${diagnose.id})}"
+                   class="btn btn-sm btn-info">
+                    Редакция
+                </a>
+                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/drugs/delete/{id}(id=${diagnose.id})}" class="btn btn-sm btn-danger">Изтриване</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:include="~{fragments/pagination :: pagination(${drugs}, '/drugs', null)}"></div>
+</div>
+</html>

@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "medical_appointments")
@@ -37,4 +38,20 @@ public class MedicalAppointment extends BaseEntity {
 
     @OneToOne(mappedBy = "medicalAppointment")
     private SickLeave sickLeave;
+
+    @ManyToMany
+    @JoinTable(
+            name = "medical_appointments_drugs",
+            joinColumns = @JoinColumn(name = "medical_appointment_id"),
+            inverseJoinColumns = @JoinColumn(name = "drug_id")
+    )
+    private List<Drug> drugs;
+
+    public void addDrug(Drug drug) {
+        drugs.add(drug);
+    }
+
+    public void clearDrugs() {
+        drugs.clear();
+    }
 }

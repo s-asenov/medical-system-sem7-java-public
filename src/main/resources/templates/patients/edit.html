@@ -9,7 +9,6 @@
     <form th:action="@{|/patients/edit/${patient.id}|}" method="post" th:object="${patient}">
         <h1>Редактирай пациент</h1>
         <input type="hidden" th:field="*{id}" />
-
         <div class="mb-3">
             <label class="form-label">Име</label>
             <input type="text" th:field="*{firstName}"
@@ -17,7 +16,6 @@
                    placeholder="Въведи име" />
             <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="invalid-feedback"></span>
         </div>
-
         <div class="mb-3">
             <label class="form-label">Фамилия</label>
             <input type="text" th:field="*{lastName}"
@@ -25,7 +23,6 @@
                    placeholder="Въведи фамилия" />
             <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="invalid-feedback"></span>
         </div>
-
         <div class="mb-3">
             <label class="form-label">Потребителско име</label>
             <input type="text" th:field="*{username}"
@@ -40,7 +37,6 @@
                    placeholder="Въведи ЕГН" />
             <span th:if="${#fields.hasErrors('egn')}" th:errors="*{egn}" class="invalid-feedback"></span>
         </div>
-
         <div class="mb-3">
             <label class="form-label">Парола</label>
             <input type="password" th:field="*{password}"

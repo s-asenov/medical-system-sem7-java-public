@@ -3,9 +3,12 @@ package com.medic.system.config;
 import com.medic.system.entities.*;
 import com.medic.system.enums.Role;
 import com.medic.system.repositories.DiagnoseRepository;
+import com.medic.system.repositories.DrugRepository;
 import com.medic.system.repositories.SpecialityRepository;
 import com.medic.system.repositories.UserRepository;
 import groovy.lang.Tuple;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -15,21 +18,20 @@ import java.util.List;
 import java.util.Set;
 
 @Component
+@RequiredArgsConstructor
 public class DatabaseLoader {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final SpecialityRepository specialityRepository;
     private final DiagnoseRepository diagnoseRepository;
+    private final DrugRepository drugRepository;
 
-    @Autowired
-    public DatabaseLoader(UserRepository userRepository, PasswordEncoder passwordEncoder, SpecialityRepository specialityRepository, DiagnoseRepository diagnoseRepository) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.specialityRepository = specialityRepository;
-        this.diagnoseRepository = diagnoseRepository;
+    @PostConstruct
+    public void init() {
         loadUsers();
         loadSpecialities();
         loadDiagnoses();
+        loadDrugs();
     }
 
     private void loadUsers() {
@@ -101,7 +103,7 @@ public class DatabaseLoader {
         );
 
         specialityNames.forEach(specialityName -> {
-            if (specialityRepository.existsByName(specialityName)) {
+            if (!specialityRepository.existsByName(specialityName)) {
                 Speciality speciality = new Speciality();
                 speciality.setName(specialityName);
                 specialityRepository.save(speciality);
@@ -125,11 +127,41 @@ public class DatabaseLoader {
         );
 
         diagnoses.forEach(diagnose -> {
-            if (diagnoseRepository.existsByName(diagnose.get(0))) {
+            if (!diagnoseRepository.existsByName(diagnose.get(0))) {
                 Diagnose newDiagnose = new Diagnose();
                 newDiagnose.setName(diagnose.get(0));
                 newDiagnose.setDescription(diagnose.get(1));
                 diagnoseRepository.save(newDiagnose);
+            }
+        });
+    }
+
+    private void loadDrugs()
+    {
+        Set<Tuple<Object>> drugs = Set.of(
+                new Tuple("Аспирин", "Лекарство за болка и възпаление", 1.0),
+                new Tuple("Парацетамол", "Лекарство за болка и възпаление", 1.0),
+                new Tuple("Ибупрофен", "Лекарство за болка и възпаление", 1.0),
+                new Tuple("Амоксицилин", "Лекарство за бактериални инфекции", 1.0),
+                new Tuple("Азитромицин", "Лекарство за бактериални инфекции", 1.0),
+                new Tuple("Кларитромицин", "Лекарство за бактериални инфекции", 1.0),
+                new Tuple("Левофлоксацин", "Лекарство за бактериални инфекции", 1.0),
+                new Tuple("Метронидазол", "Лекарство за бактериални инфекции", 1.0),
+                new Tuple("Флуконазол", "Лекарство за гъбични инфекции", 1.0),
+                new Tuple("Кетоконазол", "Лекарство за гъбични инфекции", 1.0),
+                new Tuple("Тербинафин", "Лекарство за гъбични инфекции", 1.0),
+                new Tuple("Ацетилцистеин", "Лекарство за бронхит", 1.0),
+                new Tuple("Амброксол", "Лекарство за бронхит", 1.0),
+                new Tuple("Бромгексин", "Лекарство за бронхит", 1.0)
+        );
+
+        drugs.forEach(drug -> {
+            if (!drugRepository.existsByName((String) drug.get(0))) {
+                Drug newDrug = new Drug();
+                newDrug.setName((String) drug.get(0));
+                newDrug.setDescription((String) drug.get(1));
+                newDrug.setPrice((Double) drug.get(2));
+                drugRepository.save(newDrug);
             }
         });
     }

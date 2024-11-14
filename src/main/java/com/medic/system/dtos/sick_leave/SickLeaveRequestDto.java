@@ -16,16 +16,16 @@ import java.time.LocalDate;
 @Setter
 public class SickLeaveRequestDto {
 
-    @NotNull(message="Прегледът е задължителен")
+    @NotNull(message = "Прегледът е задължителен")
     private Long medicalAppointmentId;
 
-    @NotNull(message="Дата на започване е задължителна")
-    @FutureOrPresent(message="Дата на започване не може да бъде в миналото")
+    @NotNull(message = "Дата на започване е задължителна")
+    @FutureOrPresent(message = "Дата на започване не може да бъде в миналото")
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private LocalDate startDate;
 
     @NotNull
-    @Min(value=1, message="Броят на дните трябва да бъде поне 1")
+    @Min(value = 1, message = "Броят на дните трябва да бъде поне 1")
     private Integer days;
 }

@@ -3,10 +3,7 @@ package com.medic.system.controllers.web;
 import com.medic.system.dtos.medical_appointment.EditMedicalAppointmentRequestDto;
 import com.medic.system.dtos.medical_appointment.MedicalAppointmentRequestDto;
 import com.medic.system.entities.MedicalAppointment;
-import com.medic.system.services.DiagnoseService;
-import com.medic.system.services.DoctorService;
-import com.medic.system.services.MedicalAppointmentService;
-import com.medic.system.services.PatientService;
+import com.medic.system.services.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +24,7 @@ public class MedicalAppointmentController {
     private final DoctorService doctorService;
     private final PatientService patientService;
     private final DiagnoseService diagnoseService;
+    private final DrugService drugService;
 
     @GetMapping
     public String index(Model model, Pageable pageable) {
@@ -43,6 +41,7 @@ public class MedicalAppointmentController {
         model.addAttribute("doctors", doctorService.findAll());
         model.addAttribute("patients", patientService.findAll());
         model.addAttribute("diagnoses", diagnoseService.findAll());
+        model.addAttribute("drugs", drugService.findAll());
 
         return "medical_appointments/create";
     }
@@ -54,6 +53,7 @@ public class MedicalAppointmentController {
             model.addAttribute("doctors", doctorService.findAll());
             model.addAttribute("patients", patientService.findAll());
             model.addAttribute("diagnoses", diagnoseService.findAll());
+            model.addAttribute("drugs", drugService.findAll());
 
             return "medical_appointments/create";
         }
@@ -64,6 +64,7 @@ public class MedicalAppointmentController {
             model.addAttribute("doctors", doctorService.findAll());
             model.addAttribute("patients", patientService.findAll());
             model.addAttribute("diagnoses", diagnoseService.findAll());
+            model.addAttribute("drugs", drugService.findAll());
 
             return "medical_appointments/create";
         }
@@ -81,6 +82,7 @@ public class MedicalAppointmentController {
             model.addAttribute("doctors", doctorService.findAll());
             model.addAttribute("patients", patientService.findAll());
             model.addAttribute("diagnoses", diagnoseService.findAll());
+            model.addAttribute("drugs", drugService.findAll());
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Посещението не съществува");
         }
@@ -95,6 +97,7 @@ public class MedicalAppointmentController {
             model.addAttribute("doctors", doctorService.findAll());
             model.addAttribute("patients", patientService.findAll());
             model.addAttribute("diagnoses", diagnoseService.findAll());
+            model.addAttribute("drugs", drugService.findAll());
 
             return "medical_appointments/edit";
         }
@@ -105,6 +108,7 @@ public class MedicalAppointmentController {
             model.addAttribute("doctors", doctorService.findAll());
             model.addAttribute("patients", patientService.findAll());
             model.addAttribute("diagnoses", diagnoseService.findAll());
+            model.addAttribute("drugs", drugService.findAll());
 
             return "medical_appointments/edit";
         }

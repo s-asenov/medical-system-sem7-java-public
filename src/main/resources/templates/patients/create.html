@@ -9,7 +9,6 @@
   <form th:action="@{/patients/create}" method="post" th:object="${patient}">
     <h1>Създай пациент</h1>
     <input type="hidden" th:field="*{role}"/>
-
     <div class="mb-3">
       <label class="form-label">Име</label>
       <input type="text" th:field="*{firstName}"
@@ -17,7 +16,6 @@
              placeholder="Въведи име" />
       <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="invalid-feedback"></span>
     </div>
-
     <div class="mb-3">
       <label class="form-label">Фамилия</label>
       <input type="text" th:field="*{lastName}"
@@ -25,7 +23,6 @@
              placeholder="Въведи фамилия" />
       <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="invalid-feedback"></span>
     </div>
-
     <div class="mb-3">
       <label class="form-label">Потребителско име</label>
       <input type="text" th:field="*{username}"
@@ -33,7 +30,6 @@
              placeholder="Въведи потребителско име" />
       <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="invalid-feedback"></span>
     </div>
-
     <div class="mb-3">
       <label class="form-label">ЕГН</label>
       <input type="text" th:field="*{egn}"
@@ -41,7 +37,6 @@
              placeholder="Въведи ЕГН" />
       <span th:if="${#fields.hasErrors('egn')}" th:errors="*{egn}" class="invalid-feedback"></span>
     </div>
-
     <div class="mb-3">
       <label class="form-label">Парола</label>
       <input type="password" th:field="*{password}"
@@ -49,7 +44,6 @@
              placeholder="Въведи парола" />
       <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback"></span>
     </div>
-
     <div class="mb-3">
       <label class="form-label">Потвърди парола</label>
       <input type="password" th:field="*{confirmPassword}"
@@ -57,7 +51,6 @@
              placeholder="Потвърди парола" />
       <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="invalid-feedback"></span>
     </div>
-
     <div class="mb-3">
       <label for="generalPractitionerId" class="form-label">GP</label>
       <select th:field="*{generalPractitionerId}" th:class="'form-select' + ${#fields.hasErrors('generalPractitionerId') ? ' is-invalid' : ''}" id="generalPractitionerId" name="generalPractitionerId">
@@ -66,7 +59,6 @@
       </select>
       <span th:if="${#fields.hasErrors('generalPractitionerId')}" th:errors="*{generalPractitionerId}" class="invalid-feedback"></span>
     </div>
-
     <div>
       <button type="submit" class="btn btn-primary">Създай пациент</button>
     </div>

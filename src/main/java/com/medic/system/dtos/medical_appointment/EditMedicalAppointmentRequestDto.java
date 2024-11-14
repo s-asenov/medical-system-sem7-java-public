@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,6 +33,8 @@ public class EditMedicalAppointmentRequestDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 
+    private List<Long> drugs;
+
     public EditMedicalAppointmentRequestDto() {
     }
 
@@ -41,5 +44,6 @@ public class EditMedicalAppointmentRequestDto {
         patientId = appointment.getPatient().getId();
         diagnoseId = appointment.getDiagnose().getId();
         date = appointment.getDate();
+        drugs = appointment.getDrugs().stream().map(drug -> drug.getId()).toList();
     }
 }

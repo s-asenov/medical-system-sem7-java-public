@@ -11,7 +11,7 @@
         <input type="hidden" th:field="*{id}" />
         <div class="mb-3" th:unless="${isPatient}">
             <label class="form-label" for="patient">Пациент</label>
-            <select class="form-control" id="patient" th:field="*{patientId}" th:class="'form-control' + (${#fields.hasErrors('patientId') ? ' is-invalid' : ''})">
+            <select id="patient" th:field="*{patientId}" th:class="'form-select' + (${#fields.hasErrors('patientId') ? ' is-invalid' : ''})">
                 <option value="">Избери пациент</option>
                 <option th:each="patient : ${patients}" th:value="${patient.id}" th:text="${patient.fullName}"></option>
             </select>

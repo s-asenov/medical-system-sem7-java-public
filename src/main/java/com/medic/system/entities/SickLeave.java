@@ -26,6 +26,6 @@ public class SickLeave extends BaseEntity {
     private LocalDate startDate;
 
     @NotNull
-    @Min(value=1, message="Броят на дните трябва да бъде поне 1")
+    @Min(value = 1, message = "Броят на дните трябва да бъде поне 1")
     private Integer days;
 }

@@ -9,40 +9,42 @@
     <form th:action="@{|/medical_appointments/edit/${appointment.id}|}" method="post" th:object="${appointment}">
         <h1>Редактирай преглед</h1>
         <input type="hidden" th:field="*{id}" />
-
         <div class="mb-3">
             <label class="form-label" for="date">Дата</label>
             <input type="date" class="form-control" id="date" th:field="*{date}" th:class="'form-control' + (${#fields.hasErrors('date') ? ' is-invalid' : ''})">
             <span th:if="${#fields.hasErrors('date')}" th:errors="*{date}" class="invalid-feedback"></span>
         </div>
-
         <div class="mb-3">
             <label class="form-label" for="doctor">Лекар</label>
-            <select class="form-control" id="doctor" th:field="*{doctorId}" th:class="'form-control' + (${#fields.hasErrors('doctorId') ? ' is-invalid' : ''})">
+            <select id="doctor" th:field="*{doctorId}" th:class="'form-select' + (${#fields.hasErrors('doctorId') ? ' is-invalid' : ''})">
                 <option value="">Избери доктор</option>
                 <option th:each="doctor : ${doctors}" th:value="${doctor.id}" th:text="${doctor.fullName}"></option>
             </select>
             <span th:if="${#fields.hasErrors('doctorId')}" th:errors="*{doctorId}" class="invalid-feedback"></span>
         </div>
-
         <div class="mb-3">
             <label class="form-label" for="patient">Пациент</label>
-            <select class="form-control" id="patient" th:field="*{patientId}" th:class="'form-control' + (${#fields.hasErrors('patientId') ? ' is-invalid' : ''})">
+            <select id="patient" th:field="*{patientId}" th:class="'form-select' + (${#fields.hasErrors('patientId') ? ' is-invalid' : ''})">
                 <option value="">Избери пациент</option>
                 <option th:each="patient : ${patients}" th:value="${patient.id}" th:text="${patient.fullName}"></option>
             </select>
             <span th:if="${#fields.hasErrors('patientId')}" th:errors="*{patientId}" class="invalid-feedback"></span>
         </div>
-
         <div class="mb-3">
             <label class="form-label" for="diagnose">Диагноза</label>
-            <select class="form-control" id="diagnose" th:field="*{diagnoseId}" th:class="'form-control' + (${#fields.hasErrors('diagnoseId') ? ' is-invalid' : ''})">
+            <select id="diagnose" th:field="*{diagnoseId}" th:class="'form-select' + (${#fields.hasErrors('diagnoseId') ? ' is-invalid' : ''})">
                 <option value="">Избери диагноза</option>
                 <option th:each="diagnose : ${diagnoses}" th:value="${diagnose.id}" th:text="${diagnose.name}"></option>
             </select>
             <span th:if="${#fields.hasErrors('diagnoseId')}" th:errors="*{diagnoseId}" class="invalid-feedback"></span>
         </div>
-
+        <div class="mb-3">
+            <label class="form-label">Лекарства (не е задължително)</label>
+            <select th:field="*{drugs}" th:class="'form-select' + ${#fields.hasErrors('drugs') ? ' is-invalid' : ''}" multiple>
+                <option th:each="drug : ${drugs}" th:value="${drug.id}" th:text="${drug.name}"></option>
+            </select>
+            <span th:if="${#fields.hasErrors('drugs')}" th:errors="*{drugs}" class="invalid-feedback"></span>
+        </div>
         <div>
             <button type="submit" class="btn btn-primary">Редактирай преглед</button>
         </div>

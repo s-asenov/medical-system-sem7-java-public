@@ -3,10 +3,7 @@ package com.medic.system.services;
 import com.medic.system.dtos.medical_appointment.EditMedicalAppointmentRequestDto;
 import com.medic.system.dtos.medical_appointment.MedicalAppointmentRequestDto;
 import com.medic.system.entities.*;
-import com.medic.system.repositories.DiagnoseRepository;
-import com.medic.system.repositories.DoctorRepository;
-import com.medic.system.repositories.MedicalAppointmentRepository;
-import com.medic.system.repositories.PatientRepository;
+import com.medic.system.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +20,7 @@ public class MedicalAppointmentService {
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
     private final DiagnoseRepository diagnoseRepository;
+    private final DrugRepository drugRepository;
 
     public MedicalAppointment create(MedicalAppointmentRequestDto appointmentDto, BindingResult bindingResult)
     {
@@ -59,6 +58,18 @@ public class MedicalAppointmentService {
         appointment.setDoctor(doctor);
         appointment.setPatient(patient);
         appointment.setDiagnose(diagnose);
+
+        // add drugs, if error return null and put error in bindingResult
+        try {
+            for (Long drugId : appointmentDto.getDrugs()) {
+                Drug drug = drugRepository.findById(drugId)
+                        .orElseThrow(() -> new NoSuchElementException("Лекарството не е намерена"));
+                appointment.addDrug(drug);
+            }
+        } catch (NoSuchElementException e) {
+            bindingResult.rejectValue("specialities", "error.medical_appointment", "Грешка при добавяне на лекарства");
+            return null;
+        }
 
         try {
             return medicalAppointmentRepository.save(appointment);
@@ -103,6 +114,19 @@ public class MedicalAppointmentService {
             diagnose = diagnoseRepository.findById(editAppointmentDto.getDiagnoseId()).orElseThrow();
         } catch (Exception e) {
             bindingResult.rejectValue("diagnoseId", "error.medical_appointment", "Диагнозата не съществува");
+            return null;
+        }
+
+        // add drugs, if error return null and put error in bindingResult
+        try {
+            appointment.clearDrugs();
+            for (Long drugId : editAppointmentDto.getDrugs()) {
+                Drug drug = drugRepository.findById(drugId)
+                        .orElseThrow(() -> new NoSuchElementException("Лекарството не е намерена"));
+                appointment.addDrug(drug);
+            }
+        } catch (NoSuchElementException e) {
+            bindingResult.rejectValue("specialities", "error.medical_appointment", "Грешка при добавяне на лекарства");
             return null;
         }
 
