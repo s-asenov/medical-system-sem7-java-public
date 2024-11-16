@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Най-чести диагнози</title>
+</head>
+
+<div layout:fragment="content">
+    <h1>Най-чести диагнози</h1>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>№</th>
+            <th>Име</th>
+            <th>Описание</th>
+            <th>Брой прегледи</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="diagnoseWithCount : ${diagnosesWithCount}">
+            <td th:text="${diagnoseWithCount.diagnose.id}"></td>
+            <td th:text="${diagnoseWithCount.diagnose.name}"></td>
+            <td th:text="${diagnoseWithCount.diagnose.description}"></td>
+            <td th:text="${diagnoseWithCount.appointmentCount}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</html>

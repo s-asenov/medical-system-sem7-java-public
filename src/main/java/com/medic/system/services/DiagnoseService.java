@@ -1,5 +1,6 @@
 package com.medic.system.services;
 
+import com.medic.system.dtos.diagnose.DiagnoseMedicalAppointmentCount;
 import com.medic.system.dtos.diagnose.EditDiagnoseRequestDto;
 import com.medic.system.dtos.diagnose.DiagnoseRequestDto;
 import com.medic.system.entities.Diagnose;
@@ -79,5 +80,9 @@ public class DiagnoseService {
 
     public void deleteById(Long id) {
         diagnoseRepository.deleteById(id);
+    }
+
+    public List<DiagnoseMedicalAppointmentCount> findMostSeen() {
+        return diagnoseRepository.getDiagnosesAndMedicalAppointmentsCount();
     }
 }

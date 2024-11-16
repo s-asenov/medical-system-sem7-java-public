@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Брой посещения при лекар</title>
+</head>
+
+<div layout:fragment="content">
+    <h1>Брой посещения при лекар</h1>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>№</th>
+            <th>Име</th>
+            <th>Брой прегледи</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="doctorWithAppointmentCount : ${doctorsWithAppointmentCount}">
+            <td th:text="${doctorWithAppointmentCount.doctor.id}"></td>
+            <td th:text="${doctorWithAppointmentCount.doctor.fullName}"></td>
+            <td th:text="${doctorWithAppointmentCount.appointmentCount}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</html>

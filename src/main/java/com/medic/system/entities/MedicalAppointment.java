@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -45,7 +46,7 @@ public class MedicalAppointment extends BaseEntity {
             joinColumns = @JoinColumn(name = "medical_appointment_id"),
             inverseJoinColumns = @JoinColumn(name = "drug_id")
     )
-    private List<Drug> drugs;
+    private List<Drug> drugs = new ArrayList<>();
 
     public void addDrug(Drug drug) {
         drugs.add(drug);

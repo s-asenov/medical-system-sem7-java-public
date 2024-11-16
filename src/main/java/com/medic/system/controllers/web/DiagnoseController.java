@@ -93,4 +93,10 @@ public class DiagnoseController {
 
         return "redirect:/diagnoses";
     }
+
+    @GetMapping("/most_seen")
+    public String mostSeen(Model model) {
+        model.addAttribute("diagnosesWithCount", diagnoseService.findMostSeen());
+        return "diagnoses/most_seen";
+    }
 }

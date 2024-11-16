@@ -1,6 +1,8 @@
 package com.medic.system.services;
 
+import com.medic.system.dtos.sick_leave.DoctorWithSickLeaveCount;
 import com.medic.system.dtos.sick_leave.EditSickLeaveRequestDto;
+import com.medic.system.dtos.sick_leave.MonthWithSickLeaveCount;
 import com.medic.system.dtos.sick_leave.SickLeaveRequestDto;
 import com.medic.system.entities.*;
 import com.medic.system.repositories.MedicalAppointmentRepository;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -142,5 +145,17 @@ public class SickLeaveService {
         }
 
         return sickLeave.getMedicalAppointment().getDoctor().getId().equals(doctorId);
+    }
+
+    public List<DoctorWithSickLeaveCount> doctorWithMostSickLeaves() {
+        return sickLeaveRepository.doctorWithMostSickLeaves();
+    }
+
+    public List<MonthWithSickLeaveCount> monthWithMostSickLeaves(Integer year) {
+        if (year == null) {
+            year = (LocalDate.now()).getYear();
+        }
+
+        return sickLeaveRepository.monthWithMostSickLeaves(year);
     }
 }

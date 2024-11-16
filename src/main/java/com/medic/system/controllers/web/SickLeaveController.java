@@ -26,6 +26,8 @@ public class SickLeaveController {
     @GetMapping
     public String index(Model model, Pageable pageable) {
         model.addAttribute("sickLeaves", sickLeaveService.findAllBasedOnRole(pageable));
+        model.addAttribute("doctorsWithMostSickLeaves", sickLeaveService.doctorWithMostSickLeaves());
+        model.addAttribute("monthsWithMostSickLeaves", sickLeaveService.monthWithMostSickLeaves(null));
 
         return "sick_leaves/index";
     }

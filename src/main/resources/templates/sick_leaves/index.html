@@ -8,6 +8,29 @@
 <div layout:fragment="content">
     <h1>Всички болнични</h1>
     <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_DOCTOR')" th:href="@{/sick_leaves/create}" class="btn btn-primary">Създай болничен</a>
+    <div class="row my-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${(doctorsWithMostSickLeaves.size > 1 ? 'Лекари' : 'Лекар') + ' с най-много болнични'}"></h5>
+                    <p class="card-text mb-1" th:each="doctorWithMostSickLeaves : ${doctorsWithMostSickLeaves}">
+                        <span th:text="${doctorWithMostSickLeaves.doctor.fullName}" class="fw-bold"></span> - <span th:text="${doctorWithMostSickLeaves.sickLeaveCount}"></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${(monthsWithMostSickLeaves.size > 1 ? 'Месеци' : 'Месец') + ' с най-много болнични'}"></h5>
+                    <p class="card-text mb-1" th:each="monthWithMostSickLeaves : ${monthsWithMostSickLeaves}">
+                        <span th:text="${monthWithMostSickLeaves.monthText}" class="fw-bold"></span> - <span th:text="${monthWithMostSickLeaves.sickLeaveCount}"></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <table class="table table-bordered table-striped">
         <thead>
         <tr>

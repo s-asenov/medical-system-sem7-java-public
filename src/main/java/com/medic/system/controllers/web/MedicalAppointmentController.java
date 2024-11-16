@@ -32,6 +32,8 @@ public class MedicalAppointmentController {
         model.addAttribute("appointments", medicalAppointmentService.findAllBasedOnRole(pageable, searchForm));
         model.addAttribute("searchForm", searchForm);
         model.addAttribute("diagnoses", diagnoseService.findAllOrderedByName());
+        model.addAttribute("doctors", doctorService.findAllGeneralPractitioners());
+        model.addAttribute("patients", patientService.findAll());
 
         return "medical_appointments/index";
     }
@@ -130,5 +132,13 @@ public class MedicalAppointmentController {
         }
 
         return "redirect:/medical_appointments";
+    }
+
+    @GetMapping("/doctor_appointments_count")
+    @PreAuthorize("hasRole('PATIENT')")
+    public String doctorAppointmentsCount(Model model) {
+        model.addAttribute("doctorsWithAppointmentCount", medicalAppointmentService.countDoctorAppointments());
+
+        return "medical_appointments/doctor_appointments_count";
     }
 }

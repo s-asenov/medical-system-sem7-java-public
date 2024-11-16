@@ -13,6 +13,16 @@
                 <option value="">Избери диагноза</option>
                 <option th:each="diagnose : ${diagnoses}" th:value="${diagnose.id}" th:text="${diagnose.name}"></option>
             </select>
+            <select sec:authorize="!hasRole('ROLE_DOCTOR')" th:field="*{doctorId}" class="form-select">
+                <option value="">Избери личен лекар</option>
+                <option th:each="doctor : ${doctors}" th:value="${doctor.id}" th:text="${doctor.fullName}"></option>
+            </select>
+            <select sec:authorize="!hasRole('ROLE_PATIENT')" th:field="*{patientId}" class="form-select">
+                <option value="">Избери пациент</option>
+                <option th:each="patient : ${patients}" th:value="${patient.id}" th:text="${patient.fullName}"></option>
+            </select>
+            <input type="date" th:field="*{startDate}" class="form-control" placeholder="Начална дата"/>
+            <input type="date" th:field="*{endDate}" class="form-control" placeholder="Крайна дата"/>
             <button class="btn btn-outline-secondary" type="submit">Търси</button>
         </div>
     </form>

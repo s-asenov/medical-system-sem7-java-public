@@ -1,5 +1,6 @@
 package com.medic.system.services;
 
+import com.medic.system.dtos.doctor.DoctorWithAppointmentCount;
 import com.medic.system.dtos.medical_appointment.EditMedicalAppointmentRequestDto;
 import com.medic.system.dtos.medical_appointment.MedicalAppointmentRequestDto;
 import com.medic.system.dtos.medical_appointment.MedicalAppointmentSearchDto;
@@ -159,17 +160,15 @@ public class MedicalAppointmentService {
     }
 
     public Page<MedicalAppointment> findAllBasedOnRole(Pageable pageable, MedicalAppointmentSearchDto searchForm) {
-        Specification<MedicalAppointment> specification = Specification.where(MedicalAppointmentSpecification.hasDiagnoseId(searchForm.getDiagnoseId()));
-
         User user = UserServiceImpl.getCurrentUser();
+        Specification<MedicalAppointment> specification = buildRoleBasedSpecification(user, searchForm);
 
-        if (user.isDoctor()) {
-            specification = specification.and(MedicalAppointmentSpecification.hasDoctorId(user.getId()));
-        }
-
-        if (user.isPatient()) {
-            specification = specification.and(MedicalAppointmentSpecification.hasPatientId(user.getId()));
-        }
+        specification = specification
+                .and(MedicalAppointmentSpecification.hasDiagnoseId(searchForm.getDiagnoseId()))
+                .and(MedicalAppointmentSpecification.hasDoctorId(searchForm.getDoctorId()))
+                .and(MedicalAppointmentSpecification.hasPatientId(searchForm.getPatientId()))
+                .and(MedicalAppointmentSpecification.hasStartDateOnOrAfter(searchForm.getStartDate()))
+                .and(MedicalAppointmentSpecification.hasEndDateOnOrBefore(searchForm.getEndDate()));
 
         return medicalAppointmentRepository.findAll(specification, pageable);
     }
@@ -189,5 +188,21 @@ public class MedicalAppointmentService {
         return medicalAppointmentRepository.findAll(specification);
     }
 
+    private Specification<MedicalAppointment> buildRoleBasedSpecification(User user, MedicalAppointmentSearchDto searchForm) {
+        Specification<MedicalAppointment> specification = Specification.where(null);
 
+        if (user.isDoctor()) {
+            // Doctor can only view their own appointments
+            specification = Specification.where(MedicalAppointmentSpecification.hasDoctorId(user.getId()));
+        } else if (user.isPatient()) {
+            // Patient can only view their own appointments
+            specification = Specification.where(MedicalAppointmentSpecification.hasPatientId(user.getId()));
+        }
+
+        return specification;
+    }
+
+    public List<DoctorWithAppointmentCount> countDoctorAppointments() {
+        return medicalAppointmentRepository.countDoctorAppointments();
+    }
 }
