@@ -130,7 +130,7 @@ public class MedicalAppointmentService {
                 appointment.addDrug(drug);
             }
         } catch (NoSuchElementException e) {
-            bindingResult.rejectValue("specialities", "error.medical_appointment", "Грешка при добавяне на лекарства");
+            bindingResult.rejectValue("drugs", "error.medical_appointment", "Грешка при добавяне на лекарства");
             return null;
         }
 

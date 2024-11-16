@@ -7,10 +7,12 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 
 @RequiredArgsConstructor
+@Component
 public class UniqueValidator implements ConstraintValidator<Unique, Object> {
 
     @PersistenceContext
