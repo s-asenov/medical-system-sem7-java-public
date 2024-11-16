@@ -8,7 +8,9 @@ import com.medic.system.repositories.InsuranceRepository;
 import com.medic.system.repositories.PatientRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.validation.BindingResult;
 
 import java.time.LocalDate;

@@ -1,16 +1,15 @@
 package com.medic.system.services;
 
-import com.medic.system.dtos.diagnose.DiagnoseMedicalAppointmentCount;
-import com.medic.system.dtos.diagnose.EditDiagnoseRequestDto;
 import com.medic.system.dtos.diagnose.DiagnoseRequestDto;
+import com.medic.system.dtos.diagnose.EditDiagnoseRequestDto;
 import com.medic.system.entities.Diagnose;
 import com.medic.system.repositories.DiagnoseRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.validation.BindingResult;
-import org.springframework.data.domain.*;
 
 import java.util.Arrays;
 import java.util.List;

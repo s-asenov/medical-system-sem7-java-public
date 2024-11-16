@@ -1,6 +1,5 @@
 package com.medic.system.entities;
 
-import com.medic.system.dtos.patient.PatientRequestDto;
 import com.medic.system.dtos.user.BaseUserRequestDto;
 import com.medic.system.enums.Role;
 import jakarta.persistence.*;

@@ -1,7 +1,6 @@
 package com.medic.system.dtos.drug;
 
 import com.medic.system.annotations.Unique;
-import com.medic.system.entities.Diagnose;
 import com.medic.system.entities.Drug;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

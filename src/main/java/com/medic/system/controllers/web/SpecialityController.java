@@ -1,7 +1,7 @@
 package com.medic.system.controllers.web;
 
-import com.medic.system.dtos.speciality.SpecialityRequestDto;
 import com.medic.system.dtos.speciality.EditSpecialityRequestDto;
+import com.medic.system.dtos.speciality.SpecialityRequestDto;
 import com.medic.system.entities.Speciality;
 import com.medic.system.services.SpecialityService;
 import jakarta.validation.Valid;

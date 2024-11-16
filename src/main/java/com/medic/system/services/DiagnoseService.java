@@ -1,8 +1,8 @@
 package com.medic.system.services;
 
 import com.medic.system.dtos.diagnose.DiagnoseMedicalAppointmentCount;
-import com.medic.system.dtos.diagnose.EditDiagnoseRequestDto;
 import com.medic.system.dtos.diagnose.DiagnoseRequestDto;
+import com.medic.system.dtos.diagnose.EditDiagnoseRequestDto;
 import com.medic.system.entities.Diagnose;
 import com.medic.system.repositories.DiagnoseRepository;
 import lombok.RequiredArgsConstructor;

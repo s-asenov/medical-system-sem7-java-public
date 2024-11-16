@@ -1,11 +1,8 @@
 package com.medic.system.dtos.patient;
 
 import com.medic.system.annotations.Unique;
-import com.medic.system.dtos.user.BaseUserRequestDto;
 import com.medic.system.dtos.user.EditBaseUserRequestDto;
 import com.medic.system.entities.Patient;
-import com.medic.system.entities.User;
-import com.medic.system.enums.Role;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

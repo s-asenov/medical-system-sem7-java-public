@@ -1,6 +1,5 @@
 package com.medic.system.dtos.sick_leave;
 
-import com.medic.system.entities.MedicalAppointment;
 import com.medic.system.entities.SickLeave;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;

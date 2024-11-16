@@ -1,9 +1,5 @@
 package com.medic.system.services;
 
-import com.medic.system.dtos.doctor.EditDoctorRequestDto;
-import com.medic.system.dtos.user.BaseUserRequestDto;
-import com.medic.system.dtos.user.EditBaseUserRequestDto;
-import com.medic.system.entities.Doctor;
 import com.medic.system.entities.User;
 import com.medic.system.enums.Role;
 import com.medic.system.repositories.UserRepository;
@@ -11,13 +7,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 
 @Service
 @RequiredArgsConstructor

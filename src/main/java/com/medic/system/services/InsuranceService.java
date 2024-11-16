@@ -2,7 +2,9 @@ package com.medic.system.services;
 
 import com.medic.system.dtos.insurance.EditInsuranceRequestDto;
 import com.medic.system.dtos.insurance.InsuranceRequestDto;
-import com.medic.system.entities.*;
+import com.medic.system.entities.Insurance;
+import com.medic.system.entities.Patient;
+import com.medic.system.entities.User;
 import com.medic.system.repositories.InsuranceRepository;
 import com.medic.system.repositories.PatientRepository;
 import lombok.RequiredArgsConstructor;
