@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Грешка</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .error-card {
+            border: 1px solid #dc3545;
+            border-radius: 10px;
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card text-center error-card">
+                <div class="card-body">
+                    <h1 class="display-4 text-danger">Опа!</h1>
+                    <p class="lead">Получи се грешка. Опитайте отново.</p>
+                    <hr>
+                    <p>
+                        <strong>Грешка:</strong>
+                        <span th:text="${message}">Нещо се обърка!</span>
+                    </p>
+                    <a th:href="@{/users}" class="btn btn-primary btn-lg mt-3">
+                        <i class="bi bi-arrow-left"></i> Върни се
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+</body>
+</html>

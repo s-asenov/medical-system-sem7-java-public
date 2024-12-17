@@ -1,6 +1,7 @@
 package com.medic.system.entities;
 
 import com.medic.system.dtos.doctor.DoctorRequestDto;
+import com.medic.system.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,6 +48,7 @@ public class Doctor extends User implements Serializable {
     private Long medicalAppointmentsCount;
 
     public Doctor() {
+        setRole(Role.ROLE_DOCTOR);
     }
 
     public Doctor(DoctorRequestDto doctorRequestDto) {

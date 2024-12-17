@@ -11,6 +11,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -59,6 +60,8 @@ public class DoctorControllerTest {
     @WithUserDetails("patient")
     public void testEditDoctorAccessDeniedForPatient() throws Exception {
         mockMvc.perform(get("/doctors/edit/1"))
-                .andExpect(status().isForbidden());
+                .andExpect(view().name("/errors/errors"))
+                .andExpect(model().attributeExists("message"))
+                .andExpect(model().attribute("message", containsString("Грешка в достъпа")));
     }
 }
